@@ -7,10 +7,10 @@ namespace WebApi.Models
     {
         [Key]
         public int ClassID { get; set; }
+        [Required]
+
         public string ClassName { get; set; }
 
-        public virtual ICollection<Student> Students { get; set; }
-        public virtual ICollection<ClassSubject> ClassSubject { get; set; }
-        public virtual ICollection<ResultRecord> ResultRecords { get; set; }
+        public ICollection<ClassArm> ClassArms { get; set; }
     }
 }

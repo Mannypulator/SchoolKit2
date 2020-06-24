@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.AspNetCore.Identity;
 
@@ -11,7 +12,8 @@ namespace WebApi.Models
         public string MiddleName { get; set; }
         public string Address { get; set; }
         public UserGender Gender { get; set; }
-         public int LgaID { get; set; }
+        [Required]
+        public int LgaID { get; set; }
          
         [ForeignKey("LgaID")]
         public virtual LGA LGA { get; set; }

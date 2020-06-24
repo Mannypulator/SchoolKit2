@@ -12,12 +12,15 @@ namespace WebApi.Models
         
         public string Address { get; set; }
         public int LgaID { get; set; }
+        public bool ShowPositon { get; set; }
 
         [ForeignKey("LgaID")]
         public virtual LGA LGA { get; set; }
         public virtual ICollection<Student> Students { get; set; }
         public virtual ICollection<Teacher> Teachers { get; set; }
         public virtual ICollection<Principal> Principals { get; set; }
+        public ICollection<Test> Tests { get; set; }
+    
         public virtual ICollection<ResultRecord> ResultRecords { get; set; }
     }
 }

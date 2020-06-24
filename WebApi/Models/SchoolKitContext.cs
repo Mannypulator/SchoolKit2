@@ -3,13 +3,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace WebApi.Models
 {
-    public class SchoolKitContext : IdentityDbContext
+    public class SchoolKitContext : IdentityDbContext<ApplicationUser>
     {
         
-       SchoolKitContext(DbContextOptions options):base(options)
-      {
-          
-      }
+     
+      protected override void OnConfiguring(DbContextOptionsBuilder options)
+            => options.UseSqlite("Data Source=SchoolKit.db");
 
       public DbSet<ApplicationUser> ApplicationUsers { get; set; }
       public DbSet<Class> Classes { get; set; }
@@ -27,5 +26,12 @@ namespace WebApi.Models
       public DbSet<TeacherQualification> TeacherQualifications { get; set; }
       public DbSet<TeacherSubject> TeacherSubjects { get; set; }
       public DbSet<Term> Terms { get; set; }
+      public DbSet <Admin> Admins { get; set; }
+      public DbSet <ClassArm> ClassArms { get; set; }
+      public DbSet<Test> Tests { get; set; }
+      public DbSet<TestAttempt> TestAttempts { get; set; }
+      public DbSet<Question> Questions { get; set; }
+      public DbSet<QuestionAttempt> QuestionAttempts { get; set; }
+      public DbSet<Option> Options { get; set; }
     }
 }

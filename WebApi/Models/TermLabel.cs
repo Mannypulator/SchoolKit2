@@ -1,6 +1,7 @@
 namespace WebApi.Models
 {
-    public enum TermLabel{
+    public enum TermLabel: int
+    {
         FirstTerm,
         SecondTerm,
         ThirdTerm

@@ -1,6 +1,7 @@
 namespace WebApi.Models
 {
-    public enum Grade{
+    public enum Grade : int
+    {
         A,
         B,
         C,

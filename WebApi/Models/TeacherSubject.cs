@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WebApi.Models
 {
-    public class TeacherSubject: ApplicationUser
+    public class TeacherSubject
     {
         [Key]
         public int TeacherSubjectID { get; set; }

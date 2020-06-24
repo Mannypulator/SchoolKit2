@@ -8,18 +8,20 @@ namespace WebApi.Models
     {
         [Key]
         public int ClassSubjectID { get; set; }
-
-        public int ClassID { get; set; }
+        [Required]
+        public int ClassArmID { get; set; }
+        [Required]
         public int SubjectID { get; set; }
         public string Description { get; set; }
         public bool isCompulsory { get; set; }
 
-        [ForeignKey("ClassID")]
-        public virtual Class Class { get; set; }
+        [ForeignKey("ClassArmID")]
+        public virtual ClassArm ClassArm { get; set; }
          [ForeignKey("SubjectID")]
         public virtual Subject Subject { get; set; }
 
         public virtual ICollection<Enrollment> Enrollments { get; set; }
         public virtual ICollection<TeacherSubject> TeacherSubjects { get; set; }
+        public ICollection<Test> Tests { get; set; }
     }
 }

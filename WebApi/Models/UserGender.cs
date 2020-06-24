@@ -1,6 +1,7 @@
 namespace WebApi.Models
 {
-    public enum UserGender{
+    public enum UserGender : int
+    {
         Male,
         Female
     }

@@ -20519,6 +20519,37 @@
     "CSharpLanguageVersion": 703
   },
   "RootNamespace": "WebApi",
-  "Documents": [],
+  "Documents": [
+    {
+      "FilePath": "c:\\Users\\Daniel Okpala\\Documents\\repos\\School Kit\\WebApi\\Views\\Class\\Index.cshtml",
+      "TargetPath": "Views\\Class\\Index.cshtml",
+      "FileKind": "mvc"
+    },
+    {
+      "FilePath": "c:\\Users\\Daniel Okpala\\Documents\\repos\\School Kit\\WebApi\\Views\\Class\\Details.cshtml",
+      "TargetPath": "Views\\Class\\Details.cshtml",
+      "FileKind": "mvc"
+    },
+    {
+      "FilePath": "c:\\Users\\Daniel Okpala\\Documents\\repos\\School Kit\\WebApi\\Views\\Class\\Create.cshtml",
+      "TargetPath": "Views\\Class\\Create.cshtml",
+      "FileKind": "mvc"
+    },
+    {
+      "FilePath": "c:\\Users\\Daniel Okpala\\Documents\\repos\\School Kit\\WebApi\\Views\\Class\\Delete.cshtml",
+      "TargetPath": "Views\\Class\\Delete.cshtml",
+      "FileKind": "mvc"
+    },
+    {
+      "FilePath": "c:\\Users\\Daniel Okpala\\Documents\\repos\\School Kit\\WebApi\\Views\\Shared\\_ValidationScriptsPartial.cshtml",
+      "TargetPath": "Views\\Shared\\_ValidationScriptsPartial.cshtml",
+      "FileKind": "mvc"
+    },
+    {
+      "FilePath": "c:\\Users\\Daniel Okpala\\Documents\\repos\\School Kit\\WebApi\\Views\\Class\\Edit.cshtml",
+      "TargetPath": "Views\\Class\\Edit.cshtml",
+      "FileKind": "mvc"
+    }
+  ],
   "SerializationFormat": "0.2"
 }

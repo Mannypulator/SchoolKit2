@@ -30,9 +30,11 @@ namespace WebApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddDbContext<SchoolKitContext>(options =>options.UseSqlite("Data Source=Schoolkit.db"));
+            services.AddEntityFrameworkSqlite().AddDbContext<SchoolKitContext>();
+            
             services.AddIdentity<ApplicationUser, IdentityRole>()
-            .AddEntityFrameworkStores<SchoolKitContext>().AddDefaultTokenProviders();
+            .AddEntityFrameworkStores<SchoolKitContext>()
+            .AddDefaultTokenProviders();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -1,11 +1,15 @@
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WebApi.Models
 {
     public class Enrollment
     {
+        [Key]
         public int EnrollmentID { get; set; }
+        [Required]
         public string StudentID { get; set; }
+        [Required]
         public int ClassSubjectID { get; set; }
         public bool CompletionState { get; set; }
         public int CA { get; set; }
@@ -13,6 +17,7 @@ namespace WebApi.Models
 
         public int Total { get; set; }
         public Grade grade { get; set; }
+        [Required]
         public int TermID { get; set; }
         [ForeignKey("StudentID")]
         public virtual Student Student { get; set; }
