@@ -9,6 +9,8 @@ namespace WebApi.Models
         public int TermID { get; set; }
         public TermLabel Label { get; set; }
         public string Session { get; set; }
+        public bool Current { get; set; }
+
 
         public virtual ICollection<Enrollment> Enrollments { get; set; }
         public virtual ICollection<Result> Results { get; set; }

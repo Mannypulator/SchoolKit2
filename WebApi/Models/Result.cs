@@ -12,6 +12,7 @@ namespace WebApi.Models
         public int ClassPosition { get; set; }
         [Required]
         public int TermID { get; set; }
+        public int Total { get; set; }
         public double Average { get; set; }
         [ForeignKey("StudentID")]
         public virtual Student Student { get; set; }

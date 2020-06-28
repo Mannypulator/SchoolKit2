@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -14,16 +15,18 @@ namespace WebApi.Controllers
     public class ClassController : Controller
     {
         private readonly SchoolKitContext _context;
+        private readonly UserManager<Student> _userManager;
 
-        public ClassController(SchoolKitContext context)
+        public ClassController(SchoolKitContext context, UserManager<Student> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Class
         [HttpPost]
         [Route("insert")]
-        public async Task<IActionResult> Index(string[] model)
+        public async Task<ActionResult<IEnumerable<Class>>> Index(string[] model)
         {
             foreach(var name in model){
                 _context.Classes.Add( new Class{
@@ -38,22 +41,26 @@ namespace WebApi.Controllers
         [Route("fill")]
         public async Task<IActionResult> Fill()
         {
-            var classes = _context.Classes.OrderBy(x => x.ClassID);
-            var arms = Enum.GetValues(typeof(Arms)).Cast<Arms>();
-            
-            foreach(var Class in classes)
-            {
-                foreach(var arm in arms){
-                    _context.ClassArms.Add( new ClassArm{
-                        ClassID = Class.ClassID,
-                        Arm = arm
-                    });
-                }
-            }
-            await _context.SaveChangesAsync();
-            return Ok();
+             var classArms = _userManager.Users
+            .Where(u => u.SchoolID == 1)
+            .Select(r => r.ClassArmID).ToList();
+
+               
+                
+            return Ok(classArms);
         }
 
-        // GET: Class/Details/5
+        [HttpDelete]
+        [Route("Delete")]
+        public async Task<ActionResult<IEnumerable<Class>>> Del()
+        {
+            var classArms = _context.ClassArms;
+           foreach(var arm in classArms){
+               _context.ClassArms.Remove(arm);
+           }
+            await _context.SaveChangesAsync();
+       
+            return Ok();
+        }
      }
 }

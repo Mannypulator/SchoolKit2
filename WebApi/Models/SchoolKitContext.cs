@@ -33,5 +33,8 @@ namespace WebApi.Models
       public DbSet<Question> Questions { get; set; }
       public DbSet<QuestionAttempt> QuestionAttempts { get; set; }
       public DbSet<Option> Options { get; set; }
+      public DbSet<SSDrop> SSDrops { get; set; }
+      public DbSet<Subject> Subjects { get; set; }
+      public DbSet<SSCompulsory> SSCompulsories { get; set; }
     }
 }

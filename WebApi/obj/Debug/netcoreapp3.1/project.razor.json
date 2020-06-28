@@ -20521,23 +20521,68 @@
   "RootNamespace": "WebApi",
   "Documents": [
     {
-      "FilePath": "c:\\Users\\Daniel Okpala\\Documents\\repos\\School Kit\\WebApi\\Views\\Class\\Index.cshtml",
-      "TargetPath": "Views\\Class\\Index.cshtml",
+      "FilePath": "c:\\Users\\Daniel Okpala\\Documents\\repos\\School Kit\\WebApi\\Views\\Teacher\\Index.cshtml",
+      "TargetPath": "Views\\Teacher\\Index.cshtml",
       "FileKind": "mvc"
     },
     {
-      "FilePath": "c:\\Users\\Daniel Okpala\\Documents\\repos\\School Kit\\WebApi\\Views\\Class\\Details.cshtml",
-      "TargetPath": "Views\\Class\\Details.cshtml",
+      "FilePath": "c:\\Users\\Daniel Okpala\\Documents\\repos\\School Kit\\WebApi\\Views\\Result\\Details.cshtml",
+      "TargetPath": "Views\\Result\\Details.cshtml",
       "FileKind": "mvc"
     },
     {
-      "FilePath": "c:\\Users\\Daniel Okpala\\Documents\\repos\\School Kit\\WebApi\\Views\\Class\\Create.cshtml",
-      "TargetPath": "Views\\Class\\Create.cshtml",
+      "FilePath": "c:\\Users\\Daniel Okpala\\Documents\\repos\\School Kit\\WebApi\\Views\\Result\\Create.cshtml",
+      "TargetPath": "Views\\Result\\Create.cshtml",
       "FileKind": "mvc"
     },
     {
-      "FilePath": "c:\\Users\\Daniel Okpala\\Documents\\repos\\School Kit\\WebApi\\Views\\Class\\Delete.cshtml",
-      "TargetPath": "Views\\Class\\Delete.cshtml",
+      "FilePath": "c:\\Users\\Daniel Okpala\\Documents\\repos\\School Kit\\WebApi\\Views\\Teacher\\Delete.cshtml",
+      "TargetPath": "Views\\Teacher\\Delete.cshtml",
+      "FileKind": "mvc"
+    },
+    {
+      "FilePath": "c:\\Users\\Daniel Okpala\\Documents\\repos\\School Kit\\WebApi\\Views\\Teacher\\Edit.cshtml",
+      "TargetPath": "Views\\Teacher\\Edit.cshtml",
+      "FileKind": "mvc"
+    },
+    {
+      "FilePath": "c:\\Users\\Daniel Okpala\\Documents\\repos\\School Kit\\WebApi\\Views\\Result\\Index.cshtml",
+      "TargetPath": "Views\\Result\\Index.cshtml",
+      "FileKind": "mvc"
+    },
+    {
+      "FilePath": "c:\\Users\\Daniel Okpala\\Documents\\repos\\School Kit\\WebApi\\Views\\Result\\Delete.cshtml",
+      "TargetPath": "Views\\Result\\Delete.cshtml",
+      "FileKind": "mvc"
+    },
+    {
+      "FilePath": "c:\\Users\\Daniel Okpala\\Documents\\repos\\School Kit\\WebApi\\Views\\Student\\Delete.cshtml",
+      "TargetPath": "Views\\Student\\Delete.cshtml",
+      "FileKind": "mvc"
+    },
+    {
+      "FilePath": "c:\\Users\\Daniel Okpala\\Documents\\repos\\School Kit\\WebApi\\Views\\Student\\Details.cshtml",
+      "TargetPath": "Views\\Student\\Details.cshtml",
+      "FileKind": "mvc"
+    },
+    {
+      "FilePath": "c:\\Users\\Daniel Okpala\\Documents\\repos\\School Kit\\WebApi\\Views\\Student\\Create.cshtml",
+      "TargetPath": "Views\\Student\\Create.cshtml",
+      "FileKind": "mvc"
+    },
+    {
+      "FilePath": "c:\\Users\\Daniel Okpala\\Documents\\repos\\School Kit\\WebApi\\Views\\Teacher\\Create.cshtml",
+      "TargetPath": "Views\\Teacher\\Create.cshtml",
+      "FileKind": "mvc"
+    },
+    {
+      "FilePath": "c:\\Users\\Daniel Okpala\\Documents\\repos\\School Kit\\WebApi\\Views\\Student\\Index.cshtml",
+      "TargetPath": "Views\\Student\\Index.cshtml",
+      "FileKind": "mvc"
+    },
+    {
+      "FilePath": "c:\\Users\\Daniel Okpala\\Documents\\repos\\School Kit\\WebApi\\Views\\Teacher\\Details.cshtml",
+      "TargetPath": "Views\\Teacher\\Details.cshtml",
       "FileKind": "mvc"
     },
     {
@@ -20546,8 +20591,13 @@
       "FileKind": "mvc"
     },
     {
-      "FilePath": "c:\\Users\\Daniel Okpala\\Documents\\repos\\School Kit\\WebApi\\Views\\Class\\Edit.cshtml",
-      "TargetPath": "Views\\Class\\Edit.cshtml",
+      "FilePath": "c:\\Users\\Daniel Okpala\\Documents\\repos\\School Kit\\WebApi\\Views\\Result\\Edit.cshtml",
+      "TargetPath": "Views\\Result\\Edit.cshtml",
+      "FileKind": "mvc"
+    },
+    {
+      "FilePath": "c:\\Users\\Daniel Okpala\\Documents\\repos\\School Kit\\WebApi\\Views\\Student\\Edit.cshtml",
+      "TargetPath": "Views\\Student\\Edit.cshtml",
       "FileKind": "mvc"
     }
   ],

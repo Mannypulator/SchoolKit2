@@ -2,8 +2,12 @@ namespace WebApi.Models
 {
     public enum ClassRange : int
     {
-        Junior,
-        Senior,
+        PreNusery,
+        Nursery,
+        Primary,
+        JSS,
+        SSS,
+        SS,
         All
     }
 }

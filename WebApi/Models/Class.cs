@@ -10,6 +10,7 @@ namespace WebApi.Models
         [Required]
 
         public string ClassName { get; set; }
+        
 
         public ICollection<ClassArm> ClassArms { get; set; }
     }

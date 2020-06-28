@@ -463,6 +463,9 @@ namespace WebApi.Migrations
                     b.Property<int>("TermID")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("Total")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("ResultID");
 
                     b.HasIndex("StudentID");
@@ -498,6 +501,48 @@ namespace WebApi.Migrations
                     b.ToTable("ResultRecords");
                 });
 
+            modelBuilder.Entity("WebApi.Models.SSCompulsory", b =>
+                {
+                    b.Property<int>("SSCompulsoryID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("SchoolID")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("SubjectID")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("SSCompulsoryID");
+
+                    b.HasIndex("SchoolID");
+
+                    b.HasIndex("SubjectID");
+
+                    b.ToTable("SSCompulsories");
+                });
+
+            modelBuilder.Entity("WebApi.Models.SSDrop", b =>
+                {
+                    b.Property<int>("SSDropID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("SchoolID")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("SubjectID")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("SSDropID");
+
+                    b.HasIndex("SchoolID");
+
+                    b.HasIndex("SubjectID");
+
+                    b.ToTable("SSDrops");
+                });
+
             modelBuilder.Entity("WebApi.Models.School", b =>
                 {
                     b.Property<int>("SchoolID")
@@ -507,13 +552,25 @@ namespace WebApi.Migrations
                     b.Property<string>("Address")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("Append")
+                        .HasColumnType("TEXT");
+
                     b.Property<int>("LgaID")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("RegNoCount")
+                        .HasColumnType("INTEGER");
+
                     b.Property<bool>("ShowPositon")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("StudentCount")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("TeachersCount")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("SchoolID");
@@ -554,7 +611,7 @@ namespace WebApi.Migrations
 
                     b.HasKey("SubjectID");
 
-                    b.ToTable("Subject");
+                    b.ToTable("Subjects");
                 });
 
             modelBuilder.Entity("WebApi.Models.TeacherQualification", b =>
@@ -601,6 +658,9 @@ namespace WebApi.Migrations
                 {
                     b.Property<int>("TermID")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("Current")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("Label")
@@ -929,6 +989,36 @@ namespace WebApi.Migrations
                     b.HasOne("WebApi.Models.Term", "Term")
                         .WithMany("ResultRecords")
                         .HasForeignKey("TermID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("WebApi.Models.SSCompulsory", b =>
+                {
+                    b.HasOne("WebApi.Models.School", "School")
+                        .WithMany("SSCompulsories")
+                        .HasForeignKey("SchoolID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("WebApi.Models.Subject", "Subject")
+                        .WithMany("SSCompulsories")
+                        .HasForeignKey("SubjectID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("WebApi.Models.SSDrop", b =>
+                {
+                    b.HasOne("WebApi.Models.School", "School")
+                        .WithMany("SSDrops")
+                        .HasForeignKey("SchoolID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("WebApi.Models.Subject", "Subject")
+                        .WithMany("SSDrops")
+                        .HasForeignKey("SubjectID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
