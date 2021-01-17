@@ -15,12 +15,12 @@ namespace WebApi.Models
         public int TermID { get; set; }
 
         [ForeignKey("SchoolID")]
-        public virtual School School { get; set; }
+        public School School { get; set; }
 
         [ForeignKey("ClassArmID")]
-        public virtual ClassArm ClassArm { get; set; }
+        public ClassArm ClassArm { get; set; }
 
         [ForeignKey("TermID")]
-        public virtual Term Term { get; set; }
+        public Term Term { get; set; }
     }
 }

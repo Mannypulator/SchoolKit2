@@ -16,6 +16,6 @@ namespace WebApi.Models
         public int LgaID { get; set; }
          
         [ForeignKey("LgaID")]
-        public virtual LGA LGA { get; set; }
+        public LGA LGA { get; set; }
     }
 }

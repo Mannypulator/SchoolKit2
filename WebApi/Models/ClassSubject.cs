@@ -6,6 +6,13 @@ namespace WebApi.Models
 {
     public class ClassSubject
     {
+         
+        public ClassSubject()
+        {
+            Enrollments = new HashSet<Enrollment>();
+            TeacherSubjects = new HashSet<TeacherSubject>();
+            Tests = new HashSet<Test>();
+        }
         [Key]
         public int ClassSubjectID { get; set; }
         [Required]
@@ -20,8 +27,8 @@ namespace WebApi.Models
          [ForeignKey("SubjectID")]
         public virtual Subject Subject { get; set; }
 
-        public virtual ICollection<Enrollment> Enrollments { get; set; }
-        public virtual ICollection<TeacherSubject> TeacherSubjects { get; set; }
+        public  ICollection<Enrollment> Enrollments { get; set; }
+        public  ICollection<TeacherSubject> TeacherSubjects { get; set; }
         public ICollection<Test> Tests { get; set; }
     }
 }

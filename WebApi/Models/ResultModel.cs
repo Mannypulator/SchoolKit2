@@ -9,9 +9,9 @@ namespace WebApi.Models
         public ResultModel()
         {
          Result = new Result();
-         Enrollments  = new List<Enrollment>();
+         Enrollments  = new List<EnrollmentModel>();
         }
         public Result Result { get; set; }
-        public List<Enrollment> Enrollments { get; set; }
+        public List<EnrollmentModel> Enrollments { get; set; }
     }
 }

@@ -13,59 +13,109 @@ namespace WebApi.Controllers
 {
     [ApiController]
     [Route("api/enrollment")]
-    public class EnrollmentController : Controller
+    public class EnrollmentController : ControllerBase
     {
         private readonly SchoolKitContext _context;
-        private readonly UserManager<Student> _userManager;
-
-        public EnrollmentController(SchoolKitContext context, UserManager<Student> userManager)
+        private readonly UserManager<Student> _studentManager;
+        private readonly UserManager<Teacher> _teacherManager;
+        private readonly UserManager<Principal> _principalManager;
+        public EnrollmentController(SchoolKitContext context, UserManager<Student> studentManager, UserManager<Teacher> teacherManager)
         {
             _context = context;
-            _userManager = userManager;
+            _studentManager = studentManager;
+            _teacherManager = teacherManager;
         }
 
         [HttpPost]
-        [Route("begin")]
-
-        public async Task<IActionResult> Begin(int id)
+        [Route("newTerm")]
+        //authorize for principal
+        public async Task<IActionResult> NewTerm(Term term)
         {
-            var students = _userManager.Users
-            .Where(x => x.SchoolID == id);
-             var term = _context.Terms
-                       .Where(x => x.Current == true)
-                       .Single();
-            foreach(var student in students)
+            var userId = User.Claims.FirstOrDefault(c => c.Type == "UserID").Value;
+            var principal = await _principalManager.FindByIdAsync(userId);
+
+            var prevTerm = _context.Terms
+            .Where(x => x.SchoolID == principal.SchoolID)
+            .OrderBy(x => x.TermID)
+            .LastOrDefault();
+
+
+            if(prevTerm !=null)
             {
-                await Task.Run(()=>
-                EMethod.EnrollStudent(student, term, _context)
-                );
-                   
+                if(prevTerm.Current == true)
+                {
+                    return BadRequest( new {Message = "Please end current term before starting a new one"});
+                }
+                await _context.Terms.AddAsync(term);
+                await _context.SaveChangesAsync();
+
+                var students = _studentManager.Users
+                .Where(x => x.SchoolID == principal.SchoolID);
+
+                EMethod eMethod = new EMethod(); 
+
+                foreach(var student in students)
+                {
+                    eMethod.EnrollStudent(student, term, _context, prevTerm);
+                }
+                return Ok(new {Message = "Term Started Succesfully"});
             }
-            return Ok();
+            else{
+                var students = _studentManager.Users
+                .Where(x => x.SchoolID == principal.SchoolID);
+
+                EMethod eMethod = new EMethod(); 
+
+                foreach(var student in students)
+                {
+                    eMethod.EnrollStudent(student, term, _context);
+                }
+                return Ok(new {Message = "Term Started Succesfully"});
+            }
+            
         }
 
-        [HttpPost]
+        [HttpGet]
         [Route("my")]
-        public IEnumerable<Enrollment> MyEnrollments(string id)
+        public async Task<IActionResult> MyEnrollments(string id)
         {
             int termid = _context.Terms.Where(d => d.Current == true)
             .Select(p => p.TermID)
             .Single();
 
-           var enrollments = _context.Enrollments
-           .Where(o => o.StudentID == id && o.TermID == termid).ToList();
+           var enrollments = await _context.Enrollments
+           .Where(o => o.StudentID == id && o.TermID == termid).ToListAsync();
 
-            return enrollments;
+            return Ok(enrollments);
+        }
+
+        [HttpGet]
+        [Route("all")]
+        //authorize for teacher
+        public async Task<IActionResult> AllEnrollments(int id)
+        {
+            var userID = User.Claims.FirstOrDefault(c => c.Type == "UserID").Value;
+            var teacher = await _teacherManager.FindByIdAsync(userID);
+
+            int termid = await _context.Terms.Where(d =>d.SchoolID == teacher.SchoolID && d.Current == true)
+            .Select(p => p.TermID)
+            .SingleOrDefaultAsync();
+
+           var enrollments = await _context.Enrollments
+           .Where(o => o.ClassSubjectID == id && o.TermID == termid).ToListAsync();
+
+            return Ok(enrollments);
         }
 
         [HttpPost]
         [Route("update")]
-        public async Task<IActionResult> Update(Enrollment enrollment)
+        public async Task<IActionResult> Update(Enrollment[] enrollments)
         {
-            await Task.Run(() => {
+           foreach(var enrollment in enrollments){
+               enrollment.Total = enrollment.CA + enrollment.Exam;
                 _context.Enrollments.Update(enrollment);
-            });
-            
+           }
+           await _context.SaveChangesAsync();     
             return Ok();
         }
 

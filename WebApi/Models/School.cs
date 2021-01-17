@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WebApi.Models
 {
+    
     public class School
     {
         public School()
@@ -27,6 +28,14 @@ namespace WebApi.Models
         public int StudentCount { get; set; }
         public int TeachersCount { get; set; }
         public int RegNoCount { get; set; }
+        public bool SessionStart { get; set; }
+        
+        public string? AdminID { get; set; }
+        [NotMapped]
+        public string Code { get; set; }
+
+        [ForeignKey("AdminID")]
+        public Admin Admin { get; set; }
 
         [ForeignKey("LgaID")]
         public LGA LGA { get; set; }
@@ -37,5 +46,6 @@ namespace WebApi.Models
         public ICollection<SSCompulsory> SSCompulsories { get; set; }
         public ICollection<SSDrop> SSDrops { get; set; }
         public ICollection<ResultRecord> ResultRecords { get; set; }
+        
     }
 }

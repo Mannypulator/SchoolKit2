@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -6,8 +7,16 @@ namespace WebApi.Models
 {
     public class Test
     {
+        public Test()
+        {
+            Questions = new HashSet<Question>();
+            Attempts = new HashSet<TestAttempt>();
+        }
         [Key]
         public int TestID { get; set; }
+        public DateTime StartDate { get; set; }
+        public DateTime CloseDate { get; set; }
+        public bool Closed { get; set; }
         [Required]
         public int Minutes { get; set; }
         [Required]
@@ -17,6 +26,7 @@ namespace WebApi.Models
         public int SchoolID { get; set; }
         [Required]
         public int ClassSubjectID { get; set; }
+        public int QNPS { get; set; }
         [Required]
         public int TermID { get; set; }
         [ForeignKey("SchoolID")]
@@ -26,8 +36,8 @@ namespace WebApi.Models
         [ForeignKey("TermID")]
         public Term Term { get; set; }
 
-        public virtual ICollection<Question> Questions { get; set; }
-        public virtual ICollection<TestAttempt> Attempts { get; set; }
+        public ICollection<Question> Questions { get; set; }
+        public ICollection<TestAttempt> Attempts { get; set; }
 
 
     }

@@ -7,7 +7,7 @@ namespace WebApi.Models
     [NotMapped]
     public class SubjectModel
     {
-          public string Title { get; set; }
+        public string Title { get; set; }
         public string Range { get; set; }
         public bool SchoolSpecific { get; set; }
     }

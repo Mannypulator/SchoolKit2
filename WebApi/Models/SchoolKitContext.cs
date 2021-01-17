@@ -31,10 +31,16 @@ namespace WebApi.Models
       public DbSet<Test> Tests { get; set; }
       public DbSet<TestAttempt> TestAttempts { get; set; }
       public DbSet<Question> Questions { get; set; }
-      public DbSet<QuestionAttempt> QuestionAttempts { get; set; }
+      public DbSet<QAttempt> QuestionAttempts { get; set; }
+      public DbSet<QAttemptsOption> QAttemptsOptions { get; set; }
+      
       public DbSet<Option> Options { get; set; }
       public DbSet<SSDrop> SSDrops { get; set; }
       public DbSet<Subject> Subjects { get; set; }
       public DbSet<SSCompulsory> SSCompulsories { get; set; }
+      public DbSet<SchoolRegCode> SchoolRegCodes { get; set; }
+      public DbSet<StudentCode> StudentCodes { get; set; }
+      public DbSet<TeacherCode> TeacherCodes { get; set; }
+      
     }
 }

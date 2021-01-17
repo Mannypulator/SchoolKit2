@@ -24,7 +24,7 @@ namespace WebApi.Controllers
         [Route("add")]
         public async Task<IActionResult> Add(School model)
         {
-            _context.Schools.Add(model);
+          //  _context.Schools.Add(model);
             await _context.SaveChangesAsync();
             return Ok();
         }

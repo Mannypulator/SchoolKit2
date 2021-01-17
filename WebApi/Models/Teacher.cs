@@ -5,12 +5,18 @@ namespace WebApi.Models
 {
     public class Teacher: ApplicationUser
     {
+        public Teacher(){
+            TeacherSubjects = new HashSet<TeacherSubject>();
+            TeacherQualifications = new HashSet<TeacherQualification>();
+        }
         public int SchoolID { get; set; }
+        [NotMapped]
+        public TeacherCode Code { get; set; }
         
 
         [ForeignKey("SchoolID")]
-        public virtual School School { get; set; }
-        public virtual ICollection<TeacherSubject> TeacherSubjects { get; set; }
-        public virtual ICollection<TeacherQualification> TeacherQualifications { get; set; }
+        public School School { get; set; }
+        public ICollection<TeacherSubject> TeacherSubjects { get; set; }
+        public ICollection<TeacherQualification> TeacherQualifications { get; set; }
     }
 }

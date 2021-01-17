@@ -6,6 +6,13 @@ namespace WebApi.Models
 {
     public class ClassArm
     {
+        public ClassArm()
+        {
+           Students = new HashSet<Student>();
+           ClassSubjects = new HashSet<ClassSubject>();
+           ResultRecords = new HashSet<ResultRecord>();
+        }
+        
         [Key]
         public int ClassArmID { get; set; }
         [Required]
@@ -16,8 +23,8 @@ namespace WebApi.Models
         [ForeignKey("ClassID")]
         public Class Class { get; set; }
 
-        public virtual ICollection<Student> Students { get; set; }
-        public virtual ICollection<ClassSubject> ClassSubject { get; set; }
-        public virtual ICollection<ResultRecord> ResultRecords { get; set; }
+        public ICollection<Student> Students { get; set; }
+        public ICollection<ClassSubject> ClassSubjects { get; set; }
+        public ICollection<ResultRecord> ResultRecords { get; set; }
     }
 }

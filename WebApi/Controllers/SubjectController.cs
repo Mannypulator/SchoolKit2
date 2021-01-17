@@ -11,7 +11,7 @@ namespace WebApi.Controllers
 {
     [ApiController]
     [Route("api/subject")]
-    public class SubjectController : Controller
+    public class SubjectController : ControllerBase
     {
         private readonly SchoolKitContext _context;
 

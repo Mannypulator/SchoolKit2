@@ -13,7 +13,7 @@ namespace WebApi.Controllers
 {
     [ApiController]
     [Route("api/student")]
-    public class StudentController : Controller
+    public class StudentController : ControllerBase
     {
         private readonly SchoolKitContext _context;
         private readonly UserManager<Student> _userManager;
@@ -24,35 +24,45 @@ namespace WebApi.Controllers
             _userManager = userManager;
         }
 
+        //api/student/create
         [HttpPost]
         [Route("create")]
         public async Task<IActionResult> Create(Student model)
         {
-            var regCount = _context.Schools
-            .Where(x => x.SchoolID == model.SchoolID)
-            .Select(x => x.RegNoCount).Single();
+            var code = _context.StudentCodes
+            .Where(x => x.Code == model.Code.Code)
+            .FirstOrDefault();
+            var time_check = (DateTime.UtcNow.AddHours(1) - code.Date).TotalDays;
+            if(code != null && time_check < 2)
+            {
+                var regCount = _context.Schools
+                .Where(x => x.SchoolID == model.SchoolID)
+               .Select(x => x.RegNoCount).Single();
              var append = _context.Schools
-            .Where(x => x.SchoolID == model.SchoolID)
-            .Select(x => x.Append).Single();
+              .Where(x => x.SchoolID == model.SchoolID)
+             .Select(x => x.Append).Single();
 
-           string s = append + regCount.ToString().PadLeft(4, '0');
+             string s = append + regCount.ToString().PadLeft(4, '0');
 
-            Student mod = new Student{
+             Student student = new Student{
                 FirstName = model.FirstName,
                 LastName = model.LastName,
-                ClassArmID = model.ClassArmID,
-                SchoolID = model.SchoolID,
+                Address = model.Address,
+                ClassArmID = model.Code.ClassArmID,
+                SchoolID = model.Code.SchoolID,
                 LgaID = model.LgaID,
                 Gender = (UserGender)model.Gender,
                 RegNo = s,
                 UserName = s
-            };
-            try{
-                var result = await _userManager.CreateAsync(mod, model.PasswordHash);
+              };
+             try{
+             
+                var result = await _userManager.CreateAsync(student, model.PasswordHash);
                 if (result.Succeeded)
                 {
+                    await _userManager.AddToRoleAsync(student,"Student");
                     var regC = _context.Schools
-                   .Where(x => x.SchoolID == model.SchoolID)
+                   .Where(x => x.SchoolID == student.SchoolID)
                    .Single();
                    regC.RegNoCount += 1;
                    regC.StudentCount += 1;
@@ -60,19 +70,27 @@ namespace WebApi.Controllers
                    await _context.SaveChangesAsync();
                   
                    var term = _context.Terms
-                       .Where(x => x.Current == true)
+                       .Where(x => x.SchoolID == student.SchoolID && x.Current == true)
                        .Single();
-
-                   EMethod.EnrollStudent(mod, term, _context); 
+                  EMethod eMethod = new EMethod();
+                  eMethod.EnrollStudent(student, term, _context); 
 
                 }
                 return Ok(result);
-            }
-            catch(Exception ex){
+             }
+             catch(Exception ex)
+             {
                 throw ex;
+             }
+              
             }
-            
+             else{
+                  return BadRequest(new {Message = "Invalid Code"});
+             }
         }
+
+        //api/student/deleteStudent
+        
 
     }
 }

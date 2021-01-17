@@ -15,24 +15,25 @@ namespace WebApi.Controllers
     public class ResultController : ControllerBase
     {
         private readonly SchoolKitContext _context;
-        private readonly UserManager<Student> _userManager;
+        private readonly UserManager<Student> _studentManager;
 
-        public ResultController(SchoolKitContext context, UserManager<Student> userManager)
+        public ResultController(SchoolKitContext context, UserManager<Student> studentManager)
         {
             _context = context;
-            _userManager = userManager;
+            _studentManager = studentManager;
         }
 
         [HttpPost]
         [Route("compile")]
+        //authorize for principals
         public async Task<IActionResult> Compile(int id)
         {
-            var students = _userManager.Users
+            var students = _studentManager.Users
             .Where(x => x.SchoolID == id);
 
             int termId = _context.Terms
-            .Where(d => d.Current == true)
-            .Select(r => r.TermID).Single();
+            .Where(d => d.SchoolID == id & d.Current == true)
+            .Select(r => r.TermID).SingleOrDefault();
 
             foreach(var student in students)
             {
@@ -53,7 +54,7 @@ namespace WebApi.Controllers
             }
             await _context.SaveChangesAsync();
 
-            var classArms = _userManager.Users
+            var classArms = _studentManager.Users
             .Where(u => u.SchoolID == id)
             .Select(r => r.ClassArmID).ToHashSet(); //get classArms id for students in current school
 
@@ -69,6 +70,7 @@ namespace WebApi.Controllers
                 foreach(var result in classResults)
                 {
                     result.ClassPosition = count;
+                    _context.Update(result);
                     count++;  
                 }
                  await _context.SaveChangesAsync();// if positions don't show, remember to test this
@@ -76,22 +78,33 @@ namespace WebApi.Controllers
             return Ok();
         }
 
-        [HttpPost]
-        [Route("get")]
-
-        public async Task<ActionResult<ResultModel>> Get(string stId)
+        [HttpGet]
+        [Route("getLatestResult")]
+        //authorise for students
+        public async Task<ResultModel> GetLastestResult()
         {
-           var term = _context.Terms
-           .Where(i => i.Current == true)
+            var userID = User.Claims.FirstOrDefault(c => c.Type == "UserID").Value;
+            var  student = await _studentManager.FindByIdAsync(userID);
+           var term = await _context.Terms
+           .Where(i => i.SchoolID == student.SchoolID && i.Current != true)
+           .OrderBy(x => x.TermID)
            .Select(t => t.TermID)
-           .Single();
+           .LastOrDefaultAsync();
 
-           var result = _context.Results
-           .Where(d => d.StudentID == stId && d.TermID == term)
-           .Single();
+           var result = await _context.Results
+           .Where(d => d.StudentID == userID && d.TermID == term)
+           .SingleOrDefaultAsync();
 
-           var enrollments = _context.Enrollments
-           .Where(d => d.StudentID == stId && d.TermID == term).ToList();
+           var enrollments = await _context.Enrollments
+           .Include(x=> x.ClassSubject)
+           .ThenInclude(f => f.Subject)
+           .Where(d => d.StudentID == userID && d.TermID == term)
+           .Select(d => new EnrollmentModel{
+               SubjectName = d.ClassSubject.Subject.Title,
+               CA = d.CA,
+               Exam = d.Exam,
+               Grade =d.grade,
+              }).ToListAsync();
 
             var stResult = new ResultModel
             {
@@ -100,11 +113,54 @@ namespace WebApi.Controllers
 
             };
 
-          return  await Task.Run(()=>{
-                return stResult;
-            });
-            
+             return stResult;
         }
+
+        [HttpGet]
+        [Route("getAllResults")]
+        //authorise for students
+        public async Task<IActionResult> GetAllResults()
+        {
+            var userID = User.Claims.FirstOrDefault(c => c.Type == "UserID").Value;
+            var  student = await _studentManager.FindByIdAsync(userID);
+
+           var terms =  _context.Terms
+           .Where(i => i.SchoolID == student.SchoolID && i.Current != true)
+           .Select(t => t.TermID)
+           .OrderBy(x => x)
+           .ToList();
+
+           List<ResultModel> results = new List<ResultModel>();
+           foreach(var term in terms)
+           {
+                var result = await _context.Results
+                .Where(d => d.StudentID == userID && d.TermID == term)
+                .SingleOrDefaultAsync();
+
+                var enrollments = await _context.Enrollments
+                .Include(x=> x.ClassSubject)
+                .ThenInclude(f => f.Subject)
+                .Where(d => d.StudentID == userID && d.TermID == term)
+                .Select(d => new EnrollmentModel{
+                    SubjectName = d.ClassSubject.Subject.Title,
+                    CA = d.CA,
+                    Exam = d.Exam,
+                    Grade =d.grade,
+                    }).ToListAsync();
+
+                var stResult = new ResultModel
+                {
+                    Result =result,
+                    Enrollments = enrollments
+
+                };
+                results.Add(stResult);
+           }
+
+           
+             return Ok(results);
+        }
+
 
 
     }

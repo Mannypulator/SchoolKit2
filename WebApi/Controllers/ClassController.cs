@@ -2,25 +2,32 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Threading;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using WebApi.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebApi.Controllers
 {
     [ApiController]
     [Route("api/class")]
-    public class ClassController : Controller
+    public class ClassController : ControllerBase
     {
         private readonly SchoolKitContext _context;
         private readonly UserManager<Student> _userManager;
+        public Timer timer;
+        public StateID ID;
 
         public ClassController(SchoolKitContext context, UserManager<Student> userManager)
         {
             _context = context;
             _userManager = userManager;
+             ID = new StateID();
+             
+            
         }
 
         // GET: Class
@@ -39,15 +46,10 @@ namespace WebApi.Controllers
 
         [HttpPost]
         [Route("fill")]
-        public async Task<IActionResult> Fill()
+        [Authorize]
+        public async Task<IActionResult> Fill([FromBody]string tt)
         {
-             var classArms = _userManager.Users
-            .Where(u => u.SchoolID == 1)
-            .Select(r => r.ClassArmID).ToList();
-
-               
-                
-            return Ok(classArms);
+            return Ok("class ran");
         }
 
         [HttpDelete]
@@ -62,5 +64,26 @@ namespace WebApi.Controllers
        
             return Ok();
         }
+
+        public async void AddLGA(object TestID)
+        {
+            var id = TestID as StateID;
+
+            var lga = new LGA{
+                Name = "Ezza",
+                StateID = id.Id
+            };
+            using (SchoolKitContext context = new SchoolKitContext()){
+               // await context.LGAs.AddAsync(lga);
+                await context.SaveChangesAsync();
+            }
+           timer.Dispose();
+           
+        }
      }
+}
+
+public class StateID{
+    public int Id;
+    
 }
