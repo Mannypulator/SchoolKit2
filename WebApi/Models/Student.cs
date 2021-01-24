@@ -10,6 +10,9 @@ namespace WebApi.Models
             Enrollments = new HashSet<Enrollment>();
             Results = new HashSet<Result>();
             TestAttempts = new HashSet<TestAttempt>();
+            StudentFees = new HashSet<StudentFee>();
+            AnnualEnrollments = new HashSet<AnnualEnrollment>();
+            Purchases = new HashSet<ProductSale>();
         } 
         public string RegNo { get; set; }
         public DateTime DateOfBirth { get; set; }
@@ -18,6 +21,7 @@ namespace WebApi.Models
 
         public bool HasGraduated { get; set; }
         public  bool IsActivated { get; set; }
+        public decimal Balance { get; set; }
         [NotMapped]
         public StudentCode Code { get; set; }
 
@@ -30,5 +34,9 @@ namespace WebApi.Models
        public ICollection<Enrollment> Enrollments{ get; set; }
        public ICollection<Result> Results { get; set; }
        public ICollection<TestAttempt> TestAttempts { get; set; }
+       public ICollection<StudentFee> StudentFees { get; set; }
+       public ICollection<AnnualEnrollment> AnnualEnrollments { get; set; }
+       public ICollection<FeePayment> Payments { get; set; }
+       public ICollection<ProductSale> Purchases { get; set; }
     }
 }

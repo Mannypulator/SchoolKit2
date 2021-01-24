@@ -35,21 +35,27 @@ namespace WebApi.Controllers
         [Route("insert")]
         public async Task<ActionResult<IEnumerable<Class>>> Index(string[] model)
         {
-            foreach(var name in model){
+            /*foreach(var name in model){
                 _context.Classes.Add( new Class{
                     ClassName = name
                 });
             }
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();*/
             return Ok();
+            
+
         }
 
         [HttpPost]
         [Route("fill")]
-        [Authorize]
+       // [Authorize]
         public async Task<IActionResult> Fill([FromBody]string tt)
         {
-            return Ok("class ran");
+            string u = "r";
+            string y = "e";
+            string t = null;
+            List<string> f = new List<string>{u, y, t};
+            return Ok();
         }
 
         [HttpDelete]

@@ -16,6 +16,9 @@ namespace WebApi.Models
             Principals = new HashSet<Principal>();
             Tests = new HashSet<Test>();
             SSDrops = new HashSet<SSDrop>();
+            Fees = new HashSet<Fee>();
+            Products = new HashSet<Product>();
+            GeneralExpenses = new HashSet<GeneralExpense>();
         }
         [Key]
         public int SchoolID { get; set; }
@@ -46,6 +49,9 @@ namespace WebApi.Models
         public ICollection<SSCompulsory> SSCompulsories { get; set; }
         public ICollection<SSDrop> SSDrops { get; set; }
         public ICollection<ResultRecord> ResultRecords { get; set; }
+        public ICollection<Fee> Fees { get; set; }
+        public ICollection<Product> Products { get; set; }
+        public ICollection<GeneralExpense> GeneralExpenses { get; set; }
         
     }
 }

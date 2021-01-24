@@ -3,15 +3,22 @@ using System.ComponentModel.DataAnnotations;
 
 namespace WebApi.Models
 {
-    public class Class
+    public enum Class:int
     {
-        [Key]
-        public int ClassID { get; set; }
-        [Required]
-
-        public string ClassName { get; set; }
-        
-
-        public ICollection<ClassArm> ClassArms { get; set; }
+        Nursery1,
+        Nursery2,
+        Nursery3,
+        Primary1,
+        Primary2,
+        Primary3,
+        Primary4,
+        Primary5,
+        Primary6,
+        JSS1,
+        JSS2,
+        JSS3,
+        SSS1,
+        SSS2,
+        SSS3
     }
 }

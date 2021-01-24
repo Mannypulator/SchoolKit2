@@ -16,17 +16,17 @@ namespace WebApi.Models
         public int Exam { get; set; }
 
         public int Total { get; set; }
-        public Grade grade { get; set; }
+        public Grade Grade { get; set; }
         [Required]
         public int TermID { get; set; }
         [ForeignKey("StudentID")]
-        public virtual Student Student { get; set; }
+        public Student Student { get; set; }
 
         [ForeignKey("ClassSubjectID")]
-        public virtual ClassSubject ClassSubject { get; set; }
+        public ClassSubject ClassSubject { get; set; }
 
         [ForeignKey("TermID")]
-        public virtual Term Term { get; set; }
+        public Term Term { get; set; }
         
     }
 }

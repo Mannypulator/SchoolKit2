@@ -14407,6 +14407,11 @@
       "FileKind": "mvc"
     },
     {
+      "FilePath": "c:\\Users\\Daniel Okpala\\Documents\\repos\\School Kit\\WebApi\\Views\\Finance\\Delete.cshtml",
+      "TargetPath": "Views\\Finance\\Delete.cshtml",
+      "FileKind": "mvc"
+    },
+    {
       "FilePath": "c:\\Users\\Daniel Okpala\\Documents\\repos\\School Kit\\WebApi\\Views\\Account\\Delete.cshtml",
       "TargetPath": "Views\\Account\\Delete.cshtml",
       "FileKind": "mvc"
@@ -14492,6 +14497,11 @@
       "FileKind": "mvc"
     },
     {
+      "FilePath": "c:\\Users\\Daniel Okpala\\Documents\\repos\\School Kit\\WebApi\\Views\\Finance\\Create.cshtml",
+      "TargetPath": "Views\\Finance\\Create.cshtml",
+      "FileKind": "mvc"
+    },
+    {
       "FilePath": "c:\\Users\\Daniel Okpala\\Documents\\repos\\School Kit\\WebApi\\Views\\Student\\Details.cshtml",
       "TargetPath": "Views\\Student\\Details.cshtml",
       "FileKind": "mvc"
@@ -14504,6 +14514,11 @@
     {
       "FilePath": "c:\\Users\\Daniel Okpala\\Documents\\repos\\School Kit\\WebApi\\Views\\Admin\\Index.cshtml",
       "TargetPath": "Views\\Admin\\Index.cshtml",
+      "FileKind": "mvc"
+    },
+    {
+      "FilePath": "c:\\Users\\Daniel Okpala\\Documents\\repos\\School Kit\\WebApi\\Views\\Finance\\Index.cshtml",
+      "TargetPath": "Views\\Finance\\Index.cshtml",
       "FileKind": "mvc"
     },
     {
@@ -14524,6 +14539,11 @@
     {
       "FilePath": "c:\\Users\\Daniel Okpala\\Documents\\repos\\School Kit\\WebApi\\Views\\Account\\Edit.cshtml",
       "TargetPath": "Views\\Account\\Edit.cshtml",
+      "FileKind": "mvc"
+    },
+    {
+      "FilePath": "c:\\Users\\Daniel Okpala\\Documents\\repos\\School Kit\\WebApi\\Views\\Finance\\Details.cshtml",
+      "TargetPath": "Views\\Finance\\Details.cshtml",
       "FileKind": "mvc"
     },
     {
@@ -14564,6 +14584,11 @@
     {
       "FilePath": "c:\\Users\\Daniel Okpala\\Documents\\repos\\School Kit\\WebApi\\Views\\Result\\Edit.cshtml",
       "TargetPath": "Views\\Result\\Edit.cshtml",
+      "FileKind": "mvc"
+    },
+    {
+      "FilePath": "c:\\Users\\Daniel Okpala\\Documents\\repos\\School Kit\\WebApi\\Views\\Finance\\Edit.cshtml",
+      "TargetPath": "Views\\Finance\\Edit.cshtml",
       "FileKind": "mvc"
     },
     {

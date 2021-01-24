@@ -29,6 +29,19 @@ namespace WebApi.Controllers
             _studentManager = studentManager;
         }
 
+       [HttpPost]
+        [Route("endTerm")]
+        //authorize for principals
+        public async Task<IActionResult> EndTerm(int schoolId)
+        {
+            EMethod eMethod = new EMethod();
+            eMethod.CompileResults(schoolId, _context, _studentManager);
+            return Ok();
+        }
+
+
+        //authorize for principals
+        
         
         [HttpGet]
         [Route("getTeachers")]
@@ -40,10 +53,22 @@ namespace WebApi.Controllers
              var id = principal.SchoolID;
 
               var teachers = _teacherManager.Users
-            .Where(x => x.SchoolID == id);
+            .Where(x => x.SchoolID == id)
+            .Include(x => x.TeacherSubjects)
+            .Select(x => new Teacher{
+                FirstName = x.FirstName,
+                LastName = x.LastName,
+                Email = x.Email,
+                SchoolID = x.SchoolID,
+                LgaID = x.LgaID,
+                Gender = x.Gender,
+                UserName = x.Email,
+                PhoneNumber = x.PhoneNumber,
+                TeacherSubjects = x.TeacherSubjects
+            });
 
             return Ok(teachers);
-    }
+        }
 
         [HttpGet]
         [Route("getStudents")]
@@ -294,6 +319,6 @@ namespace WebApi.Controllers
                 throw ex;
             }
         }
+        
     }
 }
-//proprietor

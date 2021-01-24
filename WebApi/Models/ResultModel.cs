@@ -13,5 +13,6 @@ namespace WebApi.Models
         }
         public Result Result { get; set; }
         public List<EnrollmentModel> Enrollments { get; set; }
+        public List<AnnualEnrollmentModel> AnnualEnrollments { get; set; }
     }
 }

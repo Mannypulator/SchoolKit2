@@ -8,7 +8,11 @@ namespace WebApi.Models
     public class Term
     {
         public Term(){
-            ResultRecords = new HashSet<ResultRecord>();
+            Results = new HashSet<Result>();
+            Fees = new HashSet<Fee>();
+            Enrollments = new HashSet<Enrollment>();
+            AnnualEnrollments = new HashSet<AnnualEnrollment>();
+
         }
         [Key]
         public int TermID { get; set; }
@@ -25,6 +29,8 @@ namespace WebApi.Models
         public ICollection<Result> Results { get; set; }
         public ICollection<ResultRecord> ResultRecords { get; set; }
         public ICollection<Test> Tests { get; set; }
+        public ICollection<Fee> Fees { get; set; }
+        public ICollection<AnnualEnrollment> AnnualEnrollments { get; set; }
         
     }
 }

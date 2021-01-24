@@ -11,7 +11,7 @@ namespace WebApi.Models
             => options.UseSqlite("Data Source=SchoolKit.db");
 
       public DbSet<ApplicationUser> ApplicationUsers { get; set; }
-      public DbSet<Class> Classes { get; set; }
+
       public DbSet<ClassSubject> ClassSubjects { get; set; }
       public DbSet<Enrollment> Enrollments { get; set; }
       public DbSet<LGA> LGAs { get; set; }
@@ -41,6 +41,14 @@ namespace WebApi.Models
       public DbSet<SchoolRegCode> SchoolRegCodes { get; set; }
       public DbSet<StudentCode> StudentCodes { get; set; }
       public DbSet<TeacherCode> TeacherCodes { get; set; }
+      public DbSet<AnnualEnrollment> AnnualEnrollments { get; set; }
+      public DbSet<Fee> Fees { get; set; }
+      public DbSet<FeePayment> FeePayments { get; set; }
+      public DbSet<ProductSale> ProductSales { get; set; }
+      public DbSet<ProductExpense> ProductExpenses { get; set; }
+      public DbSet<Product> Products { get; set; }
+      public DbSet<GeneralExpense> GeneralExpenses { get; set; }
+      public DbSet<StudentFee> StudentFees { get; set; }
       
     }
 }

@@ -226,3 +226,8 @@ C:\Users\Daniel Okpala\Documents\repos\School Kit\webapi\bin\Debug\netcoreapp3.1
 C:\Users\Daniel Okpala\Documents\repos\School Kit\webapi\bin\Debug\netcoreapp3.1\runtimes\win\lib\netcoreapp2.0\System.Text.Encoding.CodePages.dll
 C:\Users\Daniel Okpala\Documents\repos\School Kit\webapi\bin\Debug\netcoreapp3.1\runtimes\win\lib\netcoreapp3.0\System.Windows.Extensions.dll
 C:\Users\Daniel Okpala\Documents\repos\School Kit\webapi\bin\Debug\netcoreapp3.1\Humanizer.dll
+C:\Users\Daniel Okpala\Documents\repos\School Kit\webapi\obj\Debug\netcoreapp3.1\Razor\Views\Finance\Create.cshtml.g.cs
+C:\Users\Daniel Okpala\Documents\repos\School Kit\webapi\obj\Debug\netcoreapp3.1\Razor\Views\Finance\Delete.cshtml.g.cs
+C:\Users\Daniel Okpala\Documents\repos\School Kit\webapi\obj\Debug\netcoreapp3.1\Razor\Views\Finance\Details.cshtml.g.cs
+C:\Users\Daniel Okpala\Documents\repos\School Kit\webapi\obj\Debug\netcoreapp3.1\Razor\Views\Finance\Edit.cshtml.g.cs
+C:\Users\Daniel Okpala\Documents\repos\School Kit\webapi\obj\Debug\netcoreapp3.1\Razor\Views\Finance\Index.cshtml.g.cs

@@ -77,7 +77,7 @@ namespace WebApi.Controllers
                    Subject = new ClaimsIdentity(new Claim[]
                    {
                        new Claim("UserID", Auser.Id.ToString()),
-                       new Claim("Role", role.ToString())
+                       new Claim(ClaimTypes.Role, role.ToString())
                    }),
                    Expires = DateTime.Now.AddHours(1),
                    SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_appsettings.JWT_Secret)), SecurityAlgorithms.HmacSha256Signature)

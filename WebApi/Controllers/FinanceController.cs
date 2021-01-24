@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -9,157 +11,200 @@ using WebApi.Models;
 
 namespace WebApi.Controllers
 {
+    [ApiController]
+    [Route("api/finance")]
+    //authorise for burser
     public class FinanceController : ControllerBase
     {
         private readonly SchoolKitContext _context;
+        private readonly UserManager<Student> _studentManager;
+        private readonly UserManager<Principal> _principalManager;
+        private  readonly UserManager<Teacher> _teacherManager;
 
-        public FinanceController(SchoolKitContext context)
+        public FinanceController(SchoolKitContext context, UserManager<Student> studentManager, UserManager<Principal> principalManager,UserManager<Teacher> teacherManager)
         {
             _context = context;
+            _studentManager = studentManager;
+            _principalManager = principalManager;
+            _teacherManager = teacherManager;
         }
 
-        // GET: Finance
-        public async Task<IActionResult> Index()
-        {
-            var schoolKitContext = _context.Teachers.Include(t => t.LGA).Include(t => t.School);
-            return View(await schoolKitContext.ToListAsync());
-        }
-
-        // GET: Finance/Details/5
-        public async Task<IActionResult> Details(string id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var teacher = await _context.Teachers
-                .Include(t => t.LGA)
-                .Include(t => t.School)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (teacher == null)
-            {
-                return NotFound();
-            }
-
-            return View(teacher);
-        }
-
-        // GET: Finance/Create
-        public IActionResult Create()
-        {
-            ViewData["LgaID"] = new SelectList(_context.LGAs, "LgaID", "LgaID");
-            ViewData["SchoolID"] = new SelectList(_context.Schools, "SchoolID", "SchoolID");
-            return View();
-        }
-
-        // POST: Finance/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("SchoolID,FirstName,LastName,MiddleName,Address,Gender,LgaID,Id,UserName,NormalizedUserName,Email,NormalizedEmail,EmailConfirmed,PasswordHash,SecurityStamp,ConcurrencyStamp,PhoneNumber,PhoneNumberConfirmed,TwoFactorEnabled,LockoutEnd,LockoutEnabled,AccessFailedCount")] Teacher teacher)
+        [Route("addFee")]
+        public async Task<IActionResult> AddFee(Fee feeModel)
         {
-            if (ModelState.IsValid)
-            {
-                _context.Add(teacher);
+            
+            var term = _context.Terms
+            .Where(x => x.Current == true )
+            .SingleOrDefault();
+            if(term == null){
+                return BadRequest(new {Message = "There is no active term"});
+            }
+            else{
+                List<Claim> claims = User.Claims.Where(c => c.Type == ClaimTypes.Role).ToList();
+                var isDirector = claims.Any(x => x.Value == "Director");
+                if(isDirector){
+                    var UserID = User.Claims.FirstOrDefault(c => c.Type == "UserID").Value;
+                    var director = await _principalManager.FindByIdAsync(UserID);
+                    feeModel.SchoolID = director.SchoolID;
+                }
+                else{
+                    var UserID = User.Claims.FirstOrDefault(c => c.Type == "UserID").Value;
+                    var burser = await _teacherManager.FindByIdAsync(UserID);
+                    feeModel.SchoolID = burser.SchoolID;
+                }
+                feeModel.TermID = term.TermID;
+                await _context.Fees.AddAsync(feeModel);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["LgaID"] = new SelectList(_context.LGAs, "LgaID", "LgaID", teacher.LgaID);
-            ViewData["SchoolID"] = new SelectList(_context.Schools, "SchoolID", "SchoolID", teacher.SchoolID);
-            return View(teacher);
-        }
-
-        // GET: Finance/Edit/5
-        public async Task<IActionResult> Edit(string id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var teacher = await _context.Teachers.FindAsync(id);
-            if (teacher == null)
-            {
-                return NotFound();
-            }
-            ViewData["LgaID"] = new SelectList(_context.LGAs, "LgaID", "LgaID", teacher.LgaID);
-            ViewData["SchoolID"] = new SelectList(_context.Schools, "SchoolID", "SchoolID", teacher.SchoolID);
-            return View(teacher);
-        }
-
-        // POST: Finance/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("SchoolID,FirstName,LastName,MiddleName,Address,Gender,LgaID,Id,UserName,NormalizedUserName,Email,NormalizedEmail,EmailConfirmed,PasswordHash,SecurityStamp,ConcurrencyStamp,PhoneNumber,PhoneNumberConfirmed,TwoFactorEnabled,LockoutEnd,LockoutEnabled,AccessFailedCount")] Teacher teacher)
-        {
-            if (id != teacher.Id)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
+                
+                if(feeModel.FeeType == FeeType.General)
                 {
-                    _context.Update(teacher);
+                    var students = _studentManager.Users.Where(x => x.SchoolID == feeModel.SchoolID && !x.HasGraduated);
+                    
+                    foreach(var student in students)
+                    {
+                        var studentFee = new StudentFee{
+                            StudentID = student.Id,
+                            FeeID = feeModel.FeeID,
+                            AmountOwed = feeModel.Amount
+                        };
+                       await _context.StudentFees.AddAsync(studentFee);
+                       student.Balance = student.Balance - feeModel.Amount;
+                       await _studentManager.UpdateAsync(student);
+                    }
                     await _context.SaveChangesAsync();
                 }
-                catch (DbUpdateConcurrencyException)
+
+                else if(feeModel.FeeType == FeeType.Class)
                 {
-                    if (!TeacherExists(teacher.Id))
+                    var students = _context.ClassArms
+                    .Where(x => x.Class == feeModel.Class)
+                    .Include(x => x.Students)
+                    .SelectMany(x => x.Students)
+                    .Where(x => x.SchoolID == feeModel.SchoolID && !x.HasGraduated);
+                    
+                    foreach(var student in students)
                     {
-                        return NotFound();
+                        var studentFee = new StudentFee{
+                            StudentID = student.Id,
+                            FeeID = feeModel.FeeID,
+                            AmountOwed = feeModel.Amount
+                        };
+                       await _context.StudentFees.AddAsync(studentFee);
+                       student.Balance = student.Balance - feeModel.Amount;
+                       await _studentManager.UpdateAsync(student);
                     }
-                    else
-                    {
-                        throw;
-                    }
+                    await _context.SaveChangesAsync();
                 }
-                return RedirectToAction(nameof(Index));
+
+                else if(feeModel.FeeType == FeeType.ClassArm)
+                {
+                    var students = _context.ClassArms
+                    .Where(x => x.ClassArmID == feeModel.ClassArmID)
+                    .Include(x => x.Students)
+                    .SelectMany(x => x.Students)
+                    .Where(x => x.SchoolID == feeModel.SchoolID && !x.HasGraduated);
+                    
+                    foreach(var student in students)
+                    {
+                        var studentFee = new StudentFee{
+                            StudentID = student.Id,
+                            FeeID = feeModel.FeeID,
+                            AmountOwed = feeModel.Amount
+                        };
+                       await _context.StudentFees.AddAsync(studentFee);
+                       student.Balance = student.Balance - feeModel.Amount;
+                       await _studentManager.UpdateAsync(student);
+                    }
+                    await _context.SaveChangesAsync();
+                }
+
+                else if(feeModel.FeeType == FeeType.Student)
+                {
+                    var students = feeModel.Students;
+                    
+                    foreach(var student in students)
+                    {
+                        var studentFee = new StudentFee{
+                            StudentID = student.Id,
+                            FeeID = feeModel.FeeID,
+                            AmountOwed = feeModel.Amount
+                        };
+                       await _context.StudentFees.AddAsync(studentFee);
+                       student.Balance = student.Balance - feeModel.Amount;
+                       await _studentManager.UpdateAsync(student);
+                    }
+                    await _context.SaveChangesAsync();
+                }
+                return Ok();
             }
-            ViewData["LgaID"] = new SelectList(_context.LGAs, "LgaID", "LgaID", teacher.LgaID);
-            ViewData["SchoolID"] = new SelectList(_context.Schools, "SchoolID", "SchoolID", teacher.SchoolID);
-            return View(teacher);
+            
         }
 
-        // GET: Finance/Delete/5
-        public async Task<IActionResult> Delete(string id)
+        [HttpPost]
+        [Route("addStudentFee")]
+        public async Task<IActionResult> AddStudentFee(StudentFee model)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var teacher = await _context.Teachers
-                .Include(t => t.LGA)
-                .Include(t => t.School)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (teacher == null)
-            {
-                return NotFound();
-            }
-
-            return View(teacher);
-        }
-
-        // POST: Finance/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(string id)
-        {
-            var teacher = await _context.Teachers.FindAsync(id);
-            _context.Teachers.Remove(teacher);
+            await _context.StudentFees.AddAsync(model);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return Ok();
+
         }
 
-        private bool TeacherExists(string id)
+        [HttpPost]
+        [Route("addProduct")]
+        public async Task<IActionResult> AddProduct(Product model)
         {
-            return _context.Teachers.Any(e => e.Id == id);
+          
+            await _context.Products.AddAsync(model);//it is from the expenses that we can know how many we have in stock
+            await _context.SaveChangesAsync();
+            return Ok();
+
         }
+
+        [HttpPost]
+        [Route("addProductExpense")]
+        public async Task<IActionResult> AddProductExpense(Product model)
+        {
+            foreach(var expense in model.ProductExpenses){
+                model.Stock = model.Stock + expense.Quantity;
+            }
+            
+            await _context.ProductExpenses.AddRangeAsync(model.ProductExpenses);//it is from the expenses that we can know how many we have in stock
+            _context.Products.Update(model);
+            await _context.SaveChangesAsync();
+            return Ok();
+
+        }
+
+        [HttpPost]
+        [Route("addProductSales")]
+        public async Task<IActionResult> AddProductSales(Product model)
+        {
+            foreach(var sales in model.ProductSales){
+                model.Stock = model.Stock - sales.Quantity;
+            }
+            
+            await _context.ProductSales.AddRangeAsync(model.ProductSales);
+            _context.Products.Update(model);
+            await _context.SaveChangesAsync();
+            return Ok();
+
+        }
+
+        [HttpPost]
+        [Route("addGeneralExpense")]
+        public async Task<IActionResult> AddGeneralExpense(GeneralExpense model)
+        {   
+            await _context.GeneralExpenses.AddAsync(model);
+            await _context.SaveChangesAsync();
+            return Ok();
+
+        }
+
+
+        
+
+        // GET: Finance/Details/5
     }
 }

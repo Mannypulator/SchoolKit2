@@ -49,10 +49,12 @@ namespace WebApi.Controllers
                      await  _context.SaveChangesAsync();
                   }
                   else{
-                      var arms = _context.Classes
-                      .Include(x => x.ClassArms)
-                      .Where(x => x.ClassName.Contains(subject.Range))
-                      .SelectMany(x => x.ClassArms);
+                      var arms = _context.ClassArms
+                      .Select(x => new ClassName{
+                          ClassArmID = x.ClassArmID,
+                          Name = Enum.GetName(typeof(Class), x.Class)
+                      })
+                      .Where(p => p.Name.Contains("SSS"));
 
                       foreach(var arm in arms)
                       {

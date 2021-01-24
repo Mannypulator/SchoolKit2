@@ -23,61 +23,7 @@ namespace WebApi.Controllers
             _studentManager = studentManager;
         }
 
-        [HttpPost]
-        [Route("compile")]
-        //authorize for principals
-        public async Task<IActionResult> Compile(int id)
-        {
-            var students = _studentManager.Users
-            .Where(x => x.SchoolID == id);
-
-            int termId = _context.Terms
-            .Where(d => d.SchoolID == id & d.Current == true)
-            .Select(r => r.TermID).SingleOrDefault();
-
-            foreach(var student in students)
-            {
-                var enrollments = _context.Enrollments
-                .Where(u => u.StudentID == student.Id && u.TermID == termId);//get enrollments for current student
-
-               int total = enrollments.Sum(j => j.Total); //sum of all enrollments total scores for current student
-               int count = enrollments.Count();
-               double average = (double) total/count;
-
-               var result = new Result{
-                   StudentID = student.Id,
-                   TermID = termId,
-                   Total = total,
-                   Average = average
-               };
-               await _context.Results.AddAsync(result); //add result for current student
-            }
-            await _context.SaveChangesAsync();
-
-            var classArms = _studentManager.Users
-            .Where(u => u.SchoolID == id)
-            .Select(r => r.ClassArmID).ToHashSet(); //get classArms id for students in current school
-
-           foreach(var classArm in classArms)
-           {
-                var classResults = _context.Results.Include(x => x.Student)
-                 .Where(i => i.Student.SchoolID == id 
-                 && i.TermID == termId 
-                 && i.Student.ClassArmID == classArm)
-                 .OrderBy(x => x.Average);
-
-                int count = 1;
-                foreach(var result in classResults)
-                {
-                    result.ClassPosition = count;
-                    _context.Update(result);
-                    count++;  
-                }
-                 await _context.SaveChangesAsync();// if positions don't show, remember to test this
-           }
-            return Ok();
-        }
-
+        
         [HttpGet]
         [Route("getLatestResult")]
         //authorise for students
@@ -103,7 +49,7 @@ namespace WebApi.Controllers
                SubjectName = d.ClassSubject.Subject.Title,
                CA = d.CA,
                Exam = d.Exam,
-               Grade =d.grade,
+               Grade =d.Grade,
               }).ToListAsync();
 
             var stResult = new ResultModel
@@ -126,42 +72,67 @@ namespace WebApi.Controllers
 
            var terms =  _context.Terms
            .Where(i => i.SchoolID == student.SchoolID && i.Current != true)
-           .Select(t => t.TermID)
-           .OrderBy(x => x)
+           .OrderBy(x => x.TermID)
            .ToList();
 
            List<ResultModel> results = new List<ResultModel>();
            foreach(var term in terms)
            {
-                var result = await _context.Results
-                .Where(d => d.StudentID == userID && d.TermID == term)
-                .SingleOrDefaultAsync();
+               var result = _context.Results
+                        .Where(d => d.StudentID == userID && d.TermID == term.TermID);
 
-                var enrollments = await _context.Enrollments
-                .Include(x=> x.ClassSubject)
-                .ThenInclude(f => f.Subject)
-                .Where(d => d.StudentID == userID && d.TermID == term)
-                .Select(d => new EnrollmentModel{
-                    SubjectName = d.ClassSubject.Subject.Title,
-                    CA = d.CA,
-                    Exam = d.Exam,
-                    Grade =d.grade,
-                    }).ToListAsync();
+                foreach(var res in result){
+                    if(res.Type == ResultType.Term)
+                    {
+                        var enrollments = await _context.Enrollments
+                            .Include(x => x.ClassSubject)
+                            .ThenInclude(f => f.Subject)
+                            .Where(d => d.StudentID == userID && d.TermID == term.TermID)
+                            .Select(d => new EnrollmentModel{
+                                SubjectName = d.ClassSubject.Subject.Title,
+                                CA = d.CA,
+                                Exam = d.Exam,
+                                Total = d.Total,
+                                Grade =d.Grade,
+                                }).ToListAsync();
 
-                var stResult = new ResultModel
-                {
-                    Result =result,
-                    Enrollments = enrollments
+                        var stResult = new ResultModel
+                        {
+                            Result = res,
+                            Enrollments = enrollments
 
-                };
-                results.Add(stResult);
+                        };
+                        results.Add(stResult);
+                    }
+                    else if(res.Type == ResultType.Annual)
+                    {
+                        var annualEnrollments = await _context.AnnualEnrollments
+                            .Include(x => x.ClassSubject)
+                            .ThenInclude(f => f.Subject)
+                            .Where(d => d.StudentID == userID && d.TermID == term.TermID)
+                            .Select(d => new AnnualEnrollmentModel{
+                                SubjectName = d.ClassSubject.Subject.Title,
+                                FirstTerm = d.FirstTerm,
+                                SecondTerm = d.SecondTerm,
+                                ThirdTerm = d.ThirdTerm,
+                                Total = d.Total,
+                                Grade =d.Grade,
+                                }).ToListAsync();
+                        var AnnualResult = new ResultModel
+                        {
+                            Result = res,
+                            AnnualEnrollments = annualEnrollments
+
+                        };
+                        results.Add(AnnualResult);
+                    }
+                }    
+
+                
            }
-
            
              return Ok(results);
         }
-
-
 
     }
 }

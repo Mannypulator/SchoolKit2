@@ -113,6 +113,21 @@ namespace WebApi.Controllers
         {
            foreach(var enrollment in enrollments){
                enrollment.Total = enrollment.CA + enrollment.Exam;
+               if(enrollment.Total >= 70){
+                   enrollment.Grade = Grade.A;
+               }
+               else if(enrollment.Total >= 60){
+                   enrollment.Grade = Grade.B;
+               }
+               else if(enrollment.Total >= 50){
+                   enrollment.Grade = Grade.C;
+               }
+               else if(enrollment.Total >= 45){
+                   enrollment.Grade = Grade.D;
+               }
+               else{
+                   enrollment.Grade = Grade.F;
+               }
                 _context.Enrollments.Update(enrollment);
            }
            await _context.SaveChangesAsync();     

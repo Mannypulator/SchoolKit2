@@ -41,6 +41,7 @@ namespace WebApi.Controllers
                 LgaID = model.LgaID,
                 Gender = (UserGender)model.Gender,
                 UserName = model.Email,
+                PhoneNumber = model.PhoneNumber
 
                };
 
@@ -99,13 +100,12 @@ namespace WebApi.Controllers
                 var subjects = _context.TeacherSubjects
                 .Include(x => x.ClassSubject)
                 .ThenInclude(x => x.ClassArm)
-                .ThenInclude(x => x.Class)
                 .Include(x => x.ClassSubject.Subject)
                 .Where(x => x.TeacherID == teacherId)
                .Select(c => new TeacherSubjectModel{
                 ClassSubjectID = c.ClassSubjectID,
                 SubjectName = c.ClassSubject.Subject.Title,
-                ClassName = c.ClassSubject.ClassArm.Class.ClassName,
+                ClassName = Enum.GetName(typeof(Class), c.ClassSubject.ClassArm.Class),
                 ClassArm = c.ClassSubject.ClassArm.Arm
             }).ToList();
 
@@ -170,12 +170,13 @@ namespace WebApi.Controllers
                 .Select(f => f.Subject)
                 .FirstOrDefault();
 
-                 var className = await _context.ClassSubjects
+                 var Class = await _context.ClassSubjects
                   .Where(x => x.ClassSubjectID == model.ClassSubjectID)
                   .Include(x => x.ClassArm)
-                  .ThenInclude(x => x.Class)
-                  .Select(x => x.ClassArm.Class.ClassName)
-                  .SingleOrDefaultAsync();                  
+                  .Select(x => x.ClassArm.Class)
+                  .SingleOrDefaultAsync();           
+
+                var className = Enum.GetName(typeof(Class), Class);       
 
                   if(className.Contains("SSS"))
                   {

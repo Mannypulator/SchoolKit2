@@ -12,6 +12,7 @@ namespace WebApi.Models
             Enrollments = new HashSet<Enrollment>();
             TeacherSubjects = new HashSet<TeacherSubject>();
             Tests = new HashSet<Test>();
+            AnnualEnrollments = new HashSet<AnnualEnrollment>();
         }
         [Key]
         public int ClassSubjectID { get; set; }
@@ -30,5 +31,6 @@ namespace WebApi.Models
         public  ICollection<Enrollment> Enrollments { get; set; }
         public  ICollection<TeacherSubject> TeacherSubjects { get; set; }
         public ICollection<Test> Tests { get; set; }
+        public ICollection<AnnualEnrollment> AnnualEnrollments { get; set; }
     }
 }

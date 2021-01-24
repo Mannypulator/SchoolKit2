@@ -144,6 +144,48 @@ namespace WebApi.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("WebApi.Models.AnnualEnrollment", b =>
+                {
+                    b.Property<int>("AnnualEnrollmentID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("ClassSubjectID")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("FirstTerm")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Grade")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("SecondTerm")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("StudentID")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("TermID")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("ThirdTerm")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Total")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("AnnualEnrollmentID");
+
+                    b.HasIndex("ClassSubjectID");
+
+                    b.HasIndex("StudentID");
+
+                    b.HasIndex("TermID");
+
+                    b.ToTable("AnnualEnrollments");
+                });
+
             modelBuilder.Entity("WebApi.Models.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
@@ -238,21 +280,6 @@ namespace WebApi.Migrations
                     b.HasDiscriminator<string>("Discriminator").HasValue("ApplicationUser");
                 });
 
-            modelBuilder.Entity("WebApi.Models.Class", b =>
-                {
-                    b.Property<int>("ClassID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("ClassName")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("ClassID");
-
-                    b.ToTable("Classes");
-                });
-
             modelBuilder.Entity("WebApi.Models.ClassArm", b =>
                 {
                     b.Property<int>("ClassArmID")
@@ -262,12 +289,10 @@ namespace WebApi.Migrations
                     b.Property<int>("Arm")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("ClassID")
+                    b.Property<int>("Class")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("ClassArmID");
-
-                    b.HasIndex("ClassID");
 
                     b.ToTable("ClassArms");
                 });
@@ -318,6 +343,9 @@ namespace WebApi.Migrations
                     b.Property<int>("Exam")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("Grade")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("StudentID")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -326,9 +354,6 @@ namespace WebApi.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("Total")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("grade")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("EnrollmentID");
@@ -340,6 +365,97 @@ namespace WebApi.Migrations
                     b.HasIndex("TermID");
 
                     b.ToTable("Enrollments");
+                });
+
+            modelBuilder.Entity("WebApi.Models.Fee", b =>
+                {
+                    b.Property<long>("FeeID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("FeeName")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("FeeType")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("SchoolID")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("TermID")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<decimal>("TotalAmountExpeced")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("TotalAmountOwed")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("TotalAmountPaid")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("FeeID");
+
+                    b.HasIndex("SchoolID");
+
+                    b.HasIndex("TermID");
+
+                    b.ToTable("Fees");
+                });
+
+            modelBuilder.Entity("WebApi.Models.FeePayment", b =>
+                {
+                    b.Property<long>("FeePaymentID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<decimal>("AmountPaid")
+                        .HasColumnType("TEXT");
+
+                    b.Property<long>("FeeID")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("StudentID")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("TimeStamp")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("FeePaymentID");
+
+                    b.HasIndex("FeeID");
+
+                    b.HasIndex("StudentID");
+
+                    b.ToTable("FeePayments");
+                });
+
+            modelBuilder.Entity("WebApi.Models.GeneralExpense", b =>
+                {
+                    b.Property<long>("GeneralExpensesID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("Expense")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("SchoolID")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("GeneralExpensesID");
+
+                    b.HasIndex("SchoolID");
+
+                    b.ToTable("GeneralExpenses");
                 });
 
             modelBuilder.Entity("WebApi.Models.LGA", b =>
@@ -404,6 +520,91 @@ namespace WebApi.Migrations
                     b.HasIndex("PrincipalID");
 
                     b.ToTable("PrincipalQualifications");
+                });
+
+            modelBuilder.Entity("WebApi.Models.Product", b =>
+                {
+                    b.Property<long>("ProductID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ProductName")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("SchoolID")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Stock")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("ProductID");
+
+                    b.HasIndex("SchoolID");
+
+                    b.ToTable("Products");
+                });
+
+            modelBuilder.Entity("WebApi.Models.ProductExpense", b =>
+                {
+                    b.Property<long>("ProductExpenseID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<decimal>("Expense")
+                        .HasColumnType("TEXT");
+
+                    b.Property<long>("ProductID")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("TimeStamp")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("ProductExpenseID");
+
+                    b.HasIndex("ProductID");
+
+                    b.ToTable("ProductExpenses");
+                });
+
+            modelBuilder.Entity("WebApi.Models.ProductSale", b =>
+                {
+                    b.Property<long>("ProductSalesID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<decimal?>("Discount")
+                        .HasColumnType("TEXT");
+
+                    b.Property<long>("ProductID")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<decimal>("SalePrice")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("StudentID")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("TimeStamp")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("ProductSalesID");
+
+                    b.HasIndex("ProductID");
+
+                    b.HasIndex("StudentID");
+
+                    b.ToTable("ProductSales");
                 });
 
             modelBuilder.Entity("WebApi.Models.QAttempt", b =>
@@ -492,6 +693,9 @@ namespace WebApi.Migrations
                     b.Property<double>("Average")
                         .HasColumnType("REAL");
 
+                    b.Property<double>("ClassAverage")
+                        .HasColumnType("REAL");
+
                     b.Property<int>("ClassPosition")
                         .HasColumnType("INTEGER");
 
@@ -503,6 +707,9 @@ namespace WebApi.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("Total")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Type")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("ResultID");
@@ -683,6 +890,34 @@ namespace WebApi.Migrations
                     b.HasKey("CodeID");
 
                     b.ToTable("StudentCodes");
+                });
+
+            modelBuilder.Entity("WebApi.Models.StudentFee", b =>
+                {
+                    b.Property<long>("StudentFeeID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<decimal>("AmountOwed")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("AmountPaid")
+                        .HasColumnType("TEXT");
+
+                    b.Property<long>("FeeID")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("StudentID")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("StudentFeeID");
+
+                    b.HasIndex("FeeID");
+
+                    b.HasIndex("StudentID");
+
+                    b.ToTable("StudentFees");
                 });
 
             modelBuilder.Entity("WebApi.Models.Subject", b =>
@@ -908,6 +1143,9 @@ namespace WebApi.Migrations
                 {
                     b.HasBaseType("WebApi.Models.ApplicationUser");
 
+                    b.Property<decimal>("Balance")
+                        .HasColumnType("TEXT");
+
                     b.Property<int>("ClassArmID")
                         .HasColumnType("INTEGER");
 
@@ -999,6 +1237,33 @@ namespace WebApi.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("WebApi.Models.AnnualEnrollment", b =>
+                {
+                    b.HasOne("WebApi.Models.ClassSubject", "ClassSubject")
+                        .WithMany("AnnualEnrollments")
+                        .HasForeignKey("ClassSubjectID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("WebApi.Models.Student", "Student")
+                        .WithMany("AnnualEnrollments")
+                        .HasForeignKey("StudentID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("WebApi.Models.Term", "Term")
+                        .WithMany("AnnualEnrollments")
+                        .HasForeignKey("TermID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ClassSubject");
+
+                    b.Navigation("Student");
+
+                    b.Navigation("Term");
+                });
+
             modelBuilder.Entity("WebApi.Models.ApplicationUser", b =>
                 {
                     b.HasOne("WebApi.Models.LGA", "LGA")
@@ -1008,17 +1273,6 @@ namespace WebApi.Migrations
                         .IsRequired();
 
                     b.Navigation("LGA");
-                });
-
-            modelBuilder.Entity("WebApi.Models.ClassArm", b =>
-                {
-                    b.HasOne("WebApi.Models.Class", "Class")
-                        .WithMany("ClassArms")
-                        .HasForeignKey("ClassID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Class");
                 });
 
             modelBuilder.Entity("WebApi.Models.ClassSubject", b =>
@@ -1067,6 +1321,55 @@ namespace WebApi.Migrations
                     b.Navigation("Term");
                 });
 
+            modelBuilder.Entity("WebApi.Models.Fee", b =>
+                {
+                    b.HasOne("WebApi.Models.School", "School")
+                        .WithMany("Fees")
+                        .HasForeignKey("SchoolID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("WebApi.Models.Term", "Term")
+                        .WithMany("Fees")
+                        .HasForeignKey("TermID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("School");
+
+                    b.Navigation("Term");
+                });
+
+            modelBuilder.Entity("WebApi.Models.FeePayment", b =>
+                {
+                    b.HasOne("WebApi.Models.Fee", "Fee")
+                        .WithMany("Payments")
+                        .HasForeignKey("FeeID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("WebApi.Models.Student", "Student")
+                        .WithMany("Payments")
+                        .HasForeignKey("StudentID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Fee");
+
+                    b.Navigation("Student");
+                });
+
+            modelBuilder.Entity("WebApi.Models.GeneralExpense", b =>
+                {
+                    b.HasOne("WebApi.Models.School", "School")
+                        .WithMany("GeneralExpenses")
+                        .HasForeignKey("SchoolID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("School");
+                });
+
             modelBuilder.Entity("WebApi.Models.LGA", b =>
                 {
                     b.HasOne("WebApi.Models.State", "State")
@@ -1098,6 +1401,47 @@ namespace WebApi.Migrations
                         .IsRequired();
 
                     b.Navigation("Principal");
+                });
+
+            modelBuilder.Entity("WebApi.Models.Product", b =>
+                {
+                    b.HasOne("WebApi.Models.School", "School")
+                        .WithMany("Products")
+                        .HasForeignKey("SchoolID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("School");
+                });
+
+            modelBuilder.Entity("WebApi.Models.ProductExpense", b =>
+                {
+                    b.HasOne("WebApi.Models.Product", "Product")
+                        .WithMany("ProductExpenses")
+                        .HasForeignKey("ProductID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("WebApi.Models.ProductSale", b =>
+                {
+                    b.HasOne("WebApi.Models.Product", "Product")
+                        .WithMany("ProductSales")
+                        .HasForeignKey("ProductID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("WebApi.Models.Student", "Student")
+                        .WithMany("Purchases")
+                        .HasForeignKey("StudentID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+
+                    b.Navigation("Student");
                 });
 
             modelBuilder.Entity("WebApi.Models.QAttempt", b =>
@@ -1252,6 +1596,25 @@ namespace WebApi.Migrations
                     b.Navigation("LGA");
                 });
 
+            modelBuilder.Entity("WebApi.Models.StudentFee", b =>
+                {
+                    b.HasOne("WebApi.Models.Fee", "Fee")
+                        .WithMany("StudentFees")
+                        .HasForeignKey("FeeID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("WebApi.Models.Student", "Student")
+                        .WithMany("StudentFees")
+                        .HasForeignKey("StudentID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Fee");
+
+                    b.Navigation("Student");
+                });
+
             modelBuilder.Entity("WebApi.Models.TeacherQualification", b =>
                 {
                     b.HasOne("WebApi.Models.Teacher", "Teacher")
@@ -1380,11 +1743,6 @@ namespace WebApi.Migrations
                     b.Navigation("School");
                 });
 
-            modelBuilder.Entity("WebApi.Models.Class", b =>
-                {
-                    b.Navigation("ClassArms");
-                });
-
             modelBuilder.Entity("WebApi.Models.ClassArm", b =>
                 {
                     b.Navigation("ClassSubjects");
@@ -1396,11 +1754,20 @@ namespace WebApi.Migrations
 
             modelBuilder.Entity("WebApi.Models.ClassSubject", b =>
                 {
+                    b.Navigation("AnnualEnrollments");
+
                     b.Navigation("Enrollments");
 
                     b.Navigation("TeacherSubjects");
 
                     b.Navigation("Tests");
+                });
+
+            modelBuilder.Entity("WebApi.Models.Fee", b =>
+                {
+                    b.Navigation("Payments");
+
+                    b.Navigation("StudentFees");
                 });
 
             modelBuilder.Entity("WebApi.Models.LGA", b =>
@@ -1413,6 +1780,13 @@ namespace WebApi.Migrations
             modelBuilder.Entity("WebApi.Models.Option", b =>
                 {
                     b.Navigation("QAttemptsOptions");
+                });
+
+            modelBuilder.Entity("WebApi.Models.Product", b =>
+                {
+                    b.Navigation("ProductExpenses");
+
+                    b.Navigation("ProductSales");
                 });
 
             modelBuilder.Entity("WebApi.Models.QAttempt", b =>
@@ -1429,7 +1803,13 @@ namespace WebApi.Migrations
 
             modelBuilder.Entity("WebApi.Models.School", b =>
                 {
+                    b.Navigation("Fees");
+
+                    b.Navigation("GeneralExpenses");
+
                     b.Navigation("Principals");
+
+                    b.Navigation("Products");
 
                     b.Navigation("ResultRecords");
 
@@ -1460,7 +1840,11 @@ namespace WebApi.Migrations
 
             modelBuilder.Entity("WebApi.Models.Term", b =>
                 {
+                    b.Navigation("AnnualEnrollments");
+
                     b.Navigation("Enrollments");
+
+                    b.Navigation("Fees");
 
                     b.Navigation("ResultRecords");
 
@@ -1493,9 +1877,17 @@ namespace WebApi.Migrations
 
             modelBuilder.Entity("WebApi.Models.Student", b =>
                 {
+                    b.Navigation("AnnualEnrollments");
+
                     b.Navigation("Enrollments");
 
+                    b.Navigation("Payments");
+
+                    b.Navigation("Purchases");
+
                     b.Navigation("Results");
+
+                    b.Navigation("StudentFees");
 
                     b.Navigation("TestAttempts");
                 });

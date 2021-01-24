@@ -15,12 +15,9 @@ namespace WebApi.Models
         
         [Key]
         public int ClassArmID { get; set; }
-        [Required]
-        public int ClassID { get; set; }
-        [Required]
+        
         public Arms Arm { get; set; }
-
-        [ForeignKey("ClassID")]
+        
         public Class Class { get; set; }
 
         public ICollection<Student> Students { get; set; }

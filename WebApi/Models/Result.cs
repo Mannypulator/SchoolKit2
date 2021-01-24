@@ -9,9 +9,12 @@ namespace WebApi.Models
         public int ResultID { get; set; }
         [Required]
         public string StudentID { get; set; }
+        public ResultType Type { get; set; }
+        public double ClassAverage { get; set; }
         public int ClassPosition { get; set; }
         [Required]
         public int TermID { get; set; }
+        
         public int Total { get; set; }
         public double Average { get; set; }
         [ForeignKey("StudentID")]
