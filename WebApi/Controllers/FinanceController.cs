@@ -32,34 +32,20 @@ namespace WebApi.Controllers
         [HttpPost]
         [Route("addFee")]
         public async Task<IActionResult> AddFee(Fee feeModel)
-        {
-            
-            var term = _context.Terms
-            .Where(x => x.Current == true )
-            .SingleOrDefault();
-            if(term == null){
-                return BadRequest(new {Message = "There is no active term"});
-            }
-            else{
-                List<Claim> claims = User.Claims.Where(c => c.Type == ClaimTypes.Role).ToList();
-                var isDirector = claims.Any(x => x.Value == "Director");
-                if(isDirector){
-                    var UserID = User.Claims.FirstOrDefault(c => c.Type == "UserID").Value;
-                    var director = await _principalManager.FindByIdAsync(UserID);
-                    feeModel.SchoolID = director.SchoolID;
-                }
-                else{
-                    var UserID = User.Claims.FirstOrDefault(c => c.Type == "UserID").Value;
-                    var burser = await _teacherManager.FindByIdAsync(UserID);
-                    feeModel.SchoolID = burser.SchoolID;
-                }
-                feeModel.TermID = term.TermID;
-                await _context.Fees.AddAsync(feeModel);
-                await _context.SaveChangesAsync();
-                
-                if(feeModel.FeeType == FeeType.General)
+        {  
+            await _context.AddAsync(feeModel);
+            await _context.SaveChangesAsync();
+
+            var schoolID = _context.Terms
+            .Where(x => x.TermID == feeModel.TermID)
+            .Include(y => y.Session)
+            .Select(f => f.Session.SchoolID)
+            .SingleOrDefault(); 
+
+            if(feeModel.FeeType == FeeType.General)
                 {
-                    var students = _studentManager.Users.Where(x => x.SchoolID == feeModel.SchoolID && !x.HasGraduated);
+                    var students = _studentManager.Users
+                    .Where(x => x.SchoolID == schoolID && !x.HasGraduated);
                     
                     foreach(var student in students)
                     {
@@ -81,7 +67,7 @@ namespace WebApi.Controllers
                     .Where(x => x.Class == feeModel.Class)
                     .Include(x => x.Students)
                     .SelectMany(x => x.Students)
-                    .Where(x => x.SchoolID == feeModel.SchoolID && !x.HasGraduated);
+                    .Where(x => x.SchoolID == schoolID && !x.HasGraduated);
                     
                     foreach(var student in students)
                     {
@@ -103,7 +89,7 @@ namespace WebApi.Controllers
                     .Where(x => x.ClassArmID == feeModel.ClassArmID)
                     .Include(x => x.Students)
                     .SelectMany(x => x.Students)
-                    .Where(x => x.SchoolID == feeModel.SchoolID && !x.HasGraduated);
+                    .Where(x => x.SchoolID == schoolID && !x.HasGraduated);
                     
                     foreach(var student in students)
                     {
@@ -115,29 +101,22 @@ namespace WebApi.Controllers
                        await _context.StudentFees.AddAsync(studentFee);
                        student.Balance = student.Balance - feeModel.Amount;
                        await _studentManager.UpdateAsync(student);
+                       
                     }
                     await _context.SaveChangesAsync();
                 }
-
                 else if(feeModel.FeeType == FeeType.Student)
                 {
-                    var students = feeModel.Students;
+                    //check to see if this isn't needed
                     
-                    foreach(var student in students)
-                    {
-                        var studentFee = new StudentFee{
-                            StudentID = student.Id,
-                            FeeID = feeModel.FeeID,
-                            AmountOwed = feeModel.Amount
-                        };
-                       await _context.StudentFees.AddAsync(studentFee);
-                       student.Balance = student.Balance - feeModel.Amount;
-                       await _studentManager.UpdateAsync(student);
-                    }
-                    await _context.SaveChangesAsync();
+                    //if fee type is student, send studentfee along with feeModel from the front end 
+                    //and add everything at once
                 }
-                return Ok();
-            }
+
+
+                
+            return Ok();
+            
             
         }
 
@@ -147,6 +126,10 @@ namespace WebApi.Controllers
         {
             await _context.StudentFees.AddAsync(model);
             await _context.SaveChangesAsync();
+            var student = await _studentManager.FindByIdAsync(model.StudentID);
+            student.Balance = student.Balance - model.Amount;
+            await _studentManager.UpdateAsync(student);
+
             return Ok();
 
         }
@@ -181,11 +164,12 @@ namespace WebApi.Controllers
         [Route("addProductSales")]
         public async Task<IActionResult> AddProductSales(Product model)
         {
-            foreach(var sales in model.ProductSales){
-                model.Stock = model.Stock - sales.Quantity;
+            foreach(var sale in model.ProductSales){
+                model.Stock = model.Stock - sale.Quantity;
+                //sale.TimeStamp = DateTime.UtcNow.AddHours(1);
+                await _context.ProductSales.AddAsync(sale);
             }
             
-            await _context.ProductSales.AddRangeAsync(model.ProductSales);
             _context.Products.Update(model);
             await _context.SaveChangesAsync();
             return Ok();
@@ -202,9 +186,147 @@ namespace WebApi.Controllers
 
         }
 
+        [HttpPost]
+        [Route("getInflow")]
+        public ActionResult GetInflow(Period period)
+        {   
+            if(period.Order == Order.Week)
+            {
+                var fPayments = _context.Sessions
+                .Where(t => t.SchoolID == period.SchoolID)
+                .Include(k => k.Terms)
+                .ThenInclude(p => p.Fees)
+                .ThenInclude(m => m.FeePayments)
+                .SelectMany(t => t.Terms)
+                .SelectMany(c => c.Fees)
+                .SelectMany(c => c.FeePayments)
+                .Where(x => x.TimeStamp >= period.StartDate && x.TimeStamp <= period.StopDate)
+                .OrderBy(x => x.TimeStamp)
+                .GroupBy(y => y.TimeStamp.AddDays(-(int)y.TimeStamp.DayOfWeek ));
 
-        
+                var pSales = _context.Products
+                .Where(x => x.SchoolID == period.SchoolID)
+                .Include(x => x.ProductSales)
+                .SelectMany(c => c.ProductSales)
+                .Where(x => x.TimeStamp >= period.StartDate && x.TimeStamp <= period.StopDate)
+                .OrderBy(x => x.TimeStamp)
+                .GroupBy(y => y.TimeStamp.AddDays(-(int)y.TimeStamp.DayOfWeek )); //continue from here
 
-        // GET: Finance/Details/5
+                return Ok(new {feePayments = fPayments, productSales = pSales});
+            }
+            else if(period.Order == Order.Month)
+            {
+                
+                var fPayments = _context.Sessions
+                .Where(t => t.SchoolID == period.SchoolID)
+                .Include(k => k.Terms)
+                .ThenInclude(p => p.Fees)
+                .ThenInclude(m => m.FeePayments)
+                .SelectMany(t => t.Terms)
+                .SelectMany(c => c.Fees)
+                .SelectMany(c => c.FeePayments)
+                .Where(x => x.TimeStamp >= period.StartDate && x.TimeStamp <= period.StopDate)
+                .OrderBy(x => x.TimeStamp)
+                .GroupBy(y => y.TimeStamp.Month);
+
+                var pSales = _context.Products
+                .Where(x => x.SchoolID == period.SchoolID)
+                .Include(x => x.ProductSales)
+                .SelectMany(c => c.ProductSales)
+                .Where(x => x.TimeStamp >= period.StartDate && x.TimeStamp <= period.StopDate)
+                .OrderBy(x => x.TimeStamp)
+                .GroupBy(y => y.TimeStamp.Month); //continue from here
+
+                return Ok(new {feePayments = fPayments, productSales = pSales});
+            }
+            else if(period.Order == Order.Date)
+            {
+                
+                var fPayments = _context.Sessions
+                .Where(t => t.SchoolID == period.SchoolID)
+                .Include(k => k.Terms)
+                .ThenInclude(p => p.Fees)
+                .ThenInclude(m => m.FeePayments)
+                .SelectMany(t => t.Terms)
+                .SelectMany(c => c.Fees)
+                .SelectMany(c => c.FeePayments)
+                .Where(x => x.TimeStamp >= period.StartDate && x.TimeStamp <= period.StopDate)
+                .OrderBy(x => x.TimeStamp)
+                .GroupBy(y => y.TimeStamp.Date);
+
+                var pSales = _context.Products
+                .Where(x => x.SchoolID == period.SchoolID)
+                .Include(x => x.ProductSales)
+                .SelectMany(c => c.ProductSales)
+                .Where(x => x.TimeStamp >= period.StartDate && x.TimeStamp <= period.StopDate)
+                .OrderBy(x => x.TimeStamp)
+                .GroupBy(y => y.TimeStamp.Date); //continue from here
+
+                return Ok(new {feePayments = fPayments, productSales = pSales});
+            }
+            else{
+
+                var date = DateTime.UtcNow.AddHours(1);
+                var startDate = date.AddDays(-(int)date.DayOfWeek);
+                var endDate = startDate.AddDays(6);
+                
+                var fPayments = _context.Sessions
+                .Where(t => t.SchoolID == period.SchoolID)
+                .Include(k => k.Terms)
+                .ThenInclude(p => p.Fees)
+                .ThenInclude(m => m.FeePayments)
+                .SelectMany(t => t.Terms)
+                .SelectMany(c => c.Fees)
+                .SelectMany(c => c.FeePayments)
+                .Where(x => x.TimeStamp >= startDate && x.TimeStamp <= endDate)
+                .OrderBy(x => x.TimeStamp)
+                .GroupBy(y => y.TimeStamp.AddDays(-(int)y.TimeStamp.DayOfWeek ));
+
+                var pSales = _context.Products
+                .Where(x => x.SchoolID == period.SchoolID)
+                .Include(x => x.ProductSales)
+                .SelectMany(c => c.ProductSales)
+                .Where(x => x.TimeStamp >= startDate && x.TimeStamp <= endDate)
+                .OrderBy(x => x.TimeStamp)
+                .GroupBy(y => y.TimeStamp.AddDays(-(int)y.TimeStamp.DayOfWeek )); //continue from here
+
+                return Ok(new {feePayments = fPayments, productSales = pSales});
+            }
+            
+
+        }
+
+        ///make feepayments
+        [HttpPost]
+        [Route("addFeePayment")]
+        public async Task<IActionResult> AddFeePayment(FeePaymentModel model)
+        {
+            await _context.FeePayments.AddAsync(model.FeePayment);
+            model.StudentFee.AmountPaid = model.StudentFee.AmountPaid + model.FeePayment.AmountPaid;
+            model.StudentFee.AmountOwed = model.StudentFee.AmountOwed - model.FeePayment.AmountPaid;
+            _context.StudentFees.Update(model.StudentFee);
+            await _context.SaveChangesAsync();
+            var student = await _studentManager.FindByIdAsync(model.FeePayment.StudentID);
+            student.Balance = student.Balance + model.FeePayment.AmountPaid;
+            await _studentManager.UpdateAsync(student);
+
+            return Ok();
+
+        }
+
+        [HttpPost]
+        [Route("Products")]
+        public async Task<IActionResult> GetProducts(int schoolID)
+        {
+            var products = _context.Products
+            .Where(c => c.SchoolID == schoolID)
+            .Include(t => t.ProductSales)
+            .Include(p => p.ProductExpenses);
+
+            return Ok(products);
+
+        }
     }
+
+    
 }

@@ -20,7 +20,6 @@ namespace WebApi.Models
         public int ClassArmID { get; set; }
         [Required]
         public int SubjectID { get; set; }
-        public string Description { get; set; }
         public bool isCompulsory { get; set; }
 
         [ForeignKey("ClassArmID")]

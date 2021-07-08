@@ -1,0 +1,38 @@
+<div fxFlex fxLayout="row" fxLayoutAlign="center" >
+<mat-card class="mt" fxFlex.gt-sm="50%">
+<form #form="ngForm" fxFlex fxLayout="row wrap" fxLayoutAlign="center" >
+    
+
+    <mat-form-field fxFlex="75" class="mr">
+        <mat-label>Reg No</mat-label>
+        <input matInput placeholder="Enter Reg no" name="schoolName" required >
+    </mat-form-field>
+
+    <mat-form-field fxFlex="75" class="mr">
+        <mat-label>Pin</mat-label>
+        <input matInput placeholder="Pin" name="schoolAddress" required >
+    </mat-form-field>
+
+    <mat-form-field fxFlex="75" class="mr">
+        <mat-label>Class</mat-label>
+        <mat-select>
+            <mat-option *ngFor="let class of classes" value="{{class}}">{{class}}</mat-option>
+        </mat-select>
+    </mat-form-field>
+    <mat-form-field fxFlex="75" class="mr">
+        <mat-label>Session</mat-label>
+        <mat-select>
+            <mat-option *ngFor="let session of sessions" value="{{session}}">{{session}}</mat-option>
+        </mat-select>
+    </mat-form-field>
+     <mat-form-field fxFlex="75" class="mr">
+        <mat-label>Term</mat-label>
+        <mat-select>
+            <mat-option *ngFor="let term of terms" value={{term}}>{{term}}</mat-option>
+        </mat-select>
+
+    </mat-form-field>
+    <button mat-raised-button fxFlex="50%" color="accent">Submit</button>
+</form>
+</mat-card>
+</div>

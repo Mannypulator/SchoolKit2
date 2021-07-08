@@ -15,6 +15,6 @@ namespace WebApi.Models
         [ForeignKey("StateID")]
         public State State { get; set; }
         public ICollection<School> Schools { get; set; }
-        public ICollection<ApplicationUser> ApplicationUsers { get; set; }
+       
     }
 }

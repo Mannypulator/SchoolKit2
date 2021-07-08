@@ -50,7 +50,7 @@ namespace WebApi.Controllers
                 Address = model.Address,
                 ClassArmID = model.Code.ClassArmID,
                 SchoolID = model.Code.SchoolID,
-                LgaID = model.LgaID,
+                //LgaID = model.LgaID,
                 Gender = (UserGender)model.Gender,
                 RegNo = s,
                 UserName = s
@@ -69,9 +69,13 @@ namespace WebApi.Controllers
 
                    await _context.SaveChangesAsync();
                   
-                   var term = _context.Terms
+                   var term = _context.Sessions
                        .Where(x => x.SchoolID == student.SchoolID && x.Current == true)
-                       .Single();
+                       .Include(y => y.Terms)
+                       .SelectMany(t => t.Terms)
+                       .Where(t => t.Current)
+                       .SingleOrDefault();
+                       
                   EMethod eMethod = new EMethod();
                   eMethod.EnrollStudent(student, term, _context); 
 

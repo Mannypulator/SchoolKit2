@@ -38,7 +38,7 @@ namespace WebApi.Controllers
                 LastName = model.LastName,
                 Email = model.Email,
                 SchoolID = model.Code.SchoolID,
-                LgaID = model.LgaID,
+                //LgaID = model.LgaID,
                 Gender = (UserGender)model.Gender,
                 UserName = model.Email,
                 PhoneNumber = model.PhoneNumber
@@ -132,10 +132,14 @@ namespace WebApi.Controllers
 
             if(teacherSubjects.Any(e =>e.ClassSubjectID == model.ClassSubjectID ))
             {
-                var termID =  _context.Terms
-                .Where(x => x.SchoolID == teacher.SchoolID && x.Current == true)
-                .Select(y => y.TermID)
-                .FirstOrDefault();
+                var termID = _context.Sessions
+                    .Where(x => x.SchoolID == teacher.SchoolID && x.Current)
+                    .Include(x => x.Terms)
+                    .SelectMany(x => x.Terms)
+                    .Where(x => x.Current)
+                    .Select(x => x.TermID)
+                    .FirstOrDefault();
+
                 var check = _context.Enrollments
                 .Any(r => r.StudentID == model.StudentID && r.TermID == termID && r.ClassSubjectID == model.ClassSubjectID);
                 

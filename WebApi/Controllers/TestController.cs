@@ -36,10 +36,13 @@ namespace WebApi.Controllersp
             string userId = User.Claims.FirstOrDefault(c => c.Type == "UserID").Value;
             var user = await _teacherManager.FindByIdAsync(userId);
             int SchoolID = user.SchoolID;
-            var termId = await _context.Terms
-            .Where(x => x.SchoolID == SchoolID && x.Current == true)
-            .Select(c => c.TermID)
-            .SingleOrDefaultAsync();
+            var termId = _context.Sessions
+                .Where(x => x.SchoolID == SchoolID && x.Current)
+                .Include(x => x.Terms)
+                .SelectMany(x => x.Terms)
+                .Where(x => x.Current)
+                .Select(x => x.TermID)
+                .FirstOrDefault();
             
             model.SchoolID = SchoolID;   
             //let teacher choose start and close date 
@@ -345,9 +348,13 @@ namespace WebApi.Controllersp
             var studentId = User.Claims.FirstOrDefault(c => c.Type == "UserID").Value;
             var student  = await _studentManager.FindByIdAsync(studentId);
 
-            var term = await _context.Terms
-            .Where(x => x.SchoolID == student.SchoolID && x.Current == true)
-            .Select(x => x.TermID).SingleOrDefaultAsync();
+            var term = _context.Sessions
+                .Where(x => x.SchoolID == student.SchoolID && x.Current)
+                .Include(x => x.Terms)
+                .SelectMany(x => x.Terms)
+                .Where(x => x.Current)
+                .Select(x => x.TermID)
+                .FirstOrDefault();
 
             var tests = await _context.Enrollments
             .Include(x => x.ClassSubject)
@@ -367,9 +374,13 @@ namespace WebApi.Controllersp
             var teacherId = User.Claims.FirstOrDefault(c => c.Type == "UserID").Value;
             var teacher  = await _teacherManager.FindByIdAsync(teacherId);
 
-            var term = await _context.Terms
-            .Where(x => x.SchoolID == teacher.SchoolID && x.Current == true)
-            .Select(x => x.TermID).SingleOrDefaultAsync();
+            var term = _context.Sessions
+                .Where(x => x.SchoolID == teacher.SchoolID && x.Current)
+                .Include(x => x.Terms)
+                .SelectMany(x => x.Terms)
+                .Where(x => x.Current)
+                .Select(x => x.TermID)
+                .FirstOrDefault();
 
             var tests = await _context.TeacherSubjects
             .Include(x => x.ClassSubject)
@@ -491,9 +502,13 @@ namespace WebApi.Controllersp
             var studentId = User.Claims.FirstOrDefault(c => c.Type == "UserID").Value;
             var student =  await _studentManager.FindByIdAsync(studentId);
 
-            var term = await _context.Terms
-            .Where(x => x.SchoolID == student.SchoolID && x.Current == true)
-            .Select(x => x.TermID).SingleOrDefaultAsync();
+           var term = _context.Sessions
+                    .Where(x => x.SchoolID == student.SchoolID && x.Current)
+                    .Include(x => x.Terms)
+                    .SelectMany(x => x.Terms)
+                    .Where(x => x.Current)
+                    .Select(x => x.TermID)
+                    .FirstOrDefault();
 
             var tests = _context.Enrollments
             .Include(x => x.ClassSubject)

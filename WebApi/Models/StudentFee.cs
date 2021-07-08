@@ -4,9 +4,9 @@ namespace WebApi.Models
 {
     public class StudentFee
     {
-        public long StudentFeeID { get; set; }
+        public int StudentFeeID { get; set; }
         public string StudentID { get; set; }
-        public long FeeID { get; set; }
+        public int FeeID { get; set; }
         public decimal AmountPaid { get; set; }
         public decimal AmountOwed { get; set; }
 
@@ -14,6 +14,7 @@ namespace WebApi.Models
         public Student Student { get; set; }
         [ForeignKey("FeeID")]
         public Fee Fee { get; set; }
-
+        [NotMapped]
+        public decimal Amount{ get; set; }/// for front end use
     }
 }

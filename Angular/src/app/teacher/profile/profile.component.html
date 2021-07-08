@@ -1,0 +1,70 @@
+<div fxLayout="row wrap" fxLayoutAlign="center none" class="mt" >
+    <mat-card fxFlex="85%" fxLayout="column" fxLayoutAlign="space-between none">
+        <div>
+            <mat-card-header >
+                <mat-card-header>
+                    <div mat-card-avatar class="example-header-image"></div>
+                    <mat-card-title>Name</mat-card-title>
+                    <mat-card-subtitle>About Me</mat-card-subtitle>
+                </mat-card-header>
+            </mat-card-header>
+            <mat-divider></mat-divider>
+        </div>
+
+        <div class="mt">
+            <mat-card-content dir="ltr">
+                <table class="tab">
+
+                    <tr>
+                        <td>Name</td>
+                        <td>Maria Anders</td>
+                    </tr>
+                    <tr>
+                        <td>Address</td>
+                        <td>Berglund</td>
+
+                    </tr>
+                    <tr>
+                        <td>Phone Number</td>
+                        <td>090888888888</td>
+
+                    </tr>
+                    <tr>
+                        <td>Gender</td>
+                        <td>Male</td>
+                    </tr>
+                </table>
+
+            </mat-card-content>
+
+        </div>
+    </mat-card>
+
+    <mat-card fxFlex="85%" class="mt">
+        <div>
+            <mat-card-header >
+                <mat-card-header>
+                    <mat-card-title>Subjects</mat-card-title> 
+                </mat-card-header>
+            </mat-card-header>
+            <mat-divider></mat-divider>
+        </div>
+            <mat-card-content>
+               <mat-nav-list>
+        <a *ngFor="let link of links" mat-list-item  routerLink="/teacher/subject" routerLinkActive="activebutton">
+
+            <span>{{link}}</span>
+            <mat-divider></mat-divider>
+
+        </a>
+
+        
+       
+       
+
+    </mat-nav-list>
+            </mat-card-content>
+
+       
+    </mat-card>
+</div>

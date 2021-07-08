@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Daniel Okpala\\Documents\\repos\\School Kit\\webapi\\WebApi.csproj": {}
+    "C:\\Users\\Daniel Okpala\\Documents\\repos\\School Kit\\WebApi\\WebApi.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Daniel Okpala\\Documents\\repos\\School Kit\\webapi\\WebApi.csproj": {
+    "C:\\Users\\Daniel Okpala\\Documents\\repos\\School Kit\\WebApi\\WebApi.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Daniel Okpala\\Documents\\repos\\School Kit\\webapi\\WebApi.csproj",
+        "projectUniqueName": "C:\\Users\\Daniel Okpala\\Documents\\repos\\School Kit\\WebApi\\WebApi.csproj",
         "projectName": "WebApi",
-        "projectPath": "C:\\Users\\Daniel Okpala\\Documents\\repos\\School Kit\\webapi\\WebApi.csproj",
+        "projectPath": "C:\\Users\\Daniel Okpala\\Documents\\repos\\School Kit\\WebApi\\WebApi.csproj",
         "packagesPath": "C:\\Users\\Daniel Okpala\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Daniel Okpala\\Documents\\repos\\School Kit\\webapi\\obj\\",
+        "outputPath": "C:\\Users\\Daniel Okpala\\Documents\\repos\\School Kit\\WebApi\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Microsoft\\Xamarin\\NuGet\\",

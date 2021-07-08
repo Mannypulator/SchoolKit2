@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using WebApi.Methods;
 using WebApi.Models;
 
 namespace WebApi.Controllers
@@ -27,39 +28,80 @@ namespace WebApi.Controllers
         [HttpGet]
         [Route("getLatestResult")]
         //authorise for students
-        public async Task<ResultModel> GetLastestResult()
+        public async Task<IActionResult> GetLastestResult()
         {
             var userID = User.Claims.FirstOrDefault(c => c.Type == "UserID").Value;
             var  student = await _studentManager.FindByIdAsync(userID);
-           var term = await _context.Terms
-           .Where(i => i.SchoolID == student.SchoolID && i.Current != true)
+
+           var term = await _context.Sessions
+           .Where(i => i.SchoolID == student.SchoolID && (i.Current || i.Completed))
+           .Include(t => t.Terms)
+           .ThenInclude(t => t.Session)
+           .SelectMany(r => r.Terms)
+           .Where(x => x.Completed)
            .OrderBy(x => x.TermID)
-           .Select(t => t.TermID)
            .LastOrDefaultAsync();
 
-           var result = await _context.Results
-           .Where(d => d.StudentID == userID && d.TermID == term)
-           .SingleOrDefaultAsync();
-
-           var enrollments = await _context.Enrollments
-           .Include(x=> x.ClassSubject)
-           .ThenInclude(f => f.Subject)
-           .Where(d => d.StudentID == userID && d.TermID == term)
-           .Select(d => new EnrollmentModel{
-               SubjectName = d.ClassSubject.Subject.Title,
-               CA = d.CA,
-               Exam = d.Exam,
-               Grade =d.Grade,
-              }).ToListAsync();
-
-            var stResult = new ResultModel
+           var schoolPackages = _context.SchoolPackages
+            .Where(x => x.SchoolID == student.SchoolID);
+            
+            if(schoolPackages.Any(x => x.Package == Package.Finance))
             {
-                Result =result,
-                Enrollments = enrollments
+                var notOwing = _context.Fees
+                .Where(d => d.TermID == term.TermID)
+                .Include(t => t.StudentFees.Where(d => d.StudentID == student.Id))
+                .SelectMany(g => g.StudentFees)
+                .All(c => c.AmountOwed <= 0);
 
-            };
+                if(notOwing){
+                    if(term.Label != TermLabel.ThirdTerm)
+                    {
+                        List<ResultModel> resModel = new List<ResultModel>();
+                        resModel.Add(await ResultMethods.Results(term, student, _context));
+                        return Ok(resModel);               
+                    }
+                    else{
+                        List<ResultModel> resModel = new List<ResultModel>();
+                        resModel.Add(await ResultMethods.Results(term, student,_context));
+                        resModel.Add(await ResultMethods.AResults(term,student, _context));
+               
+                        return Ok(resModel);
+                    }
+                }
+                else{
+                    if(term.Label != TermLabel.ThirdTerm)
+                    {
+                        List<ResultModel> resModel = new List<ResultModel>();
+                        resModel.Add(await ResultMethods.Incomplete_Result(term, student, _context));
+                        return Ok(resModel);               
+                    }
+                    else{
+                        List<ResultModel> resModel = new List<ResultModel>();
+                        resModel.Add(await ResultMethods.Incomplete_Result(term, student, _context));
+                        resModel.Add(await ResultMethods.Incomplete_AResult(term, student, _context));
+               
+                        return Ok(resModel);
+                    }
+                }
 
-             return stResult;
+            }
+            else{
+                if(term.Label != TermLabel.ThirdTerm)
+                {
+                    List<ResultModel> resModel = new List<ResultModel>();
+                    resModel.Add(await ResultMethods.Results(term, student, _context));
+                    return Ok(resModel);               
+                }
+                else
+                {
+                    List<ResultModel> resModel = new List<ResultModel>();
+                    resModel.Add(await ResultMethods.Results(term, student, _context));
+                    resModel.Add(await ResultMethods.AResults(term,student,_context));
+               
+                    return Ok(resModel);
+                }
+            }
+           
         }
 
         [HttpGet]
@@ -70,69 +112,82 @@ namespace WebApi.Controllers
             var userID = User.Claims.FirstOrDefault(c => c.Type == "UserID").Value;
             var  student = await _studentManager.FindByIdAsync(userID);
 
-           var terms =  _context.Terms
-           .Where(i => i.SchoolID == student.SchoolID && i.Current != true)
-           .OrderBy(x => x.TermID)
-           .ToList();
+           var terms =  _context.Sessions
+           .Where(i => i.SchoolID == student.SchoolID && (i.Current || i.Completed))
+           .Include(t => t.Terms)
+           .ThenInclude(t => t.Session)
+           .SelectMany(r => r.Terms)
+           .Where(x => x.Completed)
+           .OrderBy(x => x.TermID);
 
+           //check if student is owing
+           var schoolPackages = _context.SchoolPackages
+            .Where(x => x.SchoolID == student.SchoolID);
            List<ResultModel> results = new List<ResultModel>();
-           foreach(var term in terms)
-           {
-               var result = _context.Results
-                        .Where(d => d.StudentID == userID && d.TermID == term.TermID);
 
-                foreach(var res in result){
-                    if(res.Type == ResultType.Term)
+           if(schoolPackages.Any(x => x.Package == Package.Finance))
+            {
+                foreach(var term in terms)
+                {
+                    var notOwing = _context.Fees
+                    .Where(d => d.TermID == term.TermID)
+                    .Include(t => t.StudentFees.Where(d => d.StudentID == student.Id))
+                    .SelectMany(g => g.StudentFees)
+                    .All(c => c.AmountOwed <= 0);
+
+                    if(notOwing)
                     {
-                        var enrollments = await _context.Enrollments
-                            .Include(x => x.ClassSubject)
-                            .ThenInclude(f => f.Subject)
-                            .Where(d => d.StudentID == userID && d.TermID == term.TermID)
-                            .Select(d => new EnrollmentModel{
-                                SubjectName = d.ClassSubject.Subject.Title,
-                                CA = d.CA,
-                                Exam = d.Exam,
-                                Total = d.Total,
-                                Grade =d.Grade,
-                                }).ToListAsync();
-
-                        var stResult = new ResultModel
+                        if(term.Label != TermLabel.ThirdTerm)
                         {
-                            Result = res,
-                            Enrollments = enrollments
-
-                        };
-                        results.Add(stResult);
+                            results.Add(await ResultMethods.Results(term, student, _context));               
+                        }
+                        else
+                        {
+                            results.Add(await ResultMethods.Results(term, student, _context));
+                            results.Add(await ResultMethods.AResults(term,student, _context));
+                        }
                     }
-                    else if(res.Type == ResultType.Annual)
+                    else
                     {
-                        var annualEnrollments = await _context.AnnualEnrollments
-                            .Include(x => x.ClassSubject)
-                            .ThenInclude(f => f.Subject)
-                            .Where(d => d.StudentID == userID && d.TermID == term.TermID)
-                            .Select(d => new AnnualEnrollmentModel{
-                                SubjectName = d.ClassSubject.Subject.Title,
-                                FirstTerm = d.FirstTerm,
-                                SecondTerm = d.SecondTerm,
-                                ThirdTerm = d.ThirdTerm,
-                                Total = d.Total,
-                                Grade =d.Grade,
-                                }).ToListAsync();
-                        var AnnualResult = new ResultModel
+                        if(term.Label != TermLabel.ThirdTerm)
                         {
-                            Result = res,
-                            AnnualEnrollments = annualEnrollments
+                            
+                            results.Add(await ResultMethods.Incomplete_Result(term, student, _context));
 
-                        };
-                        results.Add(AnnualResult);
+                        }
+                        else
+                        {
+                            results.Add(await ResultMethods.Incomplete_Result(term, student, _context));
+                            results.Add(await ResultMethods.Incomplete_AResult(term,student, _context));
+                        }
+
                     }
-                }    
+                    
+                }
 
-                
-           }
-           
-             return Ok(results);
+            }
+            else
+            {
+                foreach(var term in terms)
+                {
+                    if(term.Label != TermLabel.ThirdTerm)
+                    {
+                        results.Add(await ResultMethods.Results(term, student, _context));               
+                    }
+                    else
+                    {
+                        results.Add(await ResultMethods.Results(term, student, _context));
+                        results.Add(await ResultMethods.AResults(term,student, _context));
+                    }
+                    
+                    
+                }
+            }
+
+            return Ok(results);
         }
+
+        
 
     }
 }

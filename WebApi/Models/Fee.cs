@@ -10,7 +10,7 @@ namespace WebApi.Models
             StudentFees = new HashSet<StudentFee>();
         }
         [Key]
-        public long FeeID { get; set; }
+        public int FeeID { get; set; }
         public string FeeName { get; set; }
         public FeeType FeeType { get; set; }
         public decimal Amount { get; set; }
@@ -18,14 +18,11 @@ namespace WebApi.Models
         public decimal TotalAmountOwed { get; set; }
         public decimal TotalAmountExpeced { get; set; }
         public int TermID { get; set; }
-        public int SchoolID { get; set; }
+        
         [ForeignKey("TermID")]
         public Term Term { get; set; }
-        [ForeignKey("SchoolID")]
-        public School School { get; set; }
-
         public ICollection<StudentFee> StudentFees { get; set; }
-        public ICollection<FeePayment> Payments { get; set; }
+        public ICollection<FeePayment> FeePayments { get; set; }
 
         [NotMapped]
         public int ClassArmID { get; set; }

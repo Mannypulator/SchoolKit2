@@ -1,0 +1,21 @@
+
+<mat-sidenav-container >
+  <mat-sidenav #sidenav role='navigation' [opened] = openState [mode]= drawerMode>
+  <teacher-sidenav (sidenavClose) = "CloseSidenav()"></teacher-sidenav>
+  </mat-sidenav> 
+  <mat-sidenav-content>
+  <main>
+  <app-header (sidenavToggle) = "toggle()"></app-header>
+  <div>
+  <router-outlet></router-outlet>
+  </div>
+   
+  </main>
+ 
+  </mat-sidenav-content>
+</mat-sidenav-container>
+
+ 
+
+
+ 

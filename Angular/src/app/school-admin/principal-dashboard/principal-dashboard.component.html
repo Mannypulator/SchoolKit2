@@ -1,0 +1,129 @@
+<div fxFlex  fxLayout="row wrap" fxLayoutAlign="space-evenly center">
+
+    <mat-card class="card" fxLayout="row wrap" fxLayoutAlign="space-around none"  fxFlex="75%" fxFlex.gt-sm="18%" fxFlex.sm="45%" fxFlex.md="30%">
+
+        <div fxFlex="50%" fxFlex.md="30%" fxFlex.sm="35%" style="padding-top:20px; font-size:70px">
+            <span>
+                <mat-card-title >61</mat-card-title>
+                <mat-card-subtitle>Teachers</mat-card-subtitle>
+            </span>
+        </div>
+        <div [class]="activeClass" class="cyan" fxFlex="50%" fxFlex.sm="30%" fxFlex.xs="30%" fxFlex.md="30%">
+            <span>
+                <i class="fas fa-chalkboard-teacher"></i>
+            </span>
+        </div>
+        <div fxFlex="100%">
+            <mat-divider></mat-divider>
+            <mat-card-actions>View Details</mat-card-actions>
+        </div>
+
+    </mat-card>
+
+    <mat-card class="card" fxLayout="row wrap" fxLayoutAlign="space-around none"  fxFlex="75%" fxFlex.gt-sm="18%" fxFlex.sm="45%" fxFlex.md="30%">
+
+        <div fxFlex="50%" fxFlex.md="30%" fxFlex.sm="35%" style="padding-top:20px; font-size:70px">
+            <span>
+                <mat-card-title >61</mat-card-title>
+                <mat-card-subtitle>Students</mat-card-subtitle>
+            </span>
+        </div>
+        <div [class]="activeClass" class="green" fxFlex="50%" fxFlex.sm="30%" fxFlex.xs="30%" fxFlex.md="30%">
+            <span>
+                <i class="fas fa-user-graduate font"></i>
+            </span>
+        </div>
+        <div fxFlex="100%">
+            <mat-divider></mat-divider>
+            <mat-card-actions>view Details</mat-card-actions>
+        </div>
+
+    </mat-card>
+
+    <mat-card class="card" fxLayout="row wrap" fxLayoutAlign="space-around none"  fxFlex="75%" fxFlex.gt-sm="18%" fxFlex.sm="45%" fxFlex.md="30%">
+
+        <div fxFlex="50%" fxFlex.md="30%" fxFlex.sm="35%" style="padding-top:20px; font-size:70px">
+            <span>
+                <mat-card-title >61</mat-card-title>
+                <mat-card-subtitle>Event</mat-card-subtitle>
+            </span>
+        </div>
+        <div [class]="activeClass" class="purple" fxFlex="50%" fxFlex.sm="30%" fxFlex.xs="30%" fxFlex.md="30%">
+            <span>
+                <mat-icon>event_note</mat-icon>
+            </span>
+        </div>
+        <div fxFlex="100%">
+            <mat-divider></mat-divider>
+            <mat-card-actions>view Details</mat-card-actions>
+        </div>
+
+    </mat-card>
+
+    <mat-card class="card" fxLayout="row wrap" fxLayoutAlign="space-around none"  fxFlex="75%" fxFlex.gt-sm="18%" fxFlex.sm="45%" fxFlex.md="30%">
+
+        <div fxFlex="50%" fxFlex.md="30%" fxFlex.sm="35%" style="padding-top:20px; font-size:70px">
+            <span>
+                <mat-card-title >61</mat-card-title>
+                <mat-card-subtitle>Guardins</mat-card-subtitle>
+            </span>
+        </div>
+        <div [class]="activeClass" class="orange" fxFlex="50%" fxFlex.sm="30%" fxFlex.xs="30%" fxFlex.md="30%">
+            <span>
+                <mat-icon>supervisor_account</mat-icon>
+            </span>
+        </div>
+        <div fxFlex="100%">
+            <mat-divider></mat-divider>
+            <mat-card-actions>view Details</mat-card-actions>
+        </div>
+
+    </mat-card>
+
+    <mat-card fxFlex="35%" fxFlex.lt-md="95" fxLayout="column" fxLayoutAlign="center stretch" style = "height: 300px;margin-top:10px">
+        <div>
+            <mat-card-header fxLayout="column" fxLayoutAlign="center center">
+                <mat-card-title >Term</mat-card-title>
+            </mat-card-header>
+            <mat-divider></mat-divider>
+        </div>
+        <div >
+            <mat-card-content >
+                <mat-list>
+                    <mat-list-item fxLayout="column" fxLayoutAlign="center center">Week 2</mat-list-item>
+                    <mat-list-item fxLayout="column" fxLayoutAlign="center center">First term</mat-list-item>
+                    <mat-list-item fxLayout="column" fxLayoutAlign="center center">2021/2022 Session</mat-list-item>
+                </mat-list>
+
+            </mat-card-content>
+            <mat-divider></mat-divider>
+
+        </div>
+      
+        <mat-card-actions fxFlex fxLayout="row" fxLayoutAlign="space-between none" >
+       
+         <button mat-raised-button color="primary" style = "height: 40px" >End Term</button>
+      
+        <button mat-raised-button  color="accent" style = "height: 40px" >view more term details</button>
+            
+        </mat-card-actions>
+       
+        
+
+    </mat-card>
+
+    <div fxFlex="30%" fxFlex.md="45" fxFlex.lt-md="95">
+        <highcharts-chart
+   [Highcharts] = "highcharts" 
+   [options] = "chart2Options" 
+   style = " height: 300px; display: block;margin-top:10px"></highcharts-chart>
+    </div>
+
+    <div fxFlex="30%" fxFlex.md="45" fxFlex.lt-md="95">
+        <highcharts-chart
+   [Highcharts] = "highcharts" 
+   [options] = "chart3Options" 
+   style = "height: 300px; display: block;margin-top:10px"></highcharts-chart>
+    </div>
+
+</div>

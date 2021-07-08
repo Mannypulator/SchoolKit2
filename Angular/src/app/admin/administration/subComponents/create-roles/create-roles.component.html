@@ -1,0 +1,11 @@
+<ngx-alerts></ngx-alerts>
+<form #form="ngForm" fxFlex fxLayout="row wrap" fxLayoutAlign="center" (submit) = "submitRole()">
+    <mat-form-field fxFlex="75">
+        <mat-label>Role</mat-label>
+        <input matInput placeholder="Admin" color="primary" name="role" [(ngModel)] = "role">
+    </mat-form-field>
+  
+
+        <button fxFlex="75" mat-raised-button color="accent" type="submit">Submit</button>
+    
+</form>

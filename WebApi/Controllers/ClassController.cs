@@ -32,30 +32,60 @@ namespace WebApi.Controllers
 
         // GET: Class
         [HttpPost]
-        [Route("insert")]
-        public async Task<ActionResult<IEnumerable<Class>>> Index(string[] model)
+        [Route("fill")]
+        public async Task<IActionResult> FillClass()
         {
-            /*foreach(var name in model){
-                _context.Classes.Add( new Class{
-                    ClassName = name
-                });
-            }
-            await _context.SaveChangesAsync();*/
-            return Ok();
-            
+            var classes = Enum.GetValues(typeof(Class));
+            var arms = Enum.GetValues(typeof(Arms));
+
+           foreach(var _class in classes){
+              foreach(var arm in arms){
+                  await _context.ClassArms.AddAsync( new ClassArm{
+                      Arm = (Arms)arm,
+                      Class = (Class)_class
+                  });
+               }
+           }
+           await _context.SaveChangesAsync();
+           return Ok(new {message="classArms created successfully"});
 
         }
 
         [HttpPost]
-        [Route("fill")]
+        [Route("fil")]
        // [Authorize]
         public async Task<IActionResult> Fill([FromBody]string tt)
         {
-            string u = "r";
-            string y = "e";
-            string t = null;
-            List<string> f = new List<string>{u, y, t};
-            return Ok();
+            var dateTime = DateTime.Now;
+            Random randoom = new Random();
+            List<DateTime> playdate = new List<DateTime>();
+            for(var i = 0; i<10; i++)
+            {
+                var t = randoom.Next(1,25);
+                playdate.Add(dateTime.AddDays(-t));
+            }
+            var f = playdate.OrderBy(x => x.Date).GroupBy(x => x.AddDays(-(int)x.DayOfWeek ));
+            var sunday = dateTime.AddDays(-(int)dateTime.DayOfWeek);
+            return Ok(f);
+        }
+
+         [HttpPost]
+         [Route("getClass")]
+       // [Authorize]
+        public async Task<IActionResult> GetClass()
+        {
+            var classes = await _context.ClassArms.OrderBy(x => x.Class)
+            .ToListAsync();
+            var classNames = new List<ClassName>();
+            foreach(var _class in classes){
+               var className = new ClassName{
+                   ClassArmID = _class.ClassArmID,
+                   Name = Enum.GetName(typeof(Class), _class.Class),
+                   Arm = Enum.GetName(typeof(Arms), _class.Arm)
+               };
+               classNames.Add(className);
+            }
+            return Ok(classNames);
         }
 
         [HttpDelete]

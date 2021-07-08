@@ -1,0 +1,142 @@
+
+.card{
+    border-radius: 5%;
+    height: 145px;
+    margin-top: 10px;
+ }
+.button{
+    position: relative;
+    border-radius: 50%; 
+    width:70px !important; 
+    height: 70px !important;
+   
+}
+
+.font{
+   padding-left: 9px;
+}
+
+.fas{
+    font-size: 43px !important;
+}
+#school{
+    font-size: 40px !important;
+}
+
+.button i, mat-icon{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 50px;
+    height: 50px;
+    width: 50px;
+    margin: 0;
+    
+}
+
+.button-sm{
+    position: relative;
+    border-radius: 50%; 
+    width:70px !important; 
+    height: 70px !important;
+    
+}
+
+.button-sm mat-icon, i {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 50px;
+    height: 50px;
+    width: 50px;
+    margin: 0;
+  
+}
+
+.button-md{
+    position: relative;
+    border-radius: 50%; 
+    width:70px !important; 
+    height: 70px !important;
+   
+}
+
+.button-md mat-icon, i {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 50px;
+    height: 50px;
+    width: 50px;
+}
+
+.button-xs{
+    position: relative;
+    border-radius: 50%; 
+    width:70px !important; 
+    height: 70px !important;
+    background-color: rgb(250, 232, 240);
+}
+
+.button-xs mat-icon, i {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 50px;
+    height: 50px;
+    width: 50px;
+    
+    
+}
+
+.green{
+    background-color: 	#d9f7d9;
+}
+.green i{
+   color: #27c227;
+}
+
+
+.pink{
+    background-color: 	#fadde2;
+}
+.pink mat-icon, i {
+   color: #e6687b;
+   
+}
+
+.cyan{
+    background-color: 	#d3f3f3;
+}
+.cyan i, mat-icon {
+   color: #20d4d4;
+}
+
+.purple{
+    background-color: 	#e9cef7;
+}
+.purple mat-icon {
+   color: #9932CC;
+}
+
+.orange{
+    background-color: 	#f5dab9;
+}
+.orange i, mat-icon {
+   color: #FF8C00;
+}
+
+.button-left{
+    margin-left: 0px !important;
+  
+    
+}
+.button-right{
+    margin-right: 0px !important;
+  
+    
+}

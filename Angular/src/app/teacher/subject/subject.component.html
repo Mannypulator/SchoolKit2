@@ -1,0 +1,64 @@
+<div fxLayout="row" fxLayoutAlign="center none" class="mt" >
+    <mat-card fxFlex="95%" fxLayout="column" fxLayoutAlign="space-between none">
+        <div>
+            <mat-card-header >
+                <mat-card-actions fxFlex fxLayout="row" fxLayoutAlign="space-between none" class="ml">
+
+                    <button mat-raised-button color="primary">
+                        <span fxHide fxShow.gt-sm>Add student </span>
+                        <mat-icon>person_add</mat-icon>
+                    </button>
+
+                    <button mat-raised-button  color="warn">
+                        <span fxHide fxShow.gt-sm>Add student </span>
+                        <mat-icon>person_remove</mat-icon>
+                    </button>
+                </mat-card-actions>
+            </mat-card-header>
+            <mat-divider></mat-divider>
+        </div>
+
+        <div class="mt">
+            <mat-card-content>
+                <mat-accordion>
+                    <mat-expansion-panel *ngFor="let state of states">
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                {{state}}</mat-panel-title>
+                        </mat-expansion-panel-header>
+                        <form #form="ngForm" fxFlex fxLayout="row wrap" fxLayoutAlign="space-evenly center" >
+                   
+                        <mat-form-field fxFlex="40">
+                                <mat-label>First Test</mat-label>
+                                <input matInput placeholder="Enter school name" name="schoolName" required >
+                            </mat-form-field>
+
+                            <mat-form-field fxFlex="40">
+                                <mat-label>Second Test</mat-label>
+                                <input matInput placeholder="School Address" name="schoolAddress" required >
+                            </mat-form-field>
+                            <mat-form-field fxFlex="40">
+                                <mat-label>Third Test</mat-label>
+                                <input matInput placeholder="Enter school name" name="schoolName" required >
+                            </mat-form-field>
+
+                            <mat-form-field fxFlex="40">
+                                <mat-label>Exam</mat-label>
+                                <input matInput placeholder="School Address" name="schoolAddress" required >
+                            </mat-form-field>
+                      
+                            
+
+                            
+                            <button mat-raised-button fxFlex="50%" color="accent">Submit</button>
+                        
+                            
+                        </form>
+                    </mat-expansion-panel>
+                </mat-accordion>
+
+            </mat-card-content>
+
+        </div>
+    </mat-card>
+</div>

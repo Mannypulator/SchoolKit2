@@ -7,8 +7,8 @@ namespace WebApi.Models
     public class ProductSale
     {
         [Key]
-        public long ProductSalesID { get; set; }
-        public long ProductID { get; set; }
+        public int ProductSalesID { get; set; }
+        public int ProductID { get; set; }
         public string? StudentID { get; set; }
         public decimal? Discount { get; set; }
         public decimal SalePrice { get; set; }

@@ -1,0 +1,19 @@
+ <mat-toolbar>
+    <button mat-icon-button (click)="onToggleSidenav()" fxHide.gt-sm>
+        <mat-icon >menu</mat-icon>
+    </button> 
+     <span>{{title}}</span>
+    <div fxFlex fxLayout="row" fxLayoutAlign="end none" >
+
+    <button mat-button [matMenuTriggerFor]="menu" disableRipple>
+    <mat-icon>person</mat-icon>
+    Profile
+    <mat-icon>arrow_drop_down</mat-icon>
+    </button>
+<mat-menu #menu="matMenu">
+  <button mat-menu-item>My account</button>
+  <button mat-menu-item (click) = "authService.logout()">Logout</button> 
+</mat-menu>
+    
+    </div>
+  </mat-toolbar>

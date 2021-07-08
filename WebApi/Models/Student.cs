@@ -22,14 +22,17 @@ namespace WebApi.Models
         public bool HasGraduated { get; set; }
         public  bool IsActivated { get; set; }
         public decimal Balance { get; set; }
+        public String ParentID { get; set; }
         [NotMapped]
         public StudentCode Code { get; set; }
 
         [ForeignKey("ClassArmID")]
-        public virtual ClassArm ClassArm { get; set; }
+        public ClassArm ClassArm { get; set; }
 
         [ForeignKey("SchoolID")]
         public School School { get; set; }
+        [ForeignKey("ParentID")]
+        public Parent Parent { get; set; }
 
        public ICollection<Enrollment> Enrollments{ get; set; }
        public ICollection<Result> Results { get; set; }

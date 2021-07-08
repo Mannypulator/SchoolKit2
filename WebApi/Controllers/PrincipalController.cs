@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -13,6 +15,8 @@ namespace WebApi.Controllers
 {
     [ApiController]
     [Route("api/principal")]
+    [Authorize(Roles = "Admin,Principal,Proprietor" )]
+    [EnableCors("SiteCorsPolicy")]
     //authorise for principal only
     public class PrincipalController : ControllerBase
     {
@@ -29,15 +33,7 @@ namespace WebApi.Controllers
             _studentManager = studentManager;
         }
 
-       [HttpPost]
-        [Route("endTerm")]
-        //authorize for principals
-        public async Task<IActionResult> EndTerm(int schoolId)
-        {
-            EMethod eMethod = new EMethod();
-            eMethod.CompileResults(schoolId, _context, _studentManager);
-            return Ok();
-        }
+        
 
 
         //authorize for principals
@@ -60,7 +56,7 @@ namespace WebApi.Controllers
                 LastName = x.LastName,
                 Email = x.Email,
                 SchoolID = x.SchoolID,
-                LgaID = x.LgaID,
+                //LgaID = x.LgaID,
                 Gender = x.Gender,
                 UserName = x.Email,
                 PhoneNumber = x.PhoneNumber,
@@ -200,13 +196,14 @@ namespace WebApi.Controllers
 
         [HttpPost]
         [Route("AddPrincipal")]
+        
         public async Task<IActionResult> AddPrincipal([FromBody] Principal principal)
         {
             var role = User.Claims.FirstOrDefault(c => c.Type == "Role").Value;
-            if(role == "Proprietor") 
+            if(role == "Proprietor" || role == "Admin") 
             {
-                EMethod eMethod = new EMethod(); 
-                var result = await eMethod.Principal(principal,_context,_principalManager, "Principal");
+                PrincipalMethods pMethod = new PrincipalMethods(); 
+                var result = await pMethod.Principal(principal,_context,_principalManager, "Principal");
                 return Ok("Successfully deleted");
             }
            /////remember to test
@@ -232,7 +229,7 @@ namespace WebApi.Controllers
                 Address = model.Address,
                 ClassArmID = model.ClassArmID,
                 SchoolID = model.SchoolID,
-                LgaID = model.LgaID,
+                //LgaID = model.LgaID,
                 Gender = (UserGender)model.Gender,
                 RegNo = s,
                 UserName = s
@@ -251,9 +248,13 @@ namespace WebApi.Controllers
 
                    await _context.SaveChangesAsync();
                   
-                   var term = _context.Terms
-                       .Where(x => x.SchoolID == model.SchoolID && x.Current == true)
-                       .Single();
+                   var term = _context.Sessions
+                       .Where(x => x.SchoolID == model.SchoolID && x.Current)
+                       .Include(x => x.Terms)
+                       .SelectMany(x => x.Terms)
+                       .Where(x => x.Current)
+                       .FirstOrDefault();
+
                   EMethod eMethod = new EMethod();
                   eMethod.EnrollStudent(student, term, _context); 
 
@@ -275,7 +276,7 @@ namespace WebApi.Controllers
                 LastName = model.LastName,
                 Email = model.Email,
                 SchoolID = model.SchoolID,
-                LgaID = model.LgaID,
+                //LgaID = model.LgaID,
                 Gender = (UserGender)model.Gender,
                 UserName = model.Email,
 

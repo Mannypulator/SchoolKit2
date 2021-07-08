@@ -8,11 +8,20 @@ namespace WebApi.Models
     {
         public ResultModel()
         {
-         Result = new Result();
          Enrollments  = new List<EnrollmentModel>();
+         AnnualEnrollments = new List<AnnualEnrollmentModel>();
         }
-        public Result Result { get; set; }
+        public string SessionName { get; set; }
+        public string TermName { get; set; }
+        public string ClassName { get; set; }
+        public string ResultType { get; set; }
+        public double ClassAverage { get; set; }
+        public int ClassPosition { get; set; }
+        public int Total { get; set; }
+        public double Average { get; set; }        
         public List<EnrollmentModel> Enrollments { get; set; }
         public List<AnnualEnrollmentModel> AnnualEnrollments { get; set; }
+
+        public string Message { get; set; }
     }
 }

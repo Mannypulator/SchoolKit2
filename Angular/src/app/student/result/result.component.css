@@ -1,0 +1,28 @@
+
+.tab{
+   background-color: white;
+}
+.tab tr {
+    font-size: 15px;
+    text-align: center;   
+  }
+
+.tab-border{
+   
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+.tab-border tr{
+   
+    text-align: center; 
+}
+.tab-border td{
+    padding: 2px;
+    border: 1px solid black;
+  
+}
+.tab-border th{
+    padding: 2px;
+    border: 1px solid black;
+  
+}

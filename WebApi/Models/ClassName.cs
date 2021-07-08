@@ -9,5 +9,7 @@ namespace WebApi.Models
         
         public int ClassArmID { get; set; }
         public string Name { get; set; }
+
+        public string Arm { get; set; }
     }
 }

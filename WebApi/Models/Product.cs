@@ -11,7 +11,7 @@ namespace WebApi.Models
             ProductSales = new HashSet<ProductSale>();
         }
         [Key]
-        public long ProductID { get; set; }
+        public int ProductID { get; set; }
         public string ProductName { get; set; }
         public int SchoolID { get; set; }
         public int Stock { get; set; }

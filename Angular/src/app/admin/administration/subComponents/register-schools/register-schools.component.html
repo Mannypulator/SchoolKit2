@@ -1,0 +1,180 @@
+<mat-horizontal-stepper [linear]="true"  #stepper>
+    <mat-step label="Register Proprietor">
+        <form #form="ngForm" fxFlex fxLayout="row wrap" fxLayoutAlign="center" (submit)="onSubmitProprietor()">
+            <mat-form-field fxFlex="75">
+                <mat-label>First Name</mat-label>
+                <input matInput placeholder="Jessica" required name="firstName" [(ngModel)] = "admin.school.name">
+            </mat-form-field>
+            <mat-form-field fxFlex="75">
+                <mat-label>Middle Name</mat-label>
+                <input matInput placeholder="Grace" name="middleName">
+            </mat-form-field>
+            <mat-form-field fxFlex="75">
+                <mat-label>Last Name</mat-label>
+                <input matInput placeholder="Grace" name="lastName" required>
+            </mat-form-field>
+
+            <mat-form-field fxFlex="75">
+                <mat-label>Email</mat-label>
+                <input matInput placeholder="You@gmail.com" name="email" required>
+            </mat-form-field>
+
+            <mat-form-field fxFlex="75">
+                <mat-label>LGA</mat-label>
+                <mat-select name="lga" (change)="show()">
+                    <mat-option *ngFor="let state of states" [value]="state">{{state}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field fxFlex="75">
+                <mat-label>Gender</mat-label>
+                <mat-select name="gender" (change)="show()">
+                    <mat-option  value="male">Male</mat-option>
+                    <mat-option  value="male">Female</mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field fxFlex="75">
+                <mat-label>Password</mat-label>
+                <input matInput placeholder="Use a strong password" name="password" required>
+            </mat-form-field>
+            <mat-form-field fxFlex="75">
+                <mat-label>Confirm Password</mat-label>
+                <input matInput placeholder="re-enter password" name="comfirmPassword" required>
+            </mat-form-field>
+
+           
+                <button fxFlex="75" mat-raised-button color="primary" [disabled]="form.invalid" type="submit">Submit</button>
+           
+        </form>
+    </mat-step>
+
+    <mat-step label= "Add School" >
+        <form #form="ngForm" fxFlex fxLayout="row wrap" fxLayoutAlign="center">
+            <mat-form-field fxFlex="75">
+                <mat-label>School Proprietor</mat-label>
+                <mat-select name="schoolProprietor" [(ngModel)] = "admin.school.type" >
+                    <mat-option [value]="types.primary">Primary</mat-option>
+                    <mat-option [value]="types.secondary">Secondary</mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field fxFlex="75">
+                <mat-label>School name</mat-label>
+                <input matInput placeholder="Enter school name" name="schoolName" required [(ngModel)] = "admin.school.name">
+            </mat-form-field>
+
+            <mat-form-field fxFlex="75">
+                <mat-label>Address</mat-label>
+                <input matInput placeholder="School Address" name="schoolAddress" required [(ngModel)] = "admin.school.address">
+            </mat-form-field>
+
+            <mat-form-field fxFlex="75">
+                <mat-label>State</mat-label>
+                <mat-select (select)="getLGAs()">
+                    <mat-option *ngFor="let state of states" [value]="state">{{state}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field fxFlex="75">
+                <mat-label>LGA</mat-label>
+                <mat-select name="lga" [(ngModel)] = "admin.school.lgaID" (ngModelChange)="show()">
+                    <mat-option *ngFor="let state of states" [value]="state">{{state}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-checkbox (change)="admin.school.showPosition=!admin.school.showPosition" fxFlex="75">Do you want to show student's position in class?</mat-checkbox>
+
+            <mat-form-field fxFlex="75">
+                <mat-label>Reg No prefix</mat-label>
+                <input matInput placeholder="Registeration No prefix" name="append" required [(ngModel)] = "admin.school.append">
+            </mat-form-field>
+
+            <mat-form-field fxFlex="75">
+                <mat-label>School Cathegory</mat-label>
+                <mat-select name="schoolType" [(ngModel)] = "admin.school.type" >
+                    <mat-option [value]="types.primary">Primary</mat-option>
+                    <mat-option [value]="types.secondary">Secondary</mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field fxFlex="75">
+                <mat-label>Compulsory for senior secondary</mat-label>
+                <mat-select name="ssCompulsory" [(ngModel)] = "admin.school.ssCompulsories" multiple>
+                    <mat-option *ngFor="let subject of ssSubjectList" [value]="subject">{{subject}}</mat-option>
+                </mat-select>
+                <mat-select-trigger>
+                    {{admin.school.ssCompulsories ? admin.school.ssCompulsories[0] : ''}}
+                    <span *ngIf="admin.school.ssCompulsories.length > 1" class="multi-selection">
+                        (+{{admin.school.ssCompulsories.length - 1}}
+                        {{admin.school.ssCompulsories.length === 2 ? 'other' : 'others'}})
+                     </span>
+                </mat-select-trigger>
+            </mat-form-field>
+
+            <mat-form-field fxFlex="75">
+                <mat-label>Subjects not offered by your school</mat-label>
+                <mat-select name="ssDrops" [(ngModel)] = "admin.school.ssDrops" multiple>
+                    <mat-option *ngFor="let subject of ssDropList" [value]="subject">{{subject}}</mat-option>
+                </mat-select>
+                <mat-select-trigger>
+                    {{admin.school.ssDrops ? admin.school.ssDrops[0] : ''}}
+                    <span *ngIf="admin.school.ssDrops.length > 1" class="multi-selection">
+                        (+{{admin.school.ssDrops.length - 1}}
+                        {{admin.school.ssDrops.length === 2 ? 'other' : 'others'}})
+                     </span>
+                </mat-select-trigger>
+            </mat-form-field>
+            <div fxFlex="75">
+                <button mat-button type="submit" matStepperNext>Next</button>
+            </div>
+        </form>
+    </mat-step>
+
+    <mat-step label="Add Principal">
+        <form #form="ngForm" fxFlex fxLayout="row wrap" fxLayoutAlign="center">
+            <mat-form-field fxFlex="75">
+                <mat-label>First Name</mat-label>
+                <input matInput placeholder="Jessica" name="firstName" required>
+            </mat-form-field>
+            <mat-form-field fxFlex="75">
+                <mat-label>Middle Name</mat-label>
+                <input matInput placeholder="Grace" name="middleName">
+            </mat-form-field>
+            <mat-form-field fxFlex="75">
+                <mat-label>Last Name</mat-label>
+                <input matInput placeholder="Grace" name="lastName" required>
+            </mat-form-field>
+
+            <mat-form-field fxFlex="75">
+                <mat-label>Email</mat-label>
+                <input matInput placeholder="You@gmail.com" name="email" required>
+            </mat-form-field>
+
+            <mat-form-field fxFlex="75">
+                <mat-label>LGA</mat-label>
+                <mat-select name="lga" (change)="show()">
+                    <mat-option *ngFor="let state of states" [value]="state">{{state}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field fxFlex="75">
+                <mat-label>Gender</mat-label>
+                <mat-select name="gender" (change)="show()">
+                    <mat-option  value="male">Male</mat-option>
+                    <mat-option  value="male">Female</mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field fxFlex="75">
+                <mat-label>Password</mat-label>
+                <input matInput placeholder="Use a strong password" name="password" required>
+            </mat-form-field>
+            <mat-form-field fxFlex="75">
+                <mat-label>Confirm Password</mat-label>
+                <input matInput placeholder="re-enter password" name="comfirmPassword" required>
+            </mat-form-field>
+
+            <div fxFlex="75">
+                <button mat-button matStepperPrevious>Back</button>
+                <button mat-button matStepperNext>Next</button>
+            </div>
+        </form>
+    </mat-step>
+</mat-horizontal-stepper>

@@ -1,0 +1,49 @@
+<ngx-alerts></ngx-alerts>
+<div fxLayoutAlign="center center" fxFill> 
+    
+    <mat-card class="mat-elevation-z12" fxLayout="row" fxLayoutAlign="space-between stretch" >
+     
+        <div >
+        <ng-progress id="progressBar" [thick]="true" [color]="progressService.currentColor"></ng-progress>
+            <mat-card-title fxLayoutAlign="center center">Login</mat-card-title>
+            <mat-card-content>
+                <mat-tab-group>
+                    <mat-tab label="Student">
+                        <form #form="ngForm" (ngSubmit)="onSubmit(form)" fxLayout="column" fxLayoutAlign=" stretch">
+                            <mat-form-field>
+                                <mat-label>Reg No</mat-label>
+                                <input matInput placeholder="Reg No" required name="username" ngModel #username="ngModel">
+                                <mat-icon matSuffix>person</mat-icon>
+                            </mat-form-field>
+                            <mat-form-field>
+                                <mat-label>Password</mat-label>
+                                <input type ="password" matInput placeholder="Password" required name="password" ngModel #password="ngModel">
+                                <mat-icon matSuffix>lock</mat-icon>
+                            </mat-form-field>
+                            <mat-checkbox>Remember me!</mat-checkbox>
+                            <button mat-raised-button color="primary">Login</button>
+                        </form>
+                    </mat-tab>
+                    <mat-tab label="Staff">
+                        <form #form2="ngForm" (ngSubmit)="onSubmit2(form2)" fxLayout="column" fxLayoutAlign=" stretch">
+                            <mat-form-field>
+                                <mat-label>Email</mat-label>
+                                <input matInput placeholder="Email" required name="username" ngModel #username="ngModel">
+                                <mat-icon matSuffix>email</mat-icon>
+                            </mat-form-field>
+                            <mat-form-field>
+                                <mat-label>Password</mat-label>
+                                <input type ="password" matInput placeholder="Password" required name="password" ngModel #password="ngModel">
+                                <mat-icon matSuffix>lock</mat-icon>
+                            </mat-form-field>
+                            <mat-checkbox>Remember me!</mat-checkbox>
+                            <button mat-raised-button color="primary">Login</button>
+                        </form>
+                    </mat-tab>
+
+                </mat-tab-group>
+            </mat-card-content>
+        </div>
+
+    </mat-card>
+</div>

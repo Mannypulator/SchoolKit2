@@ -49,6 +49,10 @@ namespace WebApi.Models
       public DbSet<Product> Products { get; set; }
       public DbSet<GeneralExpense> GeneralExpenses { get; set; }
       public DbSet<StudentFee> StudentFees { get; set; }
+      public DbSet<Session> Sessions { get; set; }
+      public DbSet<SchoolPackage> SchoolPackages { get; set; }
+      public DbSet<Parent> Parents { get; set; }
+      public DbSet<Proprietor> Proprietors { get; set; }
       
     }
 }

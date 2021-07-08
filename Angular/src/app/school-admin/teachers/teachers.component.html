@@ -1,0 +1,54 @@
+<div fxLayout="row" fxLayoutAlign="center none" class="mt" >
+    <mat-card fxFlex="85%" fxLayout="column" fxLayoutAlign="space-between none">
+        <div>
+            <mat-card-header >
+                <mat-card-actions fxFlex fxLayout="row" fxLayoutAlign="space-between none" class="ml">
+
+                    <button mat-raised-button color="primary">
+                        <span fxHide fxShow.gt-sm>Add teacher </span>
+                        <mat-icon>person_add</mat-icon>
+                    </button>
+
+                    <button mat-raised-button  color="warn">
+                        <span fxHide fxShow.gt-sm>Remove teacher </span>
+                        <mat-icon>person_remove</mat-icon>
+                    </button>
+                </mat-card-actions>
+            </mat-card-header>
+            <mat-divider></mat-divider>
+        </div>
+
+        <div class="mt">
+            <mat-card-content>
+                <mat-accordion>
+                    <mat-expansion-panel *ngFor="let state of states">
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                {{state}}</mat-panel-title>
+                        </mat-expansion-panel-header>
+                        <p>Currently I am in {{state}}</p>
+                        <div>
+                            <mat-card-actions fxFlex fxLayout="row" fxLayoutAlign="space-between none">
+
+                                <button mat-raised-button color="accent" fxHide fxShow.gt-sm>
+                                    <span>Assign subject </span>
+                                    <mat-icon>add</mat-icon>
+                                </button>
+
+                                <button mat-raised-button  color="warn" fxHide fxShow.gt-sm>
+                                    <span>Dissociate teacher from subject </span>
+                                    <mat-icon>remove</mat-icon>
+                                </button>
+
+                                <button mat-fab fxHide fxShow.lt-md><mat-icon>add</mat-icon></button>
+                                <button mat-fab fxHide fxShow.lt-md color="warn"><mat-icon>remove</mat-icon></button>
+                            </mat-card-actions>
+                        </div>
+                    </mat-expansion-panel>
+                </mat-accordion>
+
+            </mat-card-content>
+
+        </div>
+    </mat-card>
+</div>

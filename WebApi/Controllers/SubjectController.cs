@@ -22,56 +22,54 @@ namespace WebApi.Controllers
 
         [HttpPost]
         [Route("add")]
-        public async Task<IActionResult> add(SubjectModel[] model)
-        { 
-            foreach(var subject in model)
-           {
-                var sub = new Subject{
-                        Title = subject.Title,
-                        Range = (ClassRange) Enum.Parse(typeof(ClassRange), subject.Range),
-                        SchoolSpecific = subject.SchoolSpecific  
-                   };
-                  await _context.Subjects.AddAsync(sub);
-                  await  _context.SaveChangesAsync();
+        public async Task<IActionResult> Add([FromBody]SubjectModel subject)
+        {
+            var sub = new Subject
+            {
+                Title = subject.Title,
+                Range = (ClassRange)Enum.Parse(typeof(ClassRange), subject.Range),
+                SchoolSpecific = subject.SchoolSpecific
+            };
+            await _context.Subjects.AddAsync(sub);
+            await _context.SaveChangesAsync();
 
-                  if (subject.Range == "All")
-                  {
-                     var arms =  _context.ClassArms;
+            var arms = _context.ClassArms;
 
-                     foreach(var arm in arms){
-                         var classSub = new ClassSubject{
-                             ClassArmID = arm.ClassArmID,
-                             SubjectID = sub.SubjectID,
+            if (subject.Range == "All")
+            {
+                foreach (var arm in arms)
+                {
+                    var classSub = new ClassSubject
+                    {
+                        ClassArmID = arm.ClassArmID,
+                        SubjectID = sub.SubjectID,
 
-                         };
-                         await _context.ClassSubjects.AddAsync(classSub);
-                     }
-                     await  _context.SaveChangesAsync();
-                  }
-                  else{
-                      var arms = _context.ClassArms
-                      .Select(x => new ClassName{
-                          ClassArmID = x.ClassArmID,
-                          Name = Enum.GetName(typeof(Class), x.Class)
-                      })
-                      .Where(p => p.Name.Contains("SSS"));
-
-                      foreach(var arm in arms)
-                      {
-
-                         var classSub = new ClassSubject{
-                             ClassArmID = arm.ClassArmID,
-                             SubjectID = sub.SubjectID,
-                         };
-                         await _context.ClassSubjects.AddAsync(classSub);
-                      }
-                      await  _context.SaveChangesAsync();
-                  }
-                   
+                    };
+                    await _context.ClassSubjects.AddAsync(classSub);
+                }
+                await _context.SaveChangesAsync();
             }
-            
-            await  _context.SaveChangesAsync();  
+            else
+            {
+                foreach (var arm in arms)
+                {
+                    if (Enum.GetName(typeof(Class), arm.Class).Contains(subject.Range))
+                    {
+                        var classSub = new ClassSubject
+                        {
+                            ClassArmID = arm.ClassArmID,
+                            SubjectID = sub.SubjectID,
+                        };
+                        await _context.ClassSubjects.AddAsync(classSub);
+                    }
+                    await _context.SaveChangesAsync();
+                }
+            }
+
+
+
+            await _context.SaveChangesAsync();
             return Ok();
-         } 
+        }
     }
 }

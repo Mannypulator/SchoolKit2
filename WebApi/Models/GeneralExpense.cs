@@ -6,7 +6,7 @@ namespace WebApi.Models
     public class GeneralExpense
     {
         [Key]
-        public long GeneralExpensesID { get; set; }
+        public int GeneralExpensesID { get; set; }
         public decimal Expense { get; set; }
         public string Description { get; set; }
         public int SchoolID { get; set; }

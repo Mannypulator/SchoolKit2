@@ -7,8 +7,8 @@ namespace WebApi.Models
     public class FeePayment
     {
         [Key]
-        public long FeePaymentID { get; set; }
-        public long FeeID { get; set; }
+        public int FeePaymentID { get; set; }
+        public int FeeID { get; set; }
         public decimal AmountPaid { get; set; }
         public string StudentID { get; set; }
         public DateTime TimeStamp { get; set; }
@@ -17,4 +17,5 @@ namespace WebApi.Models
         [ForeignKey("StudentID")]
         public Student Student { get; set; }
     }
+    
 }

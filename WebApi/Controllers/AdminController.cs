@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -13,35 +15,45 @@ namespace WebApi.Controllers
 {
     [ApiController]
     [Route("api/admin")]
+    [Authorize(Roles = "Admin")]
+    [EnableCors("SiteCorsPolicy")]
     public class AdminController : ControllerBase
     {
         private readonly SchoolKitContext _context;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly UserManager<Principal> _principalManager;
+        private readonly UserManager<Proprietor> _proprietorManager;
         private readonly UserManager<Admin> _adminManager;
-        public AdminController(SchoolKitContext context, RoleManager<IdentityRole> roleManager,UserManager<Principal> principalManager, UserManager<Admin> adminManager)
+        public AdminController(SchoolKitContext context, RoleManager<IdentityRole> roleManager,UserManager<Principal> principalManager, UserManager<Admin> adminManager, UserManager<Proprietor> proprietorManager)
         {
             _context = context;
             _roleManager = roleManager;
             _principalManager = principalManager;
             _adminManager = adminManager;
+            _proprietorManager = proprietorManager;
         }
 
         [HttpPost]
         [Route("createRole")]
         //authorize for admin
-        public async Task<IActionResult> Role([FromBody] string name)
+        public async Task<IActionResult> Role([FromBody]SaveModel model)
         {
-            bool exist = await _roleManager.RoleExistsAsync("Admin");
+            try{
+                bool exist = await _roleManager.RoleExistsAsync(model.name);
             if (!exist)
             {
              // first we create Admin rool    
                 var role = new IdentityRole();
-                role.Name = "Admin";
+                role.Name = model.name;
                 await _roleManager.CreateAsync(role);
                 return Ok(new {Message = "Role created"});
             }
             return BadRequest(new {Message = "Role already exists"});
+            }
+            catch(Exception e){
+                throw e;
+            }
+            
             
         }
 
@@ -71,14 +83,15 @@ namespace WebApi.Controllers
                 await _context.Schools.AddAsync(model.school);
                 await _context.SaveChangesAsync();
                 model.principal.SchoolID = model.school.SchoolID;
-                EMethod eMethod = new EMethod();
-                var result = await eMethod.Principal(model.principal,_context,_principalManager, "Proprietor");
+                
+                PrincipalMethods pMethod = new PrincipalMethods(); 
+                var result = await pMethod.Principal(model.principal,_context,_principalManager, "Proprietor");
                 if(!result.Succeeded)
                 {
                     _context.Schools.Remove(model.school);
                     await _context.SchoolRegCodes.AddAsync(new SchoolRegCode {Code = model.school.Code});
                     await _context.SaveChangesAsync();
-                    return Ok(result);
+                    return BadRequest(result);
                 }
             return Ok(new{Message = "School successfully created"});
         }
@@ -92,10 +105,11 @@ namespace WebApi.Controllers
                 FirstName = model.FirstName,
                 LastName = model.LastName,
                 Address = model.Address,
-                LgaID = model.LgaID,
+                //LgaID = model.LgaID,
                 Gender = (UserGender)model.Gender,
                 UserName = model.Email,
                 Email = model.Email
+                
             };
              try{
                  var result = await _adminManager.CreateAsync(admin, model.PasswordHash);
@@ -151,6 +165,45 @@ namespace WebApi.Controllers
            //if this method doesn't work, then try tying the school to another admin
         }
 
+        [HttpPost]
+        [Route("addProprietor")]
+        public async Task<IdentityResult> Principal(Proprietor model)
+        {
+            var proprietor = new Proprietor{
+                FirstName = model.FirstName,
+                LastName = model.LastName,
+                Address = model.Address,
+                Email = model.Email,
+                //LgaID = model.LgaID,
+                Gender = (UserGender)model.Gender,
+                UserName = model.Email,
+
+            };
+
+            try{
+                 var result = await _proprietorManager.CreateAsync(proprietor, model.PasswordHash);
+                 if(result.Succeeded)
+                 {
+                     await _proprietorManager.AddToRoleAsync(proprietor, "Proprietor");
+
+                     return result;
+                 }
+                 else{
+                     return result;
+                 }
+            }
+            catch(Exception ex){
+                throw ex;
+            }
+           
+        }
+
+
 
     }
+
+    public class SaveModel 
+{
+   public string name {get; set;}
+}
 }
