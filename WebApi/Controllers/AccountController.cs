@@ -104,6 +104,27 @@ namespace WebApi.Controllers
 
         }
 
+         [HttpGet]
+        [Route("getStates")]
+        public async Task<IActionResult> GetStates(){
+            var states = await _context.States
+            .Include(x => x.LGAs)
+            .ToListAsync();
+
+            return Ok(states);
+        }
+
+        [HttpPost]
+        [Route("getLgas")]
+        public async Task<IActionResult> GetLGAs([FromBody] StateModel state){
+            var Lgas = await _context.States
+            .Include(x => x.LGAs)
+            .Where(x => x.StateID == state.StateID)
+            .SelectMany(x=> x.LGAs)
+            .ToListAsync();
+
+            return Ok(Lgas);
+        }
 
         // GET: Account/Details/5
         // GET: Account/Create

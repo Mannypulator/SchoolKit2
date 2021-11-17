@@ -2,16 +2,16 @@
 <form #form="ngForm" fxFlex fxLayout="row wrap" fxLayoutAlign="center" (submit) = "onSubmit()">
     <mat-form-field fxFlex="75">
         <mat-label>Title</mat-label>
-        <input matInput placeholder="English" name="title" required [(ngModel)] = "subjectModel.title">
+        <input matInput placeholder="English" name="title" required [(ngModel)] = "subject.Title">
     </mat-form-field>
     <mat-form-field fxFlex="75">
                 <mat-label>Range</mat-label>
-                <mat-select name="range" [(ngModel)] = "subjectModel.range">
-                    <mat-option  *ngFor="let subject of admin.subjectRange" value={{subject}}>{{subject}}</mat-option>
+                <mat-select name="range" [(ngModel)] = "subject.Range">
+                    <mat-option  *ngFor="let subject of subjectRange; let i = index" value={{i}}>{{subject}}</mat-option>
                     
                 </mat-select>
             </mat-form-field>
-            <mat-checkbox fxFlex="75" name="schoolSpecific" [(ngModel)] = "subjectModel.schoolSpecific">Is subject specific to one school?</mat-checkbox>
+            <mat-checkbox fxFlex="75" name="schoolSpecific" [(ngModel)] = "subject.SchoolSpecific">Is subject specific to one school?</mat-checkbox>
             <div fxFlex="75">
                
                 <button mat-button type="submit">Submit</button>

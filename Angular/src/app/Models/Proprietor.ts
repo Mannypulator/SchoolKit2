@@ -7,7 +7,7 @@ export class Proprietor {
     public Address!: string;
     public Email!: string;
     public LgaID!: number;
-    public gender = Gender;
+    public Gender = Gender;
   
-    public passwordHarsh!: string;
+    public PasswordHash!: string;
 }

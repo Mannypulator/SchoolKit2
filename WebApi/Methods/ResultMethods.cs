@@ -19,7 +19,7 @@ namespace WebApi.Methods
             var classArmIDs = allstudents
                 .Select(r => r.ClassArmID).ToHashSet();
 
-            var allterms = _context.Terms
+            var allterms = _context.Terms////please redo this
             .Include(t => t.Session)
             .ThenInclude(t => t.Terms)
             .SelectMany(o => o.Session.Terms);

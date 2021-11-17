@@ -42,11 +42,10 @@ img{
     margin-right: 0% !important;
     padding-right: 0% !important;
 }
-.mat-expansion-panel:not(.mat-expanded)  .mat-expansion-panel-header:not([aria-disabled='true']):hover  {   background: #273d3d;}
+.mat-expansion-panel:not(.mat-expanded)  .mat-expansion-panel-header:not([aria-disabled='true']):hover{background: #273d3d;}
 .mat-expansion-panel{
     border-radius: 0% !important;
     background-color:#273d3d;
-    
 } 
 .mat-expansion-panel-header{
     background-color:#273d3d;

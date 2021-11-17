@@ -1,49 +1,113 @@
-<div fxLayout="row" fxLayoutAlign="center none" class="mt" >
+<ngx-alerts></ngx-alerts>
+<div fxLayout="row" fxLayoutAlign="center none" class="mt">
     <mat-card fxFlex="85%" fxLayout="column" fxLayoutAlign="space-between none">
         <div>
-            <mat-card-header >
-                <mat-card-actions fxFlex fxLayout="row" fxLayoutAlign="space-between none" class="ml">
-
-                    <button mat-raised-button color="primary">
-                        <span fxHide fxShow.gt-sm>Add teacher </span>
+            <div fxFlex fxLayout="row wrap" fxLayoutAlign="space-between center">
+                <div fxFlex.sm="100">
+                    <button mat-raised-button color="primary" (click)="openDialog()">
+                        <span>Add Teacher </span>
                         <mat-icon>person_add</mat-icon>
                     </button>
+                </div>
+                <div fxFlex.sm="80">
+                    <mat-form-field>
+                        <mat-label>Search</mat-label>
+                        <input matInput placeholder="search" name="search" [(ngModel)]="teacherSearch">
+                    </mat-form-field>
 
-                    <button mat-raised-button  color="warn">
-                        <span fxHide fxShow.gt-sm>Remove teacher </span>
-                        <mat-icon>person_remove</mat-icon>
+                    <button mat-button (click)="findTeacher()" style="margin-left:5px ;">
+                        <mat-icon>search</mat-icon>
                     </button>
-                </mat-card-actions>
-            </mat-card-header>
-            <mat-divider></mat-divider>
+                </div>
+
+            </div>
+
         </div>
+        <span>
+            <mat-divider></mat-divider>
+        </span>
 
         <div class="mt">
             <mat-card-content>
                 <mat-accordion>
-                    <mat-expansion-panel *ngFor="let state of states">
+                    <mat-expansion-panel *ngFor="let teacher of teachers; let i = index">
                         <mat-expansion-panel-header>
                             <mat-panel-title>
-                                {{state}}</mat-panel-title>
+                                <table class="tab">
+                                    <tr>
+                                        <td>{{i+1}}</td>
+                                        <td>{{teacher.LastName}} {{teacher.FirstName}}</td>
+                                    </tr>
+                                </table>
+                            </mat-panel-title>
                         </mat-expansion-panel-header>
-                        <p>Currently I am in {{state}}</p>
-                        <div>
-                            <mat-card-actions fxFlex fxLayout="row" fxLayoutAlign="space-between none">
+                        <div fxFlex fxLayout="row wrap" fxLayoutAlign="space-between none">
+                            <div>
+                                <table class="tab2">
+                                    <tr>
+                                        <td>Name:</td>
+                                        <td>{{teacher.LastName}} {{teacher.FirstName}}</td>
+                                    </tr>
 
-                                <button mat-raised-button color="accent" fxHide fxShow.gt-sm>
-                                    <span>Assign subject </span>
-                                    <mat-icon>add</mat-icon>
-                                </button>
+                                    <tr>
+                                        <td>Sex:</td>
+                                        <td>{{Gender[teacher.Gender]}}</td>
+                                    </tr>
 
-                                <button mat-raised-button  color="warn" fxHide fxShow.gt-sm>
-                                    <span>Dissociate teacher from subject </span>
-                                    <mat-icon>remove</mat-icon>
-                                </button>
+                                    <tr>
+                                        <td>Email:</td>
+                                        <td>{{teacher.Email}}</td>
+                                    </tr>
 
-                                <button mat-fab fxHide fxShow.lt-md><mat-icon>add</mat-icon></button>
-                                <button mat-fab fxHide fxShow.lt-md color="warn"><mat-icon>remove</mat-icon></button>
-                            </mat-card-actions>
+                                    <tr>
+                                        <td>Phone Number:</td>
+                                        <td>{{teacher.PhoneNumber}}</td>
+                                    </tr>
+
+
+                                </table>
+                            </div>
+                            <div fxFlex = "100" fxFlex.gt-sm = "50" style="margin-top:0;">
+                                <h2 style="text-align: center;">Teacher's Subjects</h2>
+                                <mat-list role="list">
+                                    <mat-list-item *ngFor="let teacherSubject of teacher.TeacherSubjects, let j = index">
+                                       {{teacherSubject.Title}} {{Classes[teacherSubject.Class]}} {{Arm[teacherSubject.Arm]}}
+                                       <button mat-button style = "margin-left: auto;" (click)="DissociateSubject(teacherSubject.TeacherSubjectID, j, i)"><mat-icon>delete</mat-icon></button>
+                                        
+                                    
+                                       <mat-divider></mat-divider>
+                                    </mat-list-item>
+                                    
+                                </mat-list>
+                            </div>
+
+                            <div fxFlex = "100">
+                                <mat-card-actions fxLayout="row" fxLayoutAlign="space-between none" fxFlex="98%"
+                                    style="margin-left:1%">
+    
+                                    <button mat-raised-button color="accent" fxHide fxShow.gt-sm
+                                        (click)="openDialog2(teacher)">
+                                        <span>Assign subject </span>
+                                        <mat-icon>add</mat-icon>
+                                    </button>
+    
+                                    <button mat-raised-button color="warn" fxHide fxShow.gt-sm (click)="RemoveTeacher(teacher.Id)">
+                                        <span>Remove Teacher </span>
+                                        <mat-icon>remove</mat-icon>
+                                    </button>
+    
+                                    <button mat-fab fxHide fxShow.lt-md (click)="openDialog2(teacher)">
+                                        <mat-icon>add</mat-icon>
+                                    </button>
+                                    <button mat-fab fxHide fxShow.lt-md color="warn"  (click)="RemoveTeacher(teacher.Id)">
+                                        <mat-icon>remove</mat-icon>
+                                    </button>
+                                </mat-card-actions>
+                            </div>
                         </div>
+
+
+                      
                     </mat-expansion-panel>
                 </mat-accordion>
 

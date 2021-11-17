@@ -7,8 +7,8 @@ namespace WebApi.Models
     [NotMapped]
     public class SubjectAssign
     {
-        public string TeacherID { get; set; } = null!;
-        public int ClassSubjectID { get; set; }
-        public int SchoolID { get; set; }
+        public string TeacherID { get; set; }
+        public IList<int> ClassSubjectIDs { get; set; }
+       
     }
 }

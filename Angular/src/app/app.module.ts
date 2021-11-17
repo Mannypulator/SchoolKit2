@@ -8,9 +8,13 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { PageNotFoundComponent } from './shared/components/page-not-found/page-not-found.component';
 import { AuthInterceptor } from './resources/auth.interceptor';
-import { AdminService } from './resources/admin.service';
+
 import { ProgressbarService } from './shared/services/progressbar.service';
 import { TitleService } from './shared/services/title.service';
+import { AdminService } from './resources/admin.service';
+import { SchoolAdminService } from './school-admin/Services/school-admin.service';
+import { AuthService } from './resources/auth.service';
+
 
 
 
@@ -20,7 +24,7 @@ import { TitleService } from './shared/services/title.service';
 @NgModule({
   declarations: [
     AppComponent,
-    PageNotFoundComponent,
+    PageNotFoundComponent
   
    
     
@@ -37,7 +41,9 @@ import { TitleService } from './shared/services/title.service';
     {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},
     AdminService,
     ProgressbarService,
-    TitleService
+    TitleService, 
+    SchoolAdminService,
+    AuthService
   ],
   bootstrap: [AppComponent]
 })

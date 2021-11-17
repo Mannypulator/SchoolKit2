@@ -28,6 +28,8 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 
 import { HeaderComponent } from '../components/header/header.component';
 import { AlertModule } from 'ngx-alerts';
+import { MatDialogModule } from '@angular/material/dialog';
+
 
 
 
@@ -57,7 +59,8 @@ import { AlertModule } from 'ngx-alerts';
     MatMenuModule,
     MatListModule,
     MatTableModule,
-    MatDividerModule
+    MatDividerModule,
+    MatDialogModule
   ],
 
   exports:[ 
@@ -82,7 +85,8 @@ import { AlertModule } from 'ngx-alerts';
     MatListModule,
     MatTableModule,
     HeaderComponent,
-    MatDividerModule
+    MatDividerModule,
+    MatDialogModule
     ]
 
 })

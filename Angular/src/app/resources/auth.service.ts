@@ -19,7 +19,11 @@ export class AuthService {
     userRoles: []
   }
 
- 
+  reload=false;
+
+ redirectUrl:string = "";
+
+ selectedSchool: number = 0;
 
   constructor(private http: HttpClient, private router: Router) { }
 
@@ -51,11 +55,15 @@ export class AuthService {
 
   logout(){
     localStorage.removeItem('token');
+    localStorage.removeItem('selectedSchool')
     this.currentUser = {
       userID: null,
       userRoles : []
     };
     this.router.navigateByUrl('login');
+    this.reload = true;
+    
+
   }
 
   isLoggedIn(): boolean {
@@ -89,6 +97,48 @@ export class AuthService {
     }
       
    
+  }
+
+  isPrincipal(): boolean{
+    
+    if(this.isLoggedIn()){
+      ///
+      if(this.currentUser.userRoles.length === 0){
+        this.getUser();
+      }
+      ///
+      return this.currentUser.userRoles.includes("Principal");
+    }
+
+    return false;
+  }
+
+  isProprietor(): boolean{
+    
+    if(this.isLoggedIn()){
+      ///
+      if(this.currentUser.userRoles.length === 0){
+        this.getUser();
+      }
+      ///
+      return this.currentUser.userRoles.includes("Proprietor");
+    }
+
+    return false;
+  }
+
+  isTeacher(): boolean{
+    
+    if(this.isLoggedIn()){
+      ///
+      if(this.currentUser.userRoles.length === 0){
+        this.getUser();
+      }
+      ///
+      return this.currentUser.userRoles.includes("Teacher");
+    }
+
+    return false;
   }
 
 }

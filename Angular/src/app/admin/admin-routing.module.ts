@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { AdminAuth } from '../resources/adminrole.guard';
 import { AdminComponent } from './admin.component';
 import { AdministrationComponent } from './administration/administration.component';
 import { CreateAdminComponent } from './administration/subComponents/create-admin/create-admin.component';
@@ -14,7 +15,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 
 const routes: Routes = [
   {
-    path:'', component: AdminComponent,
+    path:'', component: AdminComponent, canActivate:[AdminAuth],
     children:[
       {
       path:'dashboard', component: DashboardComponent

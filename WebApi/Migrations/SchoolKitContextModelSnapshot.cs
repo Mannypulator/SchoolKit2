@@ -332,7 +332,13 @@ namespace WebApi.Migrations
                     b.Property<int>("Exam")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("FirstCA")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int>("Grade")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("SecondCA")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("StudentID")
@@ -340,6 +346,9 @@ namespace WebApi.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<int>("TermID")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("ThridCA")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("Total")
@@ -804,9 +813,6 @@ namespace WebApi.Migrations
                     b.Property<int>("RegNoCount")
                         .HasColumnType("INTEGER");
 
-                    b.Property<bool>("SessionStart")
-                        .HasColumnType("INTEGER");
-
                     b.Property<bool>("ShowPositon")
                         .HasColumnType("INTEGER");
 
@@ -881,6 +887,9 @@ namespace WebApi.Migrations
 
                     b.Property<string>("SessionName")
                         .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("SessionStart")
                         .HasColumnType("TEXT");
 
                     b.HasKey("SessionID");

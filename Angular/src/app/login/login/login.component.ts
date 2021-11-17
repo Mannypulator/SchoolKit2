@@ -23,6 +23,9 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {
     
     this.progressService.setTitle("login");
+    if (this.authService.reload){
+      window.location.reload();
+    }
   }
 
   onSubmit(form:NgForm){
@@ -59,9 +62,51 @@ export class LoginComponent implements OnInit {
         this.progressService.setSuccess();
         this.alertService.success('Welcome back ');
         this.progressService.completeLoading();
+        console.log('before admin if')
         if(this.authService.isAdmin()){
-          this.router.navigateByUrl('admin');
+          console.log('after admin if')
+          if(this.authService.redirectUrl != ""){
+            this.router.navigateByUrl(this.authService.redirectUrl);
+            console.log(this.authService.redirectUrl)
+            //this.authService.redirectUrl = "";
+          }
+          else{
+            this.router.navigateByUrl('admin');
+            console.log('login else');
+          }
+          
         }
+       
+        else if(this.authService.isPrincipal() || this.authService.isProprietor()){
+          console.log('after principal if');
+          if(this.authService.isProprietor() && localStorage.getItem('selectedSchool') === null){
+            console.log('proprietor if')
+            this.router.navigateByUrl('school-admin/school-selection');
+          }
+          else{
+            if(this.authService.redirectUrl != ""){
+              this.router.navigateByUrl(this.authService.redirectUrl);
+              //this.authService.redirectUrl = "";
+            }
+            else{
+              this.router.navigateByUrl('school-admin');
+            }
+          }
+         
+        }
+        else if(this.authService.isTeacher()){
+          if(this.authService.redirectUrl != ""){
+            this.router.navigateByUrl(this.authService.redirectUrl);
+            console.log(this.authService.redirectUrl)
+            //this.authService.redirectUrl = "";
+          }
+          else{
+            this.router.navigateByUrl('teacher');
+           
+          }
+          
+        }
+
         //else if(this.authService.isTecher)
         //  this.router.navigateByUrl()
         //}just remember to include all these

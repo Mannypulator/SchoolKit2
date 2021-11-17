@@ -1,0 +1,53 @@
+<ngx-alerts></ngx-alerts>
+<form #form="ngForm" fxFlex fxLayout="row wrap" fxLayoutAlign="center" (submit)="onSubmitPrincipal()" >
+                        <mat-form-field fxFlex="75">
+                <mat-label>First Name</mat-label>
+                <input matInput placeholder="Jessica" required name="firstName" [(ngModel)] = "admin.principal.FirstName">
+            </mat-form-field>
+            
+            <mat-form-field fxFlex="75">
+                <mat-label>Last Name</mat-label>
+                <input matInput placeholder="Grace" name="lastName" required [(ngModel)] = "admin.principal.LastName">
+            </mat-form-field>
+
+            <mat-form-field fxFlex="75">
+                <mat-label>Email</mat-label>
+                <input matInput placeholder="You@gmail.com" name="email" required [(ngModel)] = "admin.principal.Email">
+            </mat-form-field>
+<!--
+            <mat-form-field fxFlex="75">
+                <mat-label>State</mat-label>
+                <mat-select name="state" [(ngModel)] = "selectedState" (ngModelChange)="getLGAs()">
+                    <mat-option *ngFor="let state of states" [value]="state.StateID">{{state.Name}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+             <mat-form-field fxFlex="75">
+                <mat-label>LGA</mat-label>
+                <mat-select name="lga" [(ngModel)] = "admin.principal.LgaID" >
+                    <mat-option *ngFor="let lga of lgas" [value]="lga.LgaID">{{lga.Name}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+-->
+            <mat-form-field fxFlex="75">
+                <mat-label>Gender</mat-label>
+                <mat-select name="gender" [(ngModel)]="admin.principal.Gender">
+                    <mat-option  [value]="genderSelection.male">Male</mat-option>
+                    <mat-option  [value]="genderSelection.female">Female</mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field fxFlex="75">
+                <mat-label>Password</mat-label>
+                <input matInput placeholder="Use a strong password" name="password" type="password" [(ngModel)] = "admin.principal.PasswordHash"required>
+            </mat-form-field>
+            <mat-form-field fxFlex="75">
+                <mat-label>Confirm Password</mat-label>
+                <input matInput placeholder="re-enter password" type="password" name="comfirmPassword" type="password "[(ngModel)] = "principalPasswordCheck" required>
+                <!--please use proper validations-->
+                <small [fxHide] = "principalMatched" style="color:red">Password does not match</small>
+            </mat-form-field>
+
+           
+                <button fxFlex="75" mat-raised-button color="accent" [disabled]="form.invalid" type="submit">Submit</button>
+           
+        </form>

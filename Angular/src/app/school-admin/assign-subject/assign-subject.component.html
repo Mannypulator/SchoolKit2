@@ -1,0 +1,28 @@
+<ngx-alerts></ngx-alerts>
+<div fxFlex="100%" fxLayout="row wrap" fxLayoutAlign="space-between none">
+    <div fxFlex="45%">
+        <mat-form-field fxFlex="75">
+            <mat-label>Select Subjects</mat-label>
+            <mat-select name="Subject" [(ngModel)]="SubjectID" (ngModelChange)="SubjectClassses()">
+                <mat-option *ngFor="let subject of subjects" [value]="subject.SubjectID">{{subject.Title}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+    </div>
+
+    <div fxFlex="45%">
+        <h4 style="text-aling:center">Select Classes</h4>
+        <mat-list role="list">
+            <mat-list-item *ngFor="let classSubject of classSubjects">
+                <mat-checkbox [(ngModel)]="classSubject.Selected" color="primary">
+                    {{Classes[classSubject.Class]}} {{Arm[classSubject.Arm]}}
+                </mat-checkbox>
+            </mat-list-item>
+
+        </mat-list>
+    </div>
+    <div fxFlex="100%" fxLayout="row wrap" fxLayoutAlign="space-around center">
+        <button fxFlex="55" mat-raised-button color="accent" (click)="SubmitCS()">Submit</button>
+         <button style="margin-top:2%" fxFlex="55" mat-raised-button color="accent" [mat-dialog-close]="null">Cancel</button>
+    </div>
+    
+</div>

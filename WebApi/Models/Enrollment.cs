@@ -12,6 +12,9 @@ namespace WebApi.Models
         [Required]
         public int ClassSubjectID { get; set; }
         public bool CompletionState { get; set; }
+        public int FirstCA { get; set; }
+        public int SecondCA { get; set; }
+        public int ThridCA { get; set; }
         public int CA { get; set; }
         public int Exam { get; set; }
 

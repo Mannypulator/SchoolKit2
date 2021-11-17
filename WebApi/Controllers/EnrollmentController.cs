@@ -8,11 +8,13 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using WebApi.Models;
 using WebApi.Methods;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebApi.Controllers
 {
     [ApiController]
     [Route("api/enrollment")]
+    [Authorize(Roles = "Teacher,Principal,Proprietor")]
     public class EnrollmentController : ControllerBase
     {
         private readonly SchoolKitContext _context;
@@ -42,32 +44,19 @@ namespace WebApi.Controllers
             return Ok(enrollments);
         }
 
-        [HttpGet]
-        [Route("all")]
-        //authorize for teacher
-        public async Task<IActionResult> AllEnrollments(int id)
-        {
-            var userID = User.Claims.FirstOrDefault(c => c.Type == "UserID").Value;
-            var teacher = await _teacherManager.FindByIdAsync(userID);
-
-            var termid = await _context.Sessions.Where(d =>d.SchoolID == teacher.SchoolID && d.Current)
-            .Include(x => x.Terms)
-            .SelectMany(t => t.Terms)
-            .Where(p => p.Current)
-            .Select(x => x.TermID)
-            .SingleOrDefaultAsync();
-
-           var enrollments = await _context.Enrollments
-           .Where(o => o.ClassSubjectID == id && o.TermID == termid).ToListAsync();
-
-            return Ok(enrollments);
-        }
 
         [HttpPost]
         [Route("update")]
-        public async Task<IActionResult> Update(Enrollment[] enrollments)
+        public async Task<IActionResult> Update(ReturnEnrollment model)
         {
-           foreach(var enrollment in enrollments){
+            var enrollment = await _context.Enrollments
+            .Where(x => x.EnrollmentID == model.EnrollmentID)
+            .FirstOrDefaultAsync();
+            enrollment.FirstCA = model.FirstCA;
+            enrollment.SecondCA = model.SecondCA;
+            enrollment.ThridCA = model.ThirdCA;
+            enrollment.Exam = model.Exam;
+            enrollment.CA = enrollment.FirstCA + enrollment.SecondCA + enrollment.ThridCA;
                enrollment.Total = enrollment.CA + enrollment.Exam;
                if(enrollment.Total >= 70){
                    enrollment.Grade = Grade.A;
@@ -85,9 +74,9 @@ namespace WebApi.Controllers
                    enrollment.Grade = Grade.F;
                }
                 _context.Enrollments.Update(enrollment);
-           }
+           
            await _context.SaveChangesAsync();     
-            return Ok();
+            return Ok(enrollment);
         }
 
     }      

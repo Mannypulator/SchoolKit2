@@ -27,7 +27,7 @@ namespace WebApi.Methods
                  {
                      await _userManager.AddToRoleAsync(principal,role);
 
-                     if(model.PrincipalQualifications != null)
+                    /* if(model.PrincipalQualifications != null)
                      {
                          foreach(var sub in model.PrincipalQualifications)
                        {
@@ -38,7 +38,7 @@ namespace WebApi.Methods
                          await _context.PrincipalQualifications.AddAsync(principalQualification);
                        }
                      await _context.SaveChangesAsync();
-                     }
+                     }*/
                      return result;
                  }
                  else{

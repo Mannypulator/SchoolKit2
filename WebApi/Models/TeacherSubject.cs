@@ -15,6 +15,6 @@ namespace WebApi.Models
         public ClassSubject ClassSubject  { get; set; }
 
         [ForeignKey("TeacherID")]
-        public Teacher Teacher { get; set; } = null!;
+        public Teacher Teacher { get; set; }
     }
 }

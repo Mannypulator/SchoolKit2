@@ -1,15 +1,24 @@
+import { Principal } from "./Principal";
 import { SchoolType } from "./SchoolType";
+import { Subject } from "./Subject";
 
 export class School {
-        public name!: string;
-        public address!: string;
-        public lgaID!: number;
-        public showPosition!: boolean;
-        public append!: string;
-        public proprietorID!: number;
-        public type = SchoolType;
-        public adminID!: number;
-        public code!: number;
-        public ssCompulsories!: string[];
-        public ssDrops!: string[];
+        public SchoolID!: number;
+        public Name!: string;
+        public Address!: string;
+        public LgaID!: number;
+        public ShowPosition!: boolean;
+        public Append!: string;
+        public ProprietorID!: string;
+        public Type! : SchoolType;
+        public SsCompulsories!: number[];
+        public SsDrops!: number[];
 }
+
+export class SchoolModel
+    {
+       public school!: School 
+       public principal!: Principal 
+    }
+
+

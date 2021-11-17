@@ -1,0 +1,49 @@
+<h2 mat-dialog-title>Edit Student</h2>
+<mat-dialog-content>
+<form #form="ngForm" fxFlex fxLayout="row wrap" fxLayoutAlign="center" (submit)="dialogClose()" >
+                        <mat-form-field fxFlex="75">
+                <mat-label>First Name</mat-label>
+                <input matInput placeholder="Jessica" required name="firstName" [(ngModel)] = "student.FirstName">
+            </mat-form-field>
+            
+            <mat-form-field fxFlex="75">
+                <mat-label>Last Name</mat-label>
+                <input matInput placeholder="Grace" name="lastName" required [(ngModel)] = "student.LastName">
+            </mat-form-field>
+<!--
+            <mat-form-field fxFlex="75">
+                <mat-label>State</mat-label>
+                <mat-select name="state" [(ngModel)] = "selectedState" (ngModelChange)="getLGAs()">
+                    <mat-option *ngFor="let state of states" [value]="state.StateID">{{state.Name}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+             <mat-form-field fxFlex="75">
+                <mat-label>LGA</mat-label>
+                <mat-select name="lga" [(ngModel)] = "student.LgaID" >
+                    <mat-option *ngFor="let lga of lgas" [value]="lga.LgaID">{{lga.Name}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+-->
+            <mat-form-field fxFlex="75">
+                <mat-label>Gender</mat-label>
+                <mat-select name="gender" [(ngModel)]="student.Gender">
+                    <mat-option  [value]="genderSelection.male">Male</mat-option>
+                    <mat-option  [value]="genderSelection.female">Female</mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field fxFlex="75">
+                <mat-label>Class</mat-label>
+                <mat-select name="Class" [(ngModel)]="student.ClassArmID">
+                    <mat-option *ngFor="let class of classes" [value]="class.ClassArmID">{{class.Name}} {{class.Arm}}</mat-option>
+                  
+                </mat-select>
+            </mat-form-field>
+
+
+           
+            <button fxFlex="75" mat-raised-button color="accent" [disabled]="form.invalid" type="submit">Submit</button>
+            <button style="margin-top:2%" fxFlex="75" mat-raised-button color="accent" [mat-dialog-close]="null">Cancel</button>
+           
+        </form>
+</mat-dialog-content>

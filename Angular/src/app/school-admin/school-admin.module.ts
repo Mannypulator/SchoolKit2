@@ -9,19 +9,27 @@ import { RemoveTeacherComponent } from './remove-teacher/remove-teacher.componen
 import { RemoveStudentComponent } from './remove-student/remove-student.component';
 import { SchoolAdminComponent } from './school-admin/school-admin.component';
 import { SharedModuleModule } from '../shared/shared-module/shared-module.module';
-import { SchoolsComponent } from './schools/schools.component';
+import { AddSchoolsComponent } from './add-school/add-schools.component';
 import { PrincipalSidenavListComponent } from './principal-sidenav-list/principal-sidenav-list.component';
 import { TeachersComponent } from './teachers/teachers.component';
 import { StudentsComponent } from './students/students.component';
 import { SchoolSelectionComponent } from './school-selection/school-selection.component';
+import { SchoolAdminService } from './Services/school-admin.service';
+import { SchoolsComponent } from './schools/schools.component';
+import { SchoolAdministrationComponent } from './school-administration/school-administration.component';
+import { AddPrincipalComponent } from './add-principal/add-principal.component';
+import { AssignSubjectComponent } from './assign-subject/assign-subject.component';
+import { EditStudentComponent } from './edit-student/edit-student.component';
 
 
 @NgModule({
-  declarations: [PrincipalDashboardComponent, AddTeacherComponent, AddStudentComponent, RemoveTeacherComponent, RemoveStudentComponent, SchoolAdminComponent, SchoolsComponent, PrincipalSidenavListComponent, TeachersComponent, StudentsComponent, SchoolSelectionComponent],
+  declarations: [PrincipalDashboardComponent, AddTeacherComponent, AddStudentComponent, RemoveTeacherComponent, RemoveStudentComponent, SchoolAdminComponent, AddSchoolsComponent, PrincipalSidenavListComponent, TeachersComponent, StudentsComponent, SchoolSelectionComponent, SchoolsComponent, SchoolAdministrationComponent, AddPrincipalComponent, AssignSubjectComponent, EditStudentComponent],
   imports: [
     CommonModule,
     SchoolAdminRoutingModule,
     SharedModuleModule
-  ]
+  ],
+  providers: [
+  ],
 })
 export class SchoolAdminModule { }

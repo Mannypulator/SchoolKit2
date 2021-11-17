@@ -12,7 +12,7 @@ namespace WebApi.Methods
     [NotMapped]
     public class EMethod
     {
-        public async void EnrollStudent(Student model, Term term, SchoolKitContext _context)
+        public async Task<List<ClassSubject>> EnrollStudent(Student model, Term term, SchoolKitContext _context)
         {
             
                 var Class = await _context.ClassArms
@@ -22,6 +22,9 @@ namespace WebApi.Methods
                 var className = Enum.GetName(typeof(Class), Class);
                   if(className.Contains("SSS"))
                   {
+                       var classSubjects = _context.ClassSubjects
+                    .Where(x => x.ClassArmID == model.ClassArmID);
+
                     var sub = _context.SSCompulsories
                     .Where(c => c.SchoolID == model.SchoolID)
                     .Select(j => j.SubjectID)
@@ -45,8 +48,11 @@ namespace WebApi.Methods
                            TermID = term.TermID              
                        };
                        await _context.Enrollments.AddAsync(enrollment);
+                       
                     }
+
                     await _context.SaveChangesAsync();
+                    return await classSubjects.ToListAsync();
                 }
                 else
                 {
@@ -55,8 +61,8 @@ namespace WebApi.Methods
                     var classSubject = _context.ClassSubjects
                     .Where(x => x.ClassArmID == model.ClassArmID);
 
-                    var selected = classSubject
-                    .Where(e => dropped.All(r => r.SubjectID != e.SubjectID));
+                    var selected = await classSubject
+                    .Where(e => dropped.All(r => r.SubjectID != e.SubjectID)).ToListAsync();
 
                     foreach(var select in selected)
                     {
@@ -68,6 +74,7 @@ namespace WebApi.Methods
                        await _context.Enrollments.AddAsync(enrollment);
                     }
                     await _context.SaveChangesAsync();
+                    return selected;
                 }
         }
 

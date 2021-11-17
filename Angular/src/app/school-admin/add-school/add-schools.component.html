@@ -1,0 +1,72 @@
+<form #form="ngForm" fxFlex fxLayout="row wrap" fxLayoutAlign="center">
+            <mat-form-field fxFlex="75">
+                <mat-label>School name</mat-label>
+                <input matInput placeholder="Enter school name" name="schoolName" required [(ngModel)] = "admin.school.Name">
+            </mat-form-field>
+
+            <mat-form-field fxFlex="75">
+                <mat-label>Address</mat-label>
+                <input matInput placeholder="School Address" name="schoolAddress" required [(ngModel)] = "admin.school.Address">
+            </mat-form-field>
+
+            <mat-form-field fxFlex="75">
+                <mat-label>State</mat-label>
+                <mat-select name="state" [(ngModel)] = "selectedState" (ngModelChange)="getLGAs()">
+                    <mat-option *ngFor="let state of states" [value]="state.StateID">{{state.Name}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+             <mat-form-field fxFlex="75">
+                <mat-label>LGA</mat-label>
+                <mat-select name="lga" [(ngModel)] = "admin.school.LgaID" >
+                    <mat-option *ngFor="let lga of lgas" [value]="lga.LgaID">{{lga.Name}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-checkbox (ngModelChange)="admin.school.ShowPosition=!admin.school.ShowPosition" fxFlex="75">Do you want to show student's position in class?</mat-checkbox>
+
+            <mat-form-field fxFlex="75">
+                <mat-label>Reg No prefix</mat-label>
+                <input matInput placeholder="Registeration No prefix" name="append" required [(ngModel)] = "admin.school.Append">
+            </mat-form-field>
+
+            <mat-form-field fxFlex="75">
+                <mat-label>School Cathegory</mat-label>
+                <mat-select name="schoolType" [(ngModel)] = "admin.school.Type" (ngModelChange)="checkSchoolType()">
+                    <mat-option [value]="schoolType.primary">Primary</mat-option>
+                    <mat-option [value]="schoolType.secondary">Secondary</mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field fxFlex="75" [fxHide]="sec" >
+                <mat-label>Compulsory for senior secondary</mat-label>
+                <mat-select name="ssCompulsory" [(ngModel)] = "admin.school.SsCompulsories" multiple (ngModelChange)="assignComp()">
+                    
+                <mat-select-trigger>
+                    {{firstCompSelectionTitle ? firstCompSelectionTitle : ""}}
+                    <span *ngIf="admin.school.SsCompulsories.length > 1" class="multi-selection">
+                        (+{{admin.school.SsCompulsories.length - 1}}
+                        {{admin.school.SsCompulsories.length === 2 ? 'other' : 'others'}})
+                     </span>
+                </mat-select-trigger>
+                <mat-option *ngFor="let subject of subjectList" [value]="subject.SubjectID">{{subject.Title}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field fxFlex="75" [fxHide]="sPicked">
+                <mat-label>Subjects not offered by your school</mat-label>
+                <mat-select name="ssDrops" [(ngModel)] = "admin.school.SsDrops" multiple (ngModelChange)="assignDrop()">
+                   
+                <mat-select-trigger>
+                    {{firstDropSelectionTitle  ? firstDropSelectionTitle  : ""}}
+                    <span *ngIf="admin.school.SsDrops.length > 1" class="multi-selection">
+                        (+{{admin.school.SsDrops.length - 1}}
+                        {{admin.school.SsDrops.length === 2 ? 'other' : 'others'}})
+                     </span>
+                </mat-select-trigger>
+                 <mat-option *ngFor="let subject of subjectList" [value]="subject.SubjectID">{{subject.Title}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+           
+                <button fxFlex="75" mat-raised-button color="accent" type="submit">Next</button>
+            
+           
+        </form>

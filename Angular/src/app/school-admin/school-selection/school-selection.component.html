@@ -1,1 +1,23 @@
-<p>school-selection works!</p>
+<div fxFlex  fxLayout="column" fxLayoutAlign="space-evenly center">
+  <div style="width:100%" >
+    <app-header></app-header>
+  </div>
+
+  <div fxFlex  fxLayout="row wrap" fxLayoutAlign="space-evenly center">
+
+    <mat-card class="example-card" fxFlex="90" fxFlex.gt-sm="40" style="margin-top:10px" *ngFor="let id of schoolIds">
+
+      <img mat-card-image src="assets/school.jpg" alt="Photo of a Shiba Inu">
+      <mat-card-content style="text-align:center">
+        <h1>
+      Saints High School
+    </h1>
+      </mat-card-content>
+      <mat-card-actions >
+        <button mat-raised-button color="accent" style="width:100%" (click)="redirect(id)">Select</button>
+      </mat-card-actions>
+    </mat-card>
+    
+  </div>
+  <button mat-raised-button color="accent" style="width:50%;margin-top:10px" routerLink="/school-admin/add-school">Add School</button>
+</div>

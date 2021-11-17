@@ -8,7 +8,7 @@ const routes: Routes = [
   { path: '', component: TeacherComponent,
   children: [
     {path: 'profile', component: ProfileComponent},
-    {path: 'subject', component: SubjectComponent},
+    {path: 'subject/:id', component: SubjectComponent},
     {path: '', redirectTo: 'profile'}
 
   ]

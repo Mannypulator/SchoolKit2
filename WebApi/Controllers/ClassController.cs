@@ -18,13 +18,15 @@ namespace WebApi.Controllers
     {
         private readonly SchoolKitContext _context;
         private readonly UserManager<Student> _userManager;
+        private readonly UserManager<Principal> _principalManager;
         public Timer timer;
         public StateID ID;
 
-        public ClassController(SchoolKitContext context, UserManager<Student> userManager)
+        public ClassController(SchoolKitContext context, UserManager<Student> userManager, UserManager<Principal> principalManager)
         {
             _context = context;
             _userManager = userManager;
+            _principalManager = principalManager;
              ID = new StateID();
              
             
@@ -71,11 +73,73 @@ namespace WebApi.Controllers
 
          [HttpPost]
          [Route("getClass")]
-       // [Authorize]
-        public async Task<IActionResult> GetClass()
-        {
-            var classes = await _context.ClassArms.OrderBy(x => x.Class)
-            .ToListAsync();
+         //[Authorize]
+        public async Task<IActionResult> GetSpecificClass(ClassId i)
+        { var id=0;
+
+            if (i.schoolID != 0){
+                id = i.schoolID;
+            }
+            else{
+                 var userID = User.Claims.FirstOrDefault(c => c.Type == "UserID").Value;
+                var  principal = await _principalManager.FindByIdAsync(userID);
+                id = principal.SchoolID;
+            }
+             var allstudents = _userManager.Users
+            .Where(x => x.SchoolID == id && x.HasGraduated == false)
+            .Include(x => x.ClassArm);
+            
+            var classArms = allstudents
+                .Select(r => r.ClassArm).ToHashSet();
+                
+            var classes = classArms.OrderBy(x => x.Class)
+            .ToList();
+            var classNames = new List<ClassName>();
+            foreach(var _class in classes){
+               var className = new ClassName{
+                   ClassArmID = _class.ClassArmID,
+                   Name = Enum.GetName(typeof(Class), _class.Class),
+                   Arm = Enum.GetName(typeof(Arms), _class.Arm)
+               };
+               classNames.Add(className);
+            }
+            return Ok(classNames);
+        }
+
+        [HttpPost]
+         [Route("getClassArms")]
+         [Authorize]
+        public async Task<IActionResult> GetClassArms(ClassId i)
+        {   var id=0;
+
+            if (i.schoolID != 0){
+                id = i.schoolID;
+            }
+            else{
+                 var userID = User.Claims.FirstOrDefault(c => c.Type == "UserID").Value;
+                var  principal = await _principalManager.FindByIdAsync(userID);
+                id = principal.SchoolID;
+                
+            }
+
+            var school = await _context.Schools
+            .Where(x => x.SchoolID == id)
+            .FirstOrDefaultAsync();
+            
+            var classes = new List<ClassArm>();
+            var classArms = await _context.ClassArms.ToListAsync();
+            if(school.Type == SchoolType.Primary){
+                classes = classArms
+                .Where(x=> x.Class <= Class.Primary6).ToList();
+            }
+            else{
+                classes = classArms
+                .Where(x=> x.Class > Class.Primary6).ToList();
+            }
+                
+                
+            classes = classes.OrderBy(x => x.Class)
+            .ToList();
             var classNames = new List<ClassName>();
             foreach(var _class in classes){
                var className = new ClassName{
@@ -123,3 +187,4 @@ public class StateID{
     public int Id;
     
 }
+    

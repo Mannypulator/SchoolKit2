@@ -17,21 +17,21 @@
 
                     <tr>
                         <td>Name</td>
-                        <td>Maria Anders</td>
+                        <td>{{teacher.LastName}} {{teacher.FirstName}}</td>
                     </tr>
-                    <tr>
+               <!--     <tr>
                         <td>Address</td>
-                        <td>Berglund</td>
+                        <td>{{teacher.Address}}</td>
 
-                    </tr>
+                    </tr>-->
                     <tr>
                         <td>Phone Number</td>
-                        <td>090888888888</td>
+                        <td>{{teacher.PhoneNumber}}</td>
 
                     </tr>
                     <tr>
                         <td>Gender</td>
-                        <td>Male</td>
+                        <td>{{Gender[teacher.Gender]}}</td>
                     </tr>
                 </table>
 
@@ -51,9 +51,9 @@
         </div>
             <mat-card-content>
                <mat-nav-list>
-        <a *ngFor="let link of links" mat-list-item  routerLink="/teacher/subject" routerLinkActive="activebutton">
+        <a *ngFor="let subject of teacher.TeacherSubjects" mat-list-item  [routerLink]="['/teacher/subject',subject.ClassSubjectID]" routerLinkActive="activebutton">
 
-            <span>{{link}}</span>
+            <span>{{subject.Title}} {{Class[subject.Class]}} {{Arm[subject.Arm]}}</span>
             <mat-divider></mat-divider>
 
         </a>

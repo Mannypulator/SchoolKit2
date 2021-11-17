@@ -1,1 +1,56 @@
-<p>add-teacher works!</p>
+<ngx-alerts></ngx-alerts>
+<form #form="ngForm" fxFlex fxLayout="row wrap" fxLayoutAlign="center" (submit)="onSubmitTeacher()" >
+                        <mat-form-field fxFlex="75">
+                <mat-label>First Name</mat-label>
+                <input matInput placeholder="Jessica" required name="firstName" [(ngModel)] = "teacher.FirstName">
+            </mat-form-field>
+            
+            <mat-form-field fxFlex="75">
+                <mat-label>Last Name</mat-label>
+                <input matInput placeholder="Grace" name="lastName" required [(ngModel)] = "teacher.LastName">
+            </mat-form-field>
+
+            <mat-form-field fxFlex="75">
+                <mat-label>Email</mat-label>
+                <input matInput placeholder="You@gmail.com" name="email" required [(ngModel)] = "teacher.Email">
+            </mat-form-field>
+<!--
+            <mat-form-field fxFlex="75">
+                <mat-label>State</mat-label>
+                <mat-select name="state" [(ngModel)] = "selectedState" (ngModelChange)="getLGAs()">
+                    <mat-option *ngFor="let state of states" [value]="state.StateID">{{state.Name}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+             <mat-form-field fxFlex="75">
+                <mat-label>LGA</mat-label>
+                <mat-select name="lga" [(ngModel)] = "teacher.LgaID" >
+                    <mat-option *ngFor="let lga of lgas" [value]="lga.LgaID">{{lga.Name}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+-->
+            <mat-form-field fxFlex="75">
+                <mat-label>Gender</mat-label>
+                <mat-select name="gender" [(ngModel)]="teacher.Gender">
+                    <mat-option  [value]="genderSelection.male">Male</mat-option>
+                    <mat-option  [value]="genderSelection.female">Female</mat-option>
+                </mat-select>
+            </mat-form-field>
+
+             <mat-form-field fxFlex="75">
+                <mat-label>Teacher Subjects</mat-label>
+                <mat-select name="TeacherSubjects" [(ngModel)] = "teacher.TeacherSubjects" multiple (ngModelChange)="assignTitle()">
+                    
+                <mat-select-trigger>
+                    {{subjectName ? subjectName : ""}}
+                    <span *ngIf="teacher.TeacherSubjects.length > 1" class="multi-selection">
+                        (+{{teacher.TeacherSubjects.length - 1}}
+                        {{teacher.TeacherSubjects.length === 2 ? 'other' : 'others'}})
+                     </span>
+                </mat-select-trigger>
+                <mat-option *ngFor="let classSubject of classSubjects" [value]="classSubject.CSID">{{classSubject.Title + " " + classSubject.CN + classSubject.CAN}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+           
+                <button fxFlex="75" mat-raised-button color="accent" [disabled]="form.invalid" type="submit">Submit</button>
+                <button style="margin-top:2%" fxFlex="75" mat-raised-button color="accent" [mat-dialog-close]="null">Cancel</button>
+        </form>

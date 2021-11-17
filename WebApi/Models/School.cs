@@ -16,7 +16,7 @@ namespace WebApi.Models
             Principals = new HashSet<Principal>();
             Tests = new HashSet<Test>();
             SSDrops = new HashSet<SSDrop>();
-          ;
+          
             Products = new HashSet<Product>();
             GeneralExpenses = new HashSet<GeneralExpense>();
             SchoolPackages = new HashSet<SchoolPackage>();
@@ -33,7 +33,6 @@ namespace WebApi.Models
         public string? ProprietorID { get; set; }
         public int TeachersCount { get; set; }
         public int RegNoCount { get; set; }
-        public bool SessionStart { get; set; }
         public SchoolType Type { get; set; }
         
         public string? AdminID { get; set; }

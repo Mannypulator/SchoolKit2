@@ -1,3 +1,4 @@
+<ngx-alerts></ngx-alerts>
 <div fxLayout="row" fxLayoutAlign="center none" class="mt" >
     <mat-card fxFlex="95%" fxLayout="column" fxLayoutAlign="space-between none">
         <div>
@@ -9,11 +10,13 @@
                         <mat-icon>person_add</mat-icon>
                     </button>
 
-                    <button mat-raised-button  color="warn">
-                        <span fxHide fxShow.gt-sm>Add student </span>
-                        <mat-icon>person_remove</mat-icon>
-                    </button>
+                   
                 </mat-card-actions>
+                <mat-form-field fxFlex="20">
+                    <mat-label>Search</mat-label>
+                    <input matInput placeholder="Search" name="Search"
+                     [(ngModel)]="searchTerm">
+                </mat-form-field>
             </mat-card-header>
             <mat-divider></mat-divider>
         </div>
@@ -21,36 +24,37 @@
         <div class="mt">
             <mat-card-content>
                 <mat-accordion>
-                    <mat-expansion-panel *ngFor="let state of states">
+                    <mat-expansion-panel *ngFor="let enrollment of enrollments | appFilter: searchTerm">
                         <mat-expansion-panel-header>
                             <mat-panel-title>
-                                {{state}}</mat-panel-title>
+                                {{enrollment.StudentName}}</mat-panel-title>
                         </mat-expansion-panel-header>
-                        <form #form="ngForm" fxFlex fxLayout="row wrap" fxLayoutAlign="space-evenly center" >
+                        <form #form="ngForm" autocomplete="off" fxFlex fxLayout="row wrap" fxLayoutAlign="space-evenly center"(submit)="editEnrollment(enrollment)" >
                    
                         <mat-form-field fxFlex="40">
                                 <mat-label>First Test</mat-label>
-                                <input matInput placeholder="Enter school name" name="schoolName" required >
+                                <input matInput placeholder="Edit score" name="FirstCA"
+                                 [(ngModel)]="enrollment.FirstCA" required (keypress)="($event.charCode >= 48 && $event.charCode < 58)" >
                             </mat-form-field>
 
                             <mat-form-field fxFlex="40">
                                 <mat-label>Second Test</mat-label>
-                                <input matInput placeholder="School Address" name="schoolAddress" required >
+                                <input matInput placeholder="Edit score" name="SecondCA" [(ngModel)]="enrollment.SecondCA" required (keypress)="($event.charCode >= 48 && $event.charCode < 58)">
                             </mat-form-field>
                             <mat-form-field fxFlex="40">
                                 <mat-label>Third Test</mat-label>
-                                <input matInput placeholder="Enter school name" name="schoolName" required >
+                                <input matInput placeholder="Edit score" name="ThirdCA" [(ngModel)]="enrollment.ThirdCA" required (keypress)="($event.charCode >= 48 && $event.charCode < 58)">
                             </mat-form-field>
 
                             <mat-form-field fxFlex="40">
                                 <mat-label>Exam</mat-label>
-                                <input matInput placeholder="School Address" name="schoolAddress" required >
+                                <input matInput placeholder="Edit score" name="Exam" [(ngModel)]="enrollment.Exam" required (keypress)="($event.charCode >= 48 && $event.charCode < 58)">
                             </mat-form-field>
                       
                             
 
                             
-                            <button mat-raised-button fxFlex="50%" color="accent">Submit</button>
+                            <button mat-raised-button fxFlex="50%" color="accent" tyep="submit">Submit</button>
                         
                             
                         </form>

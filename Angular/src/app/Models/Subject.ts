@@ -1,8 +1,13 @@
 import { sRange } from "./sRange";
 
 export class Subject {
-    public title!: string;
-    public range = sRange;
-    public schoolSpecific!: boolean;
-
+    public SubjectID! : number
+    public Title!: string;
+    public Range!: sRange;
+    public SchoolSpecific!: boolean;
+    
+ 
 }
+
+
+

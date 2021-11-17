@@ -8,7 +8,7 @@ namespace WebApi.Models
         
      
       protected override void OnConfiguring(DbContextOptionsBuilder options)
-            => options.UseSqlite("Data Source=SchoolKit.db");
+            => options.UseSqlite("Data Source=SchoolKit.db;");
 
       public DbSet<ApplicationUser> ApplicationUsers { get; set; }
 

@@ -19,4 +19,9 @@ namespace WebApi.Models
         public ICollection<TeacherSubject> TeacherSubjects { get; set; }
         public ICollection<TeacherQualification> TeacherQualifications { get; set; }
     }
+
+    public class ReceivedTeacher:ApplicationUser{
+        public int SchoolID { get; set; }
+        public ICollection<int> TeacherSubjects { get; set; }
+    }
 }

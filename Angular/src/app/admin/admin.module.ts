@@ -22,6 +22,7 @@ import { AdministrationSidenavComponent } from './administration/administration-
 
 
 
+
 @NgModule({
   declarations: [AdminComponent, DashboardComponent, AdministrationComponent, 
     CreateSubjectsComponent, CreateRolesComponent, RegisterSchoolsComponent, 
@@ -31,6 +32,9 @@ import { AdministrationSidenavComponent } from './administration/administration-
     AdminRoutingModule,
     SharedModuleModule
    
-  ]
+  ],
+  providers: [
+  
+  ],
 })
 export class AdminModule { }
