@@ -19,7 +19,7 @@ import {MatExpansionModule} from '@angular/material/expansion';
 import {MatStepperModule} from '@angular/material/stepper';
 import {MatSelectModule} from '@angular/material/select';
 import {MatTableModule} from '@angular/material/table';
-
+import {MatPaginatorModule} from '@angular/material/paginator';
 
 
 
@@ -60,7 +60,8 @@ import { MatDialogModule } from '@angular/material/dialog';
     MatListModule,
     MatTableModule,
     MatDividerModule,
-    MatDialogModule
+    MatDialogModule,
+    MatPaginatorModule
   ],
 
   exports:[ 
@@ -86,7 +87,8 @@ import { MatDialogModule } from '@angular/material/dialog';
     MatTableModule,
     HeaderComponent,
     MatDividerModule,
-    MatDialogModule
+    MatDialogModule,
+    MatPaginatorModule
     ]
 
 })

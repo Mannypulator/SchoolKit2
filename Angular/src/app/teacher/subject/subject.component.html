@@ -5,11 +5,10 @@
             <mat-card-header >
                 <mat-card-actions fxFlex fxLayout="row" fxLayoutAlign="space-between none" class="ml">
 
-                    <button mat-raised-button color="primary">
-                        <span fxHide fxShow.gt-sm>Add student </span>
+                    <button mat-raised-button color="primary" (click)="addStudent()">
+                        <span fxHide fxShow.gt-sm >Enroll Student </span>
                         <mat-icon>person_add</mat-icon>
                     </button>
-
                    
                 </mat-card-actions>
                 <mat-form-field fxFlex="20">
@@ -29,35 +28,42 @@
                             <mat-panel-title>
                                 {{enrollment.StudentName}}</mat-panel-title>
                         </mat-expansion-panel-header>
-                        <form #form="ngForm" autocomplete="off" fxFlex fxLayout="row wrap" fxLayoutAlign="space-evenly center"(submit)="editEnrollment(enrollment)" >
+
+                        <div fxFlex fxLayout="row wrap" fxLayoutAlign="space-around center">
+                            <div fxFlex="100">
+                                <form #form="ngForm" autocomplete="off" fxFlex fxLayout="row wrap" fxLayoutAlign="space-evenly center"(submit)="editEnrollment(enrollment)" >
+                           
+                                <mat-form-field fxFlex="40">
+                                        <mat-label>First Test</mat-label>
+                                        <input matInput placeholder="Edit score" name="FirstCA"
+                                         [(ngModel)]="enrollment.FirstCA" required (keypress)="($event.charCode >= 48 && $event.charCode < 58)" >
+                                    </mat-form-field>
+        
+                                    <mat-form-field fxFlex="40">
+                                        <mat-label>Second Test</mat-label>
+                                        <input matInput placeholder="Edit score" name="SecondCA" [(ngModel)]="enrollment.SecondCA" required (keypress)="($event.charCode >= 48 && $event.charCode < 58)">
+                                    </mat-form-field>
+                                    <mat-form-field fxFlex="40">
+                                        <mat-label>Third Test</mat-label>
+                                        <input matInput placeholder="Edit score" name="ThirdCA" [(ngModel)]="enrollment.ThirdCA" required (keypress)="($event.charCode >= 48 && $event.charCode < 58)">
+                                    </mat-form-field>
+        
+                                    <mat-form-field fxFlex="40">
+                                        <mat-label>Exam</mat-label>
+                                        <input matInput placeholder="Edit score" name="Exam" [(ngModel)]="enrollment.Exam" required (keypress)="($event.charCode >= 48 && $event.charCode < 58)">
+                                    </mat-form-field>
+                              
+                                    
+        
+                                    
+                                    <button mat-raised-button fxFlex="50%" color="accent" type="submit">Submit</button> 
+                                </form>
+                            </div>
+                            <div fxFlex="50" class="mt">
+                                <button mat-raised-button color="warn" fxFlex="100" (click)="unenroll(enrollment)">Unenroll Student</button>
+                            </div>
+                        </div>
                    
-                        <mat-form-field fxFlex="40">
-                                <mat-label>First Test</mat-label>
-                                <input matInput placeholder="Edit score" name="FirstCA"
-                                 [(ngModel)]="enrollment.FirstCA" required (keypress)="($event.charCode >= 48 && $event.charCode < 58)" >
-                            </mat-form-field>
-
-                            <mat-form-field fxFlex="40">
-                                <mat-label>Second Test</mat-label>
-                                <input matInput placeholder="Edit score" name="SecondCA" [(ngModel)]="enrollment.SecondCA" required (keypress)="($event.charCode >= 48 && $event.charCode < 58)">
-                            </mat-form-field>
-                            <mat-form-field fxFlex="40">
-                                <mat-label>Third Test</mat-label>
-                                <input matInput placeholder="Edit score" name="ThirdCA" [(ngModel)]="enrollment.ThirdCA" required (keypress)="($event.charCode >= 48 && $event.charCode < 58)">
-                            </mat-form-field>
-
-                            <mat-form-field fxFlex="40">
-                                <mat-label>Exam</mat-label>
-                                <input matInput placeholder="Edit score" name="Exam" [(ngModel)]="enrollment.Exam" required (keypress)="($event.charCode >= 48 && $event.charCode < 58)">
-                            </mat-form-field>
-                      
-                            
-
-                            
-                            <button mat-raised-button fxFlex="50%" color="accent" tyep="submit">Submit</button>
-                        
-                            
-                        </form>
                     </mat-expansion-panel>
                 </mat-accordion>
 

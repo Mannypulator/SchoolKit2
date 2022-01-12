@@ -1,0 +1,45 @@
+<ngx-alerts></ngx-alerts>
+<div fxLayout="row" fxLayoutAlign="center none" class="mt">
+    <mat-card fxFlex="85%" fxLayout="column" fxLayoutAlign="space-between none">
+        <h1>Sessions</h1>
+        <span>
+            <mat-divider></mat-divider>
+        </span>
+
+        <div class="mt">
+            <mat-card-content>
+                <mat-accordion>
+                    <mat-expansion-panel class="mat-elevation-z0" *ngFor="let session of sessions; let i = index">
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>
+                               
+                                        <h3>{{session.SessionName}}</h3>
+
+                                        <span style="margin-left: auto;margin-top: 11px;" *ngIf="session.completed">Completed </span>
+                                      <mat-icon style="margin-top: 10px;" *ngIf="session.completed">check_circle</mat-icon>
+                                        
+                            </mat-panel-title>
+                        </mat-expansion-panel-header>
+                        <mat-list role="list">
+                            <mat-list-item *ngFor="let term of session.Terms; let i = index" style="margin-bottom: 2%;">
+                                {{Term[term.Label]}}
+                                <button mat-raised-button style="margin-left: auto;" *ngIf="!session.completed">Start</button>
+                                <mat-icon style="margin-top: 10px;" *ngIf="session.completed">check_circle</mat-icon>
+
+                                <mat-divider></mat-divider>
+                            </mat-list-item>
+
+                        </mat-list>
+
+
+
+
+
+                    </mat-expansion-panel>
+                </mat-accordion>
+
+            </mat-card-content>
+
+        </div>
+    </mat-card>
+</div>

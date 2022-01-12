@@ -79,5 +79,46 @@ namespace WebApi.Controllers
             return Ok(enrollment);
         }
 
+        [HttpGet]
+        [Route("getUnEnrolled")]
+        public async Task<IActionResult> getUnEnrolled(int id)
+        {
+             var teacherId = User.Claims.FirstOrDefault(c => c.Type == "UserID").Value;
+            var teacher = await _teacherManager.FindByIdAsync(teacherId);
+            var schoolId = teacher.SchoolID;
+
+            var currentTerm = await _context.Sessions
+            .Where(x=> x.SchoolID == schoolId && x.Current == true )
+            .Include(t => t.Terms)
+            .SelectMany(t => t.Terms)
+            .Where(x=> x.Current == true)
+            .Select(x=> x.TermID)
+            .FirstOrDefaultAsync();
+
+            var allStudents = await _context.ClassSubjects
+            .Where(x=> x.ClassSubjectID == id)
+            .Include(x => x.ClassArm)
+            .ThenInclude(x=> x.Students)
+            .SelectMany(x => x.ClassArm.Students)
+            .Where(x => x.SchoolID == schoolId) 
+            .ToListAsync();
+
+             var enrolledStudents = await _context.Enrollments
+            .Where(x => x.ClassSubjectID == id && x.TermID == currentTerm)
+            .Include(x=> x.Student)
+            .Select(x=> x.Student)
+            .ToListAsync();
+
+            var unEnrolled = allStudents
+            .Where(x => enrolledStudents.All(s => s.Id != x.Id))
+            .Select( x => new ReturnStudent{
+                Id = x.Id,
+                FirstName = x.FirstName,
+                LastName = x.LastName
+            })
+            .ToList();
+            return Ok(unEnrolled);
+        }
+
     }      
 }

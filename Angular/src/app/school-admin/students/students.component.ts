@@ -52,6 +52,7 @@ export class StudentsComponent implements OnInit {
       console.log(err);
     })
   }
+
   getClasses() {
     if (this.auth.isProprietor()) {
       const s = localStorage.getItem('selectedSchool');
@@ -85,12 +86,13 @@ export class StudentsComponent implements OnInit {
         this.admin.addStudent(result as Student).then((res)=>{
           console.log(res);
           this.alert.success("Student Account Created Successfully");
+          this.getStudents();
         },
         err=>{
           console.log(err);
           this.alert.danger("Operation Failed");
         });
-        console.log(result as Student);
+       
       }
       
       

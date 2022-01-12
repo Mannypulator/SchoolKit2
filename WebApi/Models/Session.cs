@@ -21,4 +21,12 @@ namespace WebApi.Models
         public School School { get; set; }
         public ICollection<Term> Terms { get; set; }
     }
+
+    [NotMapped]
+    public class SessionModel
+    {
+        public string SessionName { get; set; }
+        public int SchoolID { get; set; }
+       
+    }
 }

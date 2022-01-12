@@ -1,0 +1,40 @@
+<div class="container">
+    <mat-toolbar class="con">
+        <div fxFlex fxLayout="row" fxLayoutAlign="center">
+            <img src="assets/i.png" alt="">
+            <span class="text-white">insight</span>
+        </div>
+    </mat-toolbar>
+
+    <mat-nav-list class='pm'>
+        <a mat-list-item class="span-white button" routerLink="/student/profile" routerLinkActive="activebutton" (click)="onSidenavClose()" >
+
+            <mat-icon matListIcon class="span-white">dashboard</mat-icon>
+            <span class="span-white">Profile</span>
+            <mat-divider></mat-divider>
+
+        </a>
+       
+        <a mat-list-item class="span-white button" routerLink="/student/enrollment-list" routerLinkActive="activebutton" (click)="onSidenavClose()" >
+
+            <mat-icon matListIcon class="span-white">view_list</mat-icon>
+            <span class="span-white">Enrollments</span>
+            <mat-divider></mat-divider>
+
+        </a> 
+        <a mat-list-item class="span-white button" routerLink="/student/result-selection" routerLinkActive="activebutton" (click)="onSidenavClose()" >
+
+            <mat-icon matListIcon class="span-white">table_chart</mat-icon>
+            <span class="span-white">Results</span>
+            <mat-divider></mat-divider>
+
+        </a>
+        
+       
+        
+       
+       
+
+    </mat-nav-list>
+
+</div>

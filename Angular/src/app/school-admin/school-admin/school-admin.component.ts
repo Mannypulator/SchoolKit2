@@ -34,7 +34,7 @@ export class SchoolAdminComponent implements OnInit, OnDestroy {
         this.drawerMode = "over";
       }
       this.alias = result.mqAlias;
-      
+      console.log(result.mqAlias);
     }) 
     
   }

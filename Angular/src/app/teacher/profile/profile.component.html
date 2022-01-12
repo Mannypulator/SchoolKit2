@@ -51,7 +51,7 @@
         </div>
             <mat-card-content>
                <mat-nav-list>
-        <a *ngFor="let subject of teacher.TeacherSubjects" mat-list-item  [routerLink]="['/teacher/subject',subject.ClassSubjectID]" routerLinkActive="activebutton">
+        <a *ngFor="let subject of teacher.TeacherSubjects" mat-list-item  [routerLink]="['/teacher/subject', subject.ClassSubjectID, subject.Title,Class[subject.Class]+Arm[subject.Arm]]" routerLinkActive="activebutton">
 
             <span>{{subject.Title}} {{Class[subject.Class]}} {{Arm[subject.Arm]}}</span>
             <mat-divider></mat-divider>

@@ -1,0 +1,24 @@
+<div fxFlex fxLayout="column" fxLayoutAlign="space-between none">
+
+    <div fxFlex fxLayout="row" fxLayoutAlign="space-between none">
+        <h2 mat-dialog-title >Add Student</h2>
+
+        <button mat-icon-button [mat-dialog-close]="null" style="margin-bottom: 20px;">
+            <mat-icon>cancel</mat-icon>
+        </button>
+    </div>
+    <mat-divider></mat-divider>
+
+    <form #form autocomplete="off" fxFlex fxLayout="row wrap" fxLayoutAlign="space-evenly none" style="margin-top: 10px;" (submit)="dialogClose()">
+        <mat-form-field fxFlex ="75">
+            <mat-label>Ttiel</mat-label>
+            <input matInput placeholder="2020/2021 Academic Sesssion" name="Title" required [(ngModel)]="sessionTitle">
+        </mat-form-field>
+
+        <button fxFlex ="30" mat-raised-button color="accent" [disabled]="form.invalid" type="submit">Submit</button>
+
+
+    </form>
+
+    
+</div>

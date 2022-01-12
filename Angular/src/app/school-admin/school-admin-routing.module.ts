@@ -8,6 +8,8 @@ import { AddTeacherComponent } from './add-teacher/add-teacher.component';
 import { PrincipalDashboardComponent } from './principal-dashboard/principal-dashboard.component';
 import { SchoolAdminComponent } from './school-admin/school-admin.component';
 import { SchoolSelectionComponent } from './school-selection/school-selection.component';
+import { SessionComponent } from './session/session.component';
+import { SettingsComponent } from './settings/settings.component';
 import { StudentsComponent } from './students/students.component';
 import { TeachersComponent } from './teachers/teachers.component';
 
@@ -30,6 +32,12 @@ const routes: Routes = [
       },
       {
         path: 'add-principal', component: AddPrincipalComponent,
+      },
+      {
+        path: 'settings', component: SettingsComponent,
+      },
+      {
+        path: 'sessions', component: SessionComponent,
       },
       {
         path: '', redirectTo: 'principal-dashboard', pathMatch: 'full'

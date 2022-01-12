@@ -137,7 +137,19 @@ export class AuthService {
       ///
       return this.currentUser.userRoles.includes("Teacher");
     }
+    return false;
+  }
 
+  isStudent(): boolean{
+    
+    if(this.isLoggedIn()){
+      ///
+      if(this.currentUser.userRoles.length === 0){
+        this.getUser();
+      }
+      ///
+      return this.currentUser.userRoles.includes("Student");
+    }
     return false;
   }
 

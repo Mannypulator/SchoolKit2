@@ -47,7 +47,9 @@ namespace WebApi.Methods
                            ClassSubjectID = classSubject.ClassSubjectID,
                            TermID = term.TermID              
                        };
-                       await _context.Enrollments.AddAsync(enrollment);
+                        if(await CheckEnrollment(enrollment.StudentID,enrollment.TermID,enrollment.ClassSubjectID,_context)){
+                           await _context.Enrollments.AddAsync(enrollment);
+                       }
                        
                     }
 
@@ -71,7 +73,9 @@ namespace WebApi.Methods
                            ClassSubjectID = select.ClassSubjectID,
                            TermID = term.TermID              
                        };
-                       await _context.Enrollments.AddAsync(enrollment);
+                       if(await CheckEnrollment(enrollment.StudentID,enrollment.TermID,enrollment.ClassSubjectID,_context)){
+                           await _context.Enrollments.AddAsync(enrollment);
+                       }
                     }
                     await _context.SaveChangesAsync();
                     return selected;
@@ -115,7 +119,9 @@ namespace WebApi.Methods
                            ClassSubjectID = classSubject.ClassSubjectID,
                            TermID = term.TermID              
                            };
+                           if(await CheckEnrollment(enrollment.StudentID,enrollment.TermID,enrollment.ClassSubjectID,_context)){
                            await _context.Enrollments.AddAsync(enrollment);
+                       }
                         }
                         await _context.SaveChangesAsync();
                     }
@@ -130,7 +136,9 @@ namespace WebApi.Methods
                                 ClassSubjectID = prevEnrollment.ClassSubjectID,
                                 TermID = term.TermID
                             };
-                            await _context.Enrollments.AddAsync(enrollment);
+                            if(await CheckEnrollment(enrollment.StudentID,enrollment.TermID,enrollment.ClassSubjectID,_context)){
+                           await _context.Enrollments.AddAsync(enrollment);
+                       }
                         }
                         await _context.SaveChangesAsync();
                     }
@@ -153,13 +161,26 @@ namespace WebApi.Methods
                            ClassSubjectID = select.ClassSubjectID,
                            TermID = term.TermID              
                        };
-                       await _context.Enrollments.AddAsync(enrollment);
+                       if(await CheckEnrollment(enrollment.StudentID,enrollment.TermID,enrollment.ClassSubjectID,_context)){
+                           await _context.Enrollments.AddAsync(enrollment);
+                       }
+                       
                     }
                     await _context.SaveChangesAsync();
                 }
         }
 
-        
+        public async Task<bool> CheckEnrollment(string studentID, int termID, int classSubjectID, SchoolKitContext _context){
+            var enrollments = await _context.Enrollments
+            .Where(x=> x.StudentID == studentID && x.TermID == termID && x.ClassSubjectID == classSubjectID)
+            .AnyAsync();
+            if(enrollments){
+                return false;
+            }
+            else{
+                return true;
+            }
+        }
 
 
     }

@@ -13,13 +13,18 @@ public class FSID{
 }
 
 public class SID{
-    public int schoolID;
+    public int schoolID { get; set; }
     public int SubjectID { get; set; }
 }
 
 public class TID{
-    public int schoolID;
+    public int schoolID { get; set; }
     public string Id { get; set; }
+}
+
+public class SE {
+    public int ClassSubjectID { get; set; }
+    public string StudentID { get; set; }
 }
 
 

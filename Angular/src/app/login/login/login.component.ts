@@ -37,11 +37,13 @@ export class LoginComponent implements OnInit {
         this.progressService.setSuccess();
         this.alertService.success('Welcome back ');
         this.progressService.completeLoading();
+        this.router.navigateByUrl('admin');
+        this.router.navigateByUrl('student');
       },
       error: (err: any) => {
         this.progressService.setFailure();
         console.log(err);
-        this.alertService.danger('Unable to Login');
+        this.alertService.danger(err.error.message);
         this.progressService.completeLoading();
       },
     };

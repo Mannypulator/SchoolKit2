@@ -160,4 +160,18 @@ export class SchoolAdminService {
     FT.schoolID = this.schoolNo.schoolID;
     return this.http.post<any[]>(this.baseUrl + '/api/principal/deleteStudent', FT).toPromise();
   }
+
+  addSession(sessionTitle : string) {
+    var session: any = {
+      SchoolID: 0,
+      SessionName: sessionTitle
+    };
+    session.SchoolID = this.schoolNo.schoolID;
+    console.log(session);
+    return this.http.post<any[]>(this.baseUrl + '/api/term/createSession', session).toPromise();
+  }
+
+  getSessions() {
+    return this.http.post<any[]>(this.baseUrl + '/api/term/getSessions', this.schoolNo).toPromise();
+  }
 }

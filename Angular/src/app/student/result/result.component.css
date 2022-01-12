@@ -9,7 +9,7 @@
 
 .tab-border{
    
-    border: 1px solid black;
+    border: 2px solid black;
     border-collapse: collapse;
 }
 .tab-border tr{
@@ -18,11 +18,25 @@
 }
 .tab-border td{
     padding: 2px;
-    border: 1px solid black;
+    border: 2px solid black;
   
 }
 .tab-border th{
     padding: 2px;
-    border: 1px solid black;
+    border: 2px solid black;
   
 }
+
+.comment-tab{
+   font-size: 15px
+}
+.comment-tab tr{
+   
+    text-align: left; 
+}
+.comment-tab td{
+    padding-left: 5px;
+    padding-top: 10px;
+  
+}
+

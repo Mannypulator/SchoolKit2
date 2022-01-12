@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -13,6 +14,7 @@ namespace WebApi.Controllers
 {
     [ApiController]
     [Route("api/term")]
+    [Authorize(Roles = "Admin,Principal,Proprietor")]
     public class TermController : ControllerBase
     {
         private readonly SchoolKitContext _context;
@@ -208,18 +210,22 @@ namespace WebApi.Controllers
         [HttpPost]
         [Route("createSession")]
         //authorize for principals
-        public async Task<IActionResult> CreateSession(Session sessionModel)
+        public async Task<IActionResult> CreateSession(SessionModel session)
         {
             var sessions = _context.Sessions
-            .Where(x => x.SchoolID == sessionModel.SchoolID && !x.Completed);
+            .Where(x => x.SchoolID == session.SchoolID && !x.Completed);
 
             int sessionsCount = sessions.Count();
             if(sessionsCount < 2)
             {
             
-                    if(sessionModel.SessionName != null)
+                    if(session.SessionName != null)
                     {
-
+                        var sessionModel = new Session{
+                            SchoolID = session.SchoolID,
+                            SessionName = session.SessionName
+                            
+                        };
                         await _context.Sessions.AddAsync(sessionModel);
                         await _context.SaveChangesAsync();
 
@@ -409,6 +415,32 @@ namespace WebApi.Controllers
             }
         }
 
+        [HttpPost]
+        [Route("getSessions")]
+        public async Task<IActionResult> GetSessions([FromBody] ClassId i)
+        {
+            var schoolId = 0;
+
+            if (i.schoolID != 0)
+            {
+                schoolId = i.schoolID;
+            }
+            else
+            {
+                var principalId = User.Claims.FirstOrDefault(c => c.Type == "UserID").Value;
+                var principal = await _principalManager.FindByIdAsync(principalId);
+                schoolId = principal.SchoolID;
+
+            }
+
+            var sessions = await _context.Sessions
+            .Where(x => x.SchoolID == schoolId)
+            .Include(x => x.Terms)
+            .ToListAsync();
+
+            return Ok(sessions);
+
+        }
 
     }
 }

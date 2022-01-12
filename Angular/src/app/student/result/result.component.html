@@ -1,96 +1,146 @@
-<div fxFlex fxLayout="row wrap" fxLayoutAlign="center none" >
-<div fxFlex="90" style= "text-align:center; padding:0px">
-<h3 style= "padding:0px; margin: 0px">EBONYI STATE SCHOOL SYSTEM</h3>
-<h1 style= "padding:0px; margin: 0px">SAINTS HIGH SCHOOL</h1>
-<h4>
-No 3 SAINTS HIGH SCHOOL CLOSE, OFF HATCHERY ROAD ABAKALIKI
-<br/>OPPOSITE HOUSE OF ASSEMBLY NKALIKI<br/>
-NUTURING FUTURE CHAMPIONS
-</h4>
-</div>
-<div fxFlex="100" fxLayout="row" fxLayoutAlign="space-around none">
- <table  fxFlex="70"  class="tab">
+<div fxFlex fxLayout="row wrap" fxLayoutAlign="center none">
+    <img src="assets/logo2.jpg" alt="" style="width:100px;height: 100px;margin-left: 20px;">
+    <div fxFlex="60" style="text-align:center; padding:0px">
+        <h1
+            style="padding:0px; margin: 0px; margin-top: 20px; color:#3cb371;font-size: 40px;font-family: Arial, Helvetica, sans-serif;">
+            <b>SAINTS HIGH SCHOOL</b>
+        </h1>
+        <h4>
+            No 3 SAINTS HIGH SCHOOL CLOSE, OFF HATCHERY ROAD ABAKALIKI
+            <br />
+            NUTURING FUTURE CHAMPIONS
+        </h4>
+    </div>
+    <div fxFlex="100" fxLayout="row" fxLayoutAlign="space-around none">
+        <table fxFlex="70" class="tab">
 
-                    <tr>
-                        <td><tr>
-                        <td>Name of student:</td>
-                        <td>Okpala Chukwuman</td>
-                        </tr></td>
-                        <td><tr>
-                        <td>Sex:</td>
-                        <td>Male</td>
-                        </tr></td>
-                    </tr>
-                    <tr>
-                        <td><tr>
-                        <td>Registration Number:</td>
-                        <td>SHS001</td>
-                        </tr></td>
-                        <td><tr>
-                        <td>Position:</td>
-                        <td>3rd</td>
-                        </tr></td>
+            <tr>
+                <td>
+            <tr>
+                <td><b>NAME:</b></td>
+                <td>Okpala Chukwuman</td>
+            </tr>
+            </td>
+            <td>
+                <tr>
+                    <td><b>GENDER:</b></td>
+                    <td>Male</td>
+                </tr>
+            </td>
+            <td>
+                <tr>
+                    <td><b>REG NO:</b></td>
+                    <td>SHS001</td>
+                </tr>
+            </td>
+            </tr>
+            <tr>
+                <td>
+            <tr>
+                <td><b>POSITION:</b></td>
+                <td>3rd</td>
+            </tr>
+            </td>
+            <td>
+                <tr>
+                    <td><b>CLASS</b></td>
+                    <td>Jss3 A</td>
+                </tr>
+            </td>
+            <td>
+                <tr>
+                    <td><b>TERM:</b></td>
+                    <td>2nd Term</td>
+                </tr>
+            </td>
+            <td>
 
-                    </tr>
-                    <tr>
-                        <td><tr>
-                        <td>Class:</td>
-                        <td>Jss3 A</td>
-                        </tr></td>
-                        <td><tr>
-                        <td>No in Class:</td>
-                        <td>25</td>
-                        </tr></td>
+                </tr>
+
+        </table>
+
+    </div>
+    <div fxFlex="95" fxLayout="row" fxLayoutAlign="space-around none" style="padding-top:10px;">
+        <table fxFlex="100" class="tab-border">
+            <tr>
+                <th style="background-color:#3cb371" rowspan="2">SUBJECT</th>
+                <th style="background-color:#3cb371" colspan="4">CONTINUOUS ASSESSMENT</th>
+                <th style="background-color:#3cb371" rowspan="2">TERM EXAM</th>
+                <th style="background-color:#3cb371" rowspan="2">TOTAL SCORE</th>
+                <th style="background-color:#3cb371" rowspan="2">GRADE</th>
+            </tr>
+            <tr>
+                <td style="background-color:#3cb371"><b>1ST TEST</b></td>
+                <td style="background-color:#3cb371"><b>2ND TEST</b></td>
+                <td style="background-color:#3cb371"><b>3RD TEST</b></td>
+                <td style="background-color:#3cb371"><b>TOTAL</b></td>
+            </tr>
+            <tr *ngFor="let entry of dataSource">
+                <td>{{entry.name}}</td>
+                <td>1ST TEST</td>
+                <td>2ND TEST</td>
+                <td>3RD TEST</td>
+                <td>TOTAL</td>
+                <td>{{entry.weight}}</td>
+                <td>{{entry.position}}</td>
+                <td>{{entry.symbol}}</td>
+
+            </tr>
+            <tr>
+                <td colspan="2">student's average</td>
+                <td colspan="2">class average</td>
+                <td colspan="2">finale</td>
+                <td colspan="2"><b>TOTAL</b></td>
+            </tr>
+        </table>
+    </div>
+
+    <div fxFlex="95" fxLayout="row" fxLayoutAlign="space-between start" style="padding-top:10px;">
+        <table fxFlex="40" class="tab-border">
+            <tr>
+                <th style="background-color:#3cb371" rowspan="2">AFFECTIVE RELATIONSHIP</th>
+                <th style="background-color:#3cb371" rowspan="2">GRADE</th>
+                <th style="background-color:#3cb371" colspan="2">PYSCHOMOTOR ABILITY AND PHYSICAL SKILL</th>
+            </tr>
+            <tr>
+                <th style="background-color:#3cb371">ACTIVITIES</th>
+                <th style="background-color:#3cb371">GRADE</th>
+            </tr>
+            <tr *ngFor="let entry of dataSource">
+                <td>{{entry.weight}}</td>
+                <td>{{entry.symbol}}</td>
+                <td>{{entry.weight}}</td>
+                <td>{{entry.symbol}}</td>
+
+            </tr>
+        </table>
+        <table fxFlex="55" class="comment-tab">
+
+            <tr >
+
+                <td><b>Class Teacher's Comment</b></td>
+                <td >keep on the good work</td>
+
+            </tr>
+
+            <tr >
+
+                <td><b>Principal's Comment</b></td>
+                <td >keep on the good work</td>
+
+            </tr>
+
+            <tr >
 
 
-                    </tr>
-                    <tr>
-                        <td><tr>
-                        <td>Term:</td>
-                        <td>2nd Term</td>
-                        </tr></td>
-                        <td><tr>
-                        <td>Student's Average:</td>
-                        <td>25</td>
-                        </tr></td>
-                    </tr>
-                    <tr>
-                        <td><tr>
-                        <td>Class average:</td>
-                        <td>994.9</td>
-                        </tr></td>
-                        <td><tr>
-                        <td>Next Term Begins:</td>
-                        <td>25/4/4</td>
-                        </tr></td>
-                    </tr>
-                    <tr>
-                        <td><tr>
-                        <td>Next Term Ends:</td>
-                        <td>9/9/3</td>
-                        </tr></td>
-                    </tr>
-                </table>
+                <td><b>Next term begins</b></td>
+                <td >Monday, 28th august, 2021 </td>
 
-</div>
-<div fxFlex="80" fxLayout="row" fxLayoutAlign="space-around none" style="padding-top:10px;">
-<table fxFlex="100" class= "tab-border">
-  <tr>
-    <th>SUBJECT</th>
-    <th>CONT.ASST.</th>
-    <th>TERM EXAM</th>
-     <th>TOTAL SCORE</th>
-    <th>GRADE</th>
-  </tr>
-  <tr *ngFor="let entry of dataSource">
-    <td>{{entry.name}}</td>
-    <td>{{entry.weight}}</td>
-    <td>{{entry.position}}</td>
-    <td>{{entry.symbol}}</td>
-    <td>{{entry.position}}</td>
-  </tr>
-</table>
+            </tr>
+        </table>
 
 
-</div>
+
+    </div>
+
 </div>

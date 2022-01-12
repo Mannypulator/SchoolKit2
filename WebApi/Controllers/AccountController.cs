@@ -42,10 +42,10 @@ namespace WebApi.Controllers
             .FirstOrDefaultAsync();
             if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
             {
-                if (!user.IsActivated)
+               /* if (!user.IsActivated)
                 {
                     return Unauthorized(new { message = _appsettings.notActivated });
-                }
+                }*/
                 var roles = await _userManager.GetRolesAsync(user);
                 var role = roles.FirstOrDefault();
                 var tokendescriptor = new SecurityTokenDescriptor

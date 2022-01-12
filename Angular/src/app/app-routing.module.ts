@@ -2,6 +2,8 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AdminroleGuard } from './resources/adminrole.guard';
 import { SchoolAdminGuard } from './resources/school-admin.guard';
+import { StudentRoleGuard } from './resources/student.guard';
+import { TeacherRoleGuard } from './resources/teacher.guard';
 import { PageNotFoundComponent } from './shared/components/page-not-found/page-not-found.component';
 
 
@@ -24,12 +26,14 @@ const routes: Routes = [
   {
     path: 'teacher',
     loadChildren:
-      () => import('./teacher/teacher.module').then(m => m.TeacherModule)
+      () => import('./teacher/teacher.module').then(m => m.TeacherModule),
+      canLoad: [TeacherRoleGuard]
   },
   {
     path: 'student',
     loadChildren:
-      () => import('./student/student.module').then(m => m.StudentModule)
+      () => import('./student/student.module').then(m => m.StudentModule),
+      canLoad: [StudentRoleGuard]
   },
   // ]
   // },

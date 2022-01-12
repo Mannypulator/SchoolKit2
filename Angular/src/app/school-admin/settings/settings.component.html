@@ -1,0 +1,380 @@
+<ngx-alerts></ngx-alerts>
+<div fxFlex fxLayout="row wrap" fxLayoutAlign="space-evenly start">
+
+    <mat-card class="card" fxLayout="column" fxLayoutAlign="space-between none" fxFlex.lt-md="90%" fxFlex="47%"
+        style="margin-top: 3%;">
+
+        <div>
+            <div fxFlex fxLayout="row" fxLayoutAlign="space-between center">
+                <div>
+                    <mat-card-title>Session</mat-card-title>
+                </div>
+                <div fxFlex="20" fxFlex.lt-sm="30" fxFlex.md="25" fxFlex.sm="17">
+                    <button mat-icon-button style="margin-bottom: 3%;" routerLink="/school-admin/sessions">
+
+                        <mat-icon>view_list</mat-icon>
+                    </button>
+
+                    <button mat-icon-button style="margin-bottom: 3%;margin-left: 1px;" (click)= "openDialog()">
+
+                        <mat-icon>add_circle</mat-icon>
+                    </button>
+                </div>
+
+            </div>
+
+        </div>
+        <span>
+            <mat-divider></mat-divider>
+        </span>
+        <table class="tab1">
+
+            <tr>
+                <td>Current Session</td>
+                <td>10-25-30</td>
+            </tr>
+
+            <tr>
+                <td>Current Term</td>
+                <td>10-25-30</td>
+
+            </tr>
+            <tr>
+                <td>Next Session</td>
+                <td>10-25-30</td>
+            </tr>
+        </table>
+
+        <mat-card-actions>
+            <button mat-raised-button>End Term</button>
+        </mat-card-actions>
+    </mat-card>
+
+    <mat-card class="card" fxLayout="column" fxLayoutAlign="space-between none" fxFlex.lt-md="90%" fxFlex="47%"
+        style="margin-top: 3%;">
+
+        <div fxFlex fxLayout="row" fxLayoutAlign="space-between center">
+            <div>
+                <mat-card-title>Scores</mat-card-title>
+                <mat-card-subtitle>Highest Scores for each termly assessment and exams</mat-card-subtitle>
+            </div>
+
+        </div>
+
+        <span>
+            <mat-divider></mat-divider>
+        </span>
+
+        <div fxFlex fxLayout="row" fxLayoutAlign="space-between center">
+
+            <mat-form-field class="form-field" appearance="fill" style="margin-top:2%;">
+                <mat-label>Test 1</mat-label>
+                <input matInput type="number" autocomplete="off">
+
+            </mat-form-field>
+
+            <mat-form-field class="form-field" appearance="fill" style="margin-top:2%;">
+                <mat-label>Test 2</mat-label>
+                <input matInput type="number" autocomplete="off">
+
+            </mat-form-field>
+
+            <mat-form-field class="form-field" appearance="fill" style="margin-top:2%;">
+                <mat-label>Test 3</mat-label>
+                <input matInput type="number" autocomplete="off">
+
+            </mat-form-field>
+
+            <mat-form-field class="form-field" appearance="fill" style="margin-top:2%;">
+                <mat-label>Exam</mat-label>
+                <input matInput type="number" autocomplete="off">
+            </mat-form-field>
+        </div>
+        <mat-card-actions>
+            <button mat-raised-button>Save</button>
+        </mat-card-actions>
+    </mat-card>
+
+    <div fxLayout="column" fxLayoutAlign="space-between none" fxFlex.lt-md="90%" fxFlex="47%" style="margin-top: 2%;">
+        <mat-card class="card" fxLayout="column" fxLayoutAlign="space-between none">
+
+            <div fxFlex fxLayout="row" fxLayoutAlign="space-between center">
+                <div>
+                    <mat-card-title>Grades</mat-card-title>
+                    <mat-card-subtitle>Enter scores between the min and max boxes that give the following grade
+                    </mat-card-subtitle>
+                    <mat-card-subtitle>The min boxes hold the lesser of the scores and the max hold the greater scores
+                    </mat-card-subtitle>
+                </div>
+
+            </div>
+
+
+            <span>
+                <mat-divider></mat-divider>
+            </span>
+            <table class="tab">
+
+                <tr>
+                    <td>
+                        <span style="font-size: 30px;"><b>A</b></span>
+                        <div>
+                            <mat-form-field class="form" appearance="fill" style="margin-left:2%">
+                                <mat-label>Min</mat-label>
+                                <input matInput type="number" autocomplete="off">
+                            </mat-form-field>
+
+                            <span style="margin-left:2%">to</span>
+
+                            <mat-form-field class="form" appearance="fill" style="margin-left:2%">
+                                <mat-label>Max</mat-label>
+                                <input matInput type="number" autocomplete="off">
+                            </mat-form-field>
+                        </div>
+
+                    </td>
+
+                    <td>
+                        <span style="font-size: 30px;"><b>B</b></span>
+                        <div>
+                            <mat-form-field class="form" appearance="fill" style="margin-left:2%">
+                                <mat-label>Min</mat-label>
+                                <input matInput type="number" autocomplete="off">
+                            </mat-form-field>
+
+                            <span style="margin-left:2%">to</span>
+
+                            <mat-form-field class="form" appearance="fill" style="margin-left:2%">
+                                <mat-label>Max</mat-label>
+                                <input matInput type="number" autocomplete="off">
+                            </mat-form-field>
+                        </div>
+
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <span style="font-size: 30px;margin-left:4%"><b>C</b></span>
+
+                        <div>
+                            <mat-form-field class="form" appearance="fill" style="margin-left:2%">
+                                <mat-label>Min</mat-label>
+                                <input matInput type="number" autocomplete="off">
+                            </mat-form-field>
+
+                            <span style="margin-left:2%">to</span>
+
+                            <mat-form-field class="form" appearance="fill" style="margin-left:2%">
+                                <mat-label>Max</mat-label>
+                                <input matInput type="number" autocomplete="off">
+                            </mat-form-field>
+                        </div>
+
+                    </td>
+
+                    <td>
+                        <span style="font-size: 30px;margin-left:4%"><b>D</b></span>
+                        <div>
+                            <mat-form-field class="form" appearance="fill" style="margin-left:2%">
+                                <mat-label>Min</mat-label>
+                                <input matInput type="number" autocomplete="off">
+                            </mat-form-field>
+
+                            <span style="margin-left:2%">to</span>
+
+                            <mat-form-field class="form" appearance="fill" style="margin-left:2%">
+                                <mat-label>Max</mat-label>
+                                <input matInput type="number" autocomplete="off">
+                            </mat-form-field>
+                        </div>
+
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <span style="font-size: 30px;margin-left:4%"><b>E</b></span>
+
+                        <div>
+                            <mat-form-field class="form" appearance="fill" style="margin-left:2%">
+                                <mat-label>Min</mat-label>
+                                <input matInput type="number" autocomplete="off">
+                            </mat-form-field>
+
+                            <span style="margin-left:2%">to</span>
+
+                            <mat-form-field class="form" appearance="fill" style="margin-left:2%">
+                                <mat-label>Max</mat-label>
+                                <input matInput type="number" autocomplete="off">
+                            </mat-form-field>
+                        </div>
+
+                    </td>
+
+                    <td>
+                        <span style="font-size: 30px;margin-left:4%"><b>F</b></span>
+
+                        <div>
+                            <mat-form-field class="form" appearance="fill" style="margin-left:2%">
+                                <mat-label>Min</mat-label>
+                                <input matInput type="number" autocomplete="off">
+                            </mat-form-field>
+
+                            <span style="margin-left:2%">to</span>
+
+                            <mat-form-field class="form" appearance="fill" style="margin-left:2%">
+                                <mat-label>Max</mat-label>
+                                <input matInput type="number" autocomplete="off">
+                            </mat-form-field>
+                        </div>
+
+
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <span style="font-size: 30px;margin-left:4%"><b>P</b></span>
+                        <div>
+                            <mat-form-field class="form" appearance="fill" style="margin-left:2%">
+                                <mat-label>Min</mat-label>
+                                <input matInput type="number" autocomplete="off">
+                            </mat-form-field>
+
+                            <span style="margin-left:2%">to</span>
+
+                            <mat-form-field class="form" appearance="fill" style="margin-left:2%">
+                                <mat-label>Max</mat-label>
+                                <input matInput type="number" autocomplete="off">
+                            </mat-form-field>
+                        </div>
+
+                    </td>
+
+
+                </tr>
+
+            </table>
+
+            <mat-card-actions>
+                <button mat-raised-button>Save</button>
+
+            </mat-card-actions>
+        </mat-card>
+
+        <mat-card class="card" fxLayout="column" fxLayoutAlign="space-between none"
+            style="margin-top: 3%;">
+
+            <div fxFlex fxLayout="row" fxLayoutAlign="space-between center">
+                <div>
+                    <mat-card-title>Results</mat-card-title>
+                </div>
+
+            </div>
+
+            <span>
+                <mat-divider></mat-divider>
+            </span>
+            <div>
+                <span>Show results to students that are owing school fees?</span>
+                <button mat-button>Yes</button>
+                <button mat-button>No</button>
+            </div>
+            <p>Results will not be shown to students who are owing.</p>
+
+        </mat-card>
+
+    </div>
+
+    <div fxLayout="column" fxLayoutAlign="space-between none" fxFlex.lt-md="90%" fxFlex="47%" style="margin-top: 2%;">
+        <mat-card class="card" fxLayout="column" fxLayoutAlign="space-between none">
+
+            <div fxFlex fxLayout="row" fxLayoutAlign="space-between center">
+                <div>
+                    <mat-card-title>School</mat-card-title>
+                </div>
+
+            </div>
+
+            <span>
+                <mat-divider></mat-divider>
+            </span>
+
+            <div fxFlex fxLayout="row wrap" fxLayoutAlign="space-evenly center">
+
+                <mat-form-field appearance="fill" fxFlex="75" style="margin-top:2%;">
+                    <mat-label>Adress</mat-label>
+                    <input matInput type="text" autocomplete="off">
+
+                </mat-form-field>
+
+                <mat-form-field appearance="fill" fxFlex="75" style="margin-top:2%;">
+                    <mat-label>Reg No Prefix</mat-label>
+                    <input matInput type="text" autocomplete="off">
+
+                </mat-form-field>
+
+                <div fxFlex="40">
+                    <h1>School logo</h1>
+                    <img mat-card-sm-image src="https://material.angular.io/assets/img/examples/shiba2.jpg">
+                </div>
+
+            </div>
+            <mat-card-actions>
+                <button mat-raised-button>Save</button>
+            </mat-card-actions>
+        </mat-card>
+
+        <mat-card class="card" fxLayout="column" fxLayoutAlign="space-between none" style="margin-top: 3%;">
+
+            <div fxFlex fxLayout="row" fxLayoutAlign="space-between center">
+                <div>
+                    <mat-card-title>Packages</mat-card-title>
+                    <mat-card-subtitle>Apply for packages you want to implement for your school below
+                    </mat-card-subtitle>
+                </div>
+
+            </div>
+
+            <span>
+                <mat-divider></mat-divider>
+            </span>
+
+            <div fxFlex fxLayout="row" fxLayoutAlign="space-between none">
+                <div fxFlex="45" style="margin-top: 1%;">
+                    <span style="font-size:larger"><b>Implemented Packages</b></span>
+                    <mat-list role="list">
+                        <mat-list-item *ngFor="let package of packages, let j = index">
+                            {{package}}
+                            <div style="margin-left: auto;">
+                                <mat-icon>check_box</mat-icon>
+                            </div>
+
+                            <mat-divider></mat-divider>
+                        </mat-list-item>
+
+                    </mat-list>
+                </div>
+
+                <mat-divider [vertical]="true"></mat-divider>
+
+                <div fxFlex="45" style="margin-top: 1%;">
+                    <span style="font-size:larger"><b>Unimplemented Packages</b></span>
+                    <mat-list role="list">
+                        <mat-list-item *ngFor="let package of unimplemented, let j = index">
+                            {{package}}
+                            <button mat-button style="margin-left: auto;">apply</button>
+
+                            <mat-divider></mat-divider>
+                        </mat-list-item>
+
+                    </mat-list>
+                </div>
+
+            </div>
+        </mat-card>
+    </div>
+
+
+</div>

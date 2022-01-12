@@ -171,7 +171,8 @@ namespace WebApi.Controllers
                 ThirdCA = x.ThridCA,
                 CA = x.CA,
                 Exam = x.Exam,
-                StudentName = x.Student.LastName + " " + x.Student.FirstName
+                StudentName = x.Student.LastName + " " + x.Student.FirstName,
+                ClassSubjectID = x.ClassSubjectID
             })
             //.Where(x=> x.Student.SchoolID == teacher.SchoolID)//should return only 
             .ToListAsync();   ////please don't forget to add more schools and test this out                                                                             //students that belong to the same school as the term
@@ -215,7 +216,7 @@ namespace WebApi.Controllers
 
         [HttpPost]
         [Route("enrollStudent")]
-        public async Task<IActionResult> EnrollStudent([FromBody] Enrollment model)
+        public async Task<IActionResult> EnrollStudent([FromBody] SE model)
         {
             var teacherId = User.Claims.FirstOrDefault(c => c.Type == "UserID").Value;
             var teacher = await _teacherManager.FindByIdAsync(teacherId);
@@ -239,8 +240,13 @@ namespace WebApi.Controllers
                 {
                     return BadRequest(new { Message = "Student already enrolled" });
                 }
-                model.TermID = termID;
-                await _context.Enrollments.AddAsync(model);
+
+                var enrollment = new Enrollment{
+                    StudentID = model.StudentID,
+                    TermID = termID,
+                    ClassSubjectID = model.ClassSubjectID
+                };
+                await _context.Enrollments.AddAsync(enrollment);
                 await _context.SaveChangesAsync();
                 return Ok();
             }
@@ -253,7 +259,7 @@ namespace WebApi.Controllers
 
         [HttpPost]
         [Route("deListStudent")]
-        public async Task<IActionResult> DeListStudent([FromBody] Enrollment model)
+        public async Task<IActionResult> DeListStudent([FromBody] ReturnEnrollment model)
         {
             var teacherId = User.Claims.FirstOrDefault(c => c.Type == "UserID").Value;
             var teacher = await _teacherManager.FindByIdAsync(teacherId);
@@ -286,9 +292,10 @@ namespace WebApi.Controllers
                     }
                     else
                     {
-                        _context.Enrollments.Remove(model);
+                        var enrollment =  await _context.Enrollments.Where(x=> x.EnrollmentID==model.EnrollmentID).FirstOrDefaultAsync();
+                        _context.Enrollments.Remove(enrollment);
                         await _context.SaveChangesAsync();
-                        return Ok();
+                        return Ok(new {Message = "Student successfully unenrolled"});
                     }
                 }
                 else
@@ -313,7 +320,7 @@ namespace WebApi.Controllers
           public int ThirdCA { get; set; }
         public int CA { get; set; }
         public int Exam { get; set; }
-      
+        public int ClassSubjectID { get; set; }
         public string StudentName { get; set; }
     }
 }

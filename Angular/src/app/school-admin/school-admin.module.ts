@@ -20,10 +20,13 @@ import { SchoolAdministrationComponent } from './school-administration/school-ad
 import { AddPrincipalComponent } from './add-principal/add-principal.component';
 import { AssignSubjectComponent } from './assign-subject/assign-subject.component';
 import { EditStudentComponent } from './edit-student/edit-student.component';
+import { SettingsComponent } from './settings/settings.component';
+import { SessionComponent } from './session/session.component';
+import { AddSessionsComponent } from './add-sessions/add-sessions.component';
 
 
 @NgModule({
-  declarations: [PrincipalDashboardComponent, AddTeacherComponent, AddStudentComponent, RemoveTeacherComponent, RemoveStudentComponent, SchoolAdminComponent, AddSchoolsComponent, PrincipalSidenavListComponent, TeachersComponent, StudentsComponent, SchoolSelectionComponent, SchoolsComponent, SchoolAdministrationComponent, AddPrincipalComponent, AssignSubjectComponent, EditStudentComponent],
+  declarations: [PrincipalDashboardComponent, AddTeacherComponent, AddStudentComponent, RemoveTeacherComponent, RemoveStudentComponent, SchoolAdminComponent, AddSchoolsComponent, PrincipalSidenavListComponent, TeachersComponent, StudentsComponent, SchoolSelectionComponent, SchoolsComponent, SchoolAdministrationComponent, AddPrincipalComponent, AssignSubjectComponent, EditStudentComponent, SettingsComponent, SessionComponent, AddSessionsComponent],
   imports: [
     CommonModule,
     SchoolAdminRoutingModule,

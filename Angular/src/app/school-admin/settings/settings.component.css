@@ -1,0 +1,28 @@
+.tab{
+    background-color: white;
+}
+.tab td {
+    padding-top: 8px;
+    padding-bottom: 1px;
+    text-align: center;
+    font-size: 15px;
+    
+  }
+
+.tab1{
+    background-color: white;
+}
+.tab1 td {
+    padding-top: 8px;
+    padding-bottom: 8px;
+    text-align: left;
+    font-size: 15px;
+    
+  }
+.form-field {
+    width: 60px;
+  }
+
+  .form {
+    width: 53px;
+  }
