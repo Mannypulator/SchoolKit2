@@ -32,4 +32,15 @@ namespace WebApi.Models
         public ICollection<AnnualEnrollment> AnnualEnrollments { get; set; }
         
     }
+
+    [NotMapped]
+    public class ReturnTerm
+    {
+        public int TermID { get; set; }
+        public int SchoolID { get; set; }
+        
+       
+        
+        
+    }
 }

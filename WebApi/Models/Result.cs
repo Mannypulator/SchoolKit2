@@ -12,11 +12,11 @@ namespace WebApi.Models
         public int ClassPosition { get; set; }
         public int ResultRecordID { get; set; }
         public int Total { get; set; }
+        
         public double Average { get; set; }
         [ForeignKey("StudentID")]
         public Student Student { get; set; }
-        [ForeignKey("TermID")]
-        public Term Term { get; set; }
+        
         [ForeignKey("ResultRecordID")]
         public ResultRecord ResultRecord { get; set; }
         

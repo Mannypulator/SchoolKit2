@@ -17,6 +17,7 @@
     padding-bottom: 8px;
     text-align: left;
     font-size: 15px;
+    width: 50% !important;
     
   }
 .form-field {
@@ -24,5 +25,5 @@
   }
 
   .form {
-    width: 53px;
+    width: 55px;
   }

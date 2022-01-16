@@ -27,27 +27,30 @@
         <span>
             <mat-divider></mat-divider>
         </span>
-        <table class="tab1">
+        <div *ngIf="session" style="width: 100%;">
+            <table class="tab1">
 
-            <tr>
-                <td>Current Session</td>
-                <td>10-25-30</td>
-            </tr>
-
-            <tr>
-                <td>Current Term</td>
-                <td>10-25-30</td>
-
-            </tr>
-            <tr>
-                <td>Next Session</td>
-                <td>10-25-30</td>
-            </tr>
-        </table>
-
-        <mat-card-actions>
-            <button mat-raised-button>End Term</button>
-        </mat-card-actions>
+                <tr>
+                    <td>Current Session</td>
+                    <td>{{session.SessionName}}</td>
+                </tr>
+    
+                <tr>
+                    <td>Current Term</td>
+                    <td *ngIf="session.Terms.length > 0">{{term[session.Terms[0].Label]}}</td>
+    
+                </tr>
+                <tr>
+                    <td>Term Start Date</td>
+                    <td *ngIf="session.Terms.length > 0">{{session.Terms[0].TermStart}}</td>
+                </tr>
+            </table>
+    
+            <mat-card-actions>
+                <button mat-raised-button (click) = "endTerm(session.Terms[0].TermID)" *ngIf="session.Terms.length > 0">End Term</button>
+            </mat-card-actions>
+        </div>
+        <span style="text-align: center;height: 120px;padding-top: 3%;" *ngIf="!session">There is no current Session</span>
     </mat-card>
 
     <mat-card class="card" fxLayout="column" fxLayoutAlign="space-between none" fxFlex.lt-md="90%" fxFlex="47%"
@@ -69,29 +72,29 @@
 
             <mat-form-field class="form-field" appearance="fill" style="margin-top:2%;">
                 <mat-label>Test 1</mat-label>
-                <input matInput type="number" autocomplete="off">
+                <input matInput type="number" name="Test1" autocomplete="off" [(ngModel)]="TestScheme.Test1">
 
             </mat-form-field>
 
-            <mat-form-field class="form-field" appearance="fill" style="margin-top:2%;">
+            <mat-form-field class="form-field" appearance="fill" style="margin-top:2%;" >
                 <mat-label>Test 2</mat-label>
-                <input matInput type="number" autocomplete="off">
+                <input matInput type="number" autocomplete="off" name="Test2" [(ngModel)]="TestScheme.Test2">
 
             </mat-form-field>
 
             <mat-form-field class="form-field" appearance="fill" style="margin-top:2%;">
                 <mat-label>Test 3</mat-label>
-                <input matInput type="number" autocomplete="off">
+                <input matInput type="number" autocomplete="off" name="Test3" [(ngModel)]="TestScheme.Test3">
 
             </mat-form-field>
 
             <mat-form-field class="form-field" appearance="fill" style="margin-top:2%;">
                 <mat-label>Exam</mat-label>
-                <input matInput type="number" autocomplete="off">
+                <input matInput type="number" autocomplete="off" name="Exam" [(ngModel)]="TestScheme.Exam">
             </mat-form-field>
         </div>
         <mat-card-actions>
-            <button mat-raised-button>Save</button>
+            <button mat-raised-button (click)="saveTestScheme()">Save</button>
         </mat-card-actions>
     </mat-card>
 
@@ -103,7 +106,7 @@
                     <mat-card-title>Grades</mat-card-title>
                     <mat-card-subtitle>Enter scores between the min and max boxes that give the following grade
                     </mat-card-subtitle>
-                    <mat-card-subtitle>The min boxes hold the lesser of the scores and the max hold the greater scores
+                    <mat-card-subtitle>The range for which the following grades can be given.
                     </mat-card-subtitle>
                 </div>
 
@@ -121,14 +124,14 @@
                         <div>
                             <mat-form-field class="form" appearance="fill" style="margin-left:2%">
                                 <mat-label>Min</mat-label>
-                                <input matInput type="number" autocomplete="off">
+                                <input matInput autocomplete="off" name="MinA" [(ngModel)]="GradeScheme.MinA">
                             </mat-form-field>
 
                             <span style="margin-left:2%">to</span>
 
                             <mat-form-field class="form" appearance="fill" style="margin-left:2%">
                                 <mat-label>Max</mat-label>
-                                <input matInput type="number" autocomplete="off">
+                                <input matInput autocomplete="off" name="MaxA" [(ngModel)]="GradeScheme.MaxA">
                             </mat-form-field>
                         </div>
 
@@ -139,14 +142,14 @@
                         <div>
                             <mat-form-field class="form" appearance="fill" style="margin-left:2%">
                                 <mat-label>Min</mat-label>
-                                <input matInput type="number" autocomplete="off">
+                                <input matInput autocomplete="off" name="MinB" [(ngModel)]="GradeScheme.MinB">
                             </mat-form-field>
 
                             <span style="margin-left:2%">to</span>
 
                             <mat-form-field class="form" appearance="fill" style="margin-left:2%">
                                 <mat-label>Max</mat-label>
-                                <input matInput type="number" autocomplete="off">
+                                <input matInput autocomplete="off" name="MaxB" [(ngModel)]="GradeScheme.MaxB">
                             </mat-form-field>
                         </div>
 
@@ -160,14 +163,14 @@
                         <div>
                             <mat-form-field class="form" appearance="fill" style="margin-left:2%">
                                 <mat-label>Min</mat-label>
-                                <input matInput type="number" autocomplete="off">
+                                <input matInput autocomplete="off" name="MinC" [(ngModel)]="GradeScheme.MinC">
                             </mat-form-field>
 
                             <span style="margin-left:2%">to</span>
 
                             <mat-form-field class="form" appearance="fill" style="margin-left:2%">
                                 <mat-label>Max</mat-label>
-                                <input matInput type="number" autocomplete="off">
+                                <input matInput autocomplete="off" name="MaxC" [(ngModel)]="GradeScheme.MaxC">
                             </mat-form-field>
                         </div>
 
@@ -178,14 +181,14 @@
                         <div>
                             <mat-form-field class="form" appearance="fill" style="margin-left:2%">
                                 <mat-label>Min</mat-label>
-                                <input matInput type="number" autocomplete="off">
+                                <input matInput autocomplete="off" name="MinD" [(ngModel)]="GradeScheme.MinD">
                             </mat-form-field>
 
                             <span style="margin-left:2%">to</span>
 
                             <mat-form-field class="form" appearance="fill" style="margin-left:2%">
                                 <mat-label>Max</mat-label>
-                                <input matInput type="number" autocomplete="off">
+                                <input matInput autocomplete="off" name="MaxD" [(ngModel)]="GradeScheme.MaxD">
                             </mat-form-field>
                         </div>
 
@@ -199,33 +202,33 @@
                         <div>
                             <mat-form-field class="form" appearance="fill" style="margin-left:2%">
                                 <mat-label>Min</mat-label>
-                                <input matInput type="number" autocomplete="off">
+                                <input matInput autocomplete="off" name="MinE" [(ngModel)]="GradeScheme.MinE">
                             </mat-form-field>
 
                             <span style="margin-left:2%">to</span>
 
                             <mat-form-field class="form" appearance="fill" style="margin-left:2%">
                                 <mat-label>Max</mat-label>
-                                <input matInput type="number" autocomplete="off">
+                                <input matInput autocomplete="off" name="MaxE" [(ngModel)]="GradeScheme.MaxE">
                             </mat-form-field>
                         </div>
 
                     </td>
 
                     <td>
-                        <span style="font-size: 30px;margin-left:4%"><b>F</b></span>
+                        <span style="font-size: 30px;margin-left:4%"><b>P</b></span>
 
                         <div>
                             <mat-form-field class="form" appearance="fill" style="margin-left:2%">
                                 <mat-label>Min</mat-label>
-                                <input matInput type="number" autocomplete="off">
+                                <input matInput autocomplete="off" name="MinP" [(ngModel)]="GradeScheme.MinP">
                             </mat-form-field>
 
                             <span style="margin-left:2%">to</span>
 
                             <mat-form-field class="form" appearance="fill" style="margin-left:2%">
                                 <mat-label>Max</mat-label>
-                                <input matInput type="number" autocomplete="off">
+                                <input matInput autocomplete="off" name="MaxP" [(ngModel)]="GradeScheme.MaxP">
                             </mat-form-field>
                         </div>
 
@@ -235,18 +238,18 @@
 
                 <tr>
                     <td>
-                        <span style="font-size: 30px;margin-left:4%"><b>P</b></span>
+                        <span style="font-size: 30px;margin-left:4%"><b>F</b></span>
                         <div>
                             <mat-form-field class="form" appearance="fill" style="margin-left:2%">
                                 <mat-label>Min</mat-label>
-                                <input matInput type="number" autocomplete="off">
+                                <input matInput autocomplete="off" name="MinF" [(ngModel)]="GradeScheme.MinF">
                             </mat-form-field>
 
                             <span style="margin-left:2%">to</span>
 
                             <mat-form-field class="form" appearance="fill" style="margin-left:2%">
                                 <mat-label>Max</mat-label>
-                                <input matInput type="number" autocomplete="off">
+                                <input matInput autocomplete="off" name="MaxF" [(ngModel)]="GradeScheme.MaxF">
                             </mat-form-field>
                         </div>
 
@@ -258,7 +261,7 @@
             </table>
 
             <mat-card-actions>
-                <button mat-raised-button>Save</button>
+                <button mat-raised-button (click)="saveGradeScheme()">Save</button>
 
             </mat-card-actions>
         </mat-card>

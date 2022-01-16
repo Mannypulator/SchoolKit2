@@ -55,34 +55,35 @@ namespace WebApi.Controllers
             .Where(x => x.SchoolID == id)
             .Include(x => x.TeacherSubjects)
             .ThenInclude(x => x.ClassSubject)
-            .ThenInclude(x=> x.Subject)
+            .ThenInclude(x => x.Subject)
             .Include(x => x.TeacherSubjects)
             .ThenInclude(x => x.ClassSubject)
-            .ThenInclude(x=> x.ClassArm);
-            
+            .ThenInclude(x => x.ClassArm);
+
 
             var selection = new List<ReturnTeacher>();
 
             foreach (var teacher in teachers)
             {
                 var TS = new ReturnTeacher
-                    {
-                        Id = teacher.Id,
-                        FirstName = teacher.FirstName,
-                        LastName = teacher.LastName,
-                        Email = teacher.Email,
-                        SchoolID = teacher.SchoolID,
-                        //LgaID = teacher.LgaID,
-                        Gender = teacher.Gender,
+                {
+                    Id = teacher.Id,
+                    FirstName = teacher.FirstName,
+                    LastName = teacher.LastName,
+                    Email = teacher.Email,
+                    SchoolID = teacher.SchoolID,
+                    //LgaID = teacher.LgaID,
+                    Gender = teacher.Gender,
 
-                        PhoneNumber = teacher.PhoneNumber,
-                        TeacherSubjects = new List<ReturnTeacherSubject>()
-                        
+                    PhoneNumber = teacher.PhoneNumber,
+                    TeacherSubjects = new List<ReturnTeacherSubject>()
 
-                    };
+
+                };
                 foreach (var subject in teacher.TeacherSubjects)
                 {
-                    var RTS = new ReturnTeacherSubject{
+                    var RTS = new ReturnTeacherSubject
+                    {
                         TeacherSubjectID = subject.TeacherSubjectID,
                         Title = subject.ClassSubject.Subject.Title,
                         Range = subject.ClassSubject.Subject.Range, // an update would be to get a hashset for the subject Ids so we can have
@@ -91,7 +92,7 @@ namespace WebApi.Controllers
                         Arm = subject.ClassSubject.ClassArm.Arm
                     };
                     TS.TeacherSubjects.Add(RTS);
-                  
+
                 }
 
                 selection.Add(TS);
@@ -161,7 +162,7 @@ namespace WebApi.Controllers
 
         [HttpPost]
         [Route("deleteTeacher")]
-        public async Task<IActionResult> DeleteTeacher([FromBody] TID i )
+        public async Task<IActionResult> DeleteTeacher([FromBody] TID i)
         {
             var id = 0;
 
@@ -179,27 +180,31 @@ namespace WebApi.Controllers
 
             var teacher = await _teacherManager.FindByIdAsync(i.Id);
 
-            if(teacher.SchoolID == id){
-                try{
+            if (teacher.SchoolID == id)
+            {
+                try
+                {
                     IdentityResult result = await _teacherManager.RemoveFromRoleAsync(teacher, "Teacher");
-               IdentityResult res = await _teacherManager.DeleteAsync(teacher);/////remember to test
-            await _context.SaveChangesAsync();
-            return Ok();
+                    IdentityResult res = await _teacherManager.DeleteAsync(teacher);/////remember to test
+                    await _context.SaveChangesAsync();
+                    return Ok();
                 }
-                catch(Exception ex){
+                catch (Exception ex)
+                {
                     throw ex;
                 }
-                
+
             }
-            else{
+            else
+            {
                 return BadRequest();
             }
-            
+
         }
 
         [HttpPost]
         [Route("deleteStudent")]
-        public async Task<IActionResult> DeleteStudent([FromBody] TID i )
+        public async Task<IActionResult> DeleteStudent([FromBody] TID i)
         {
             var id = 0;
 
@@ -217,22 +222,26 @@ namespace WebApi.Controllers
 
             var student = await _studentManager.FindByIdAsync(i.Id);
 
-            if(student.SchoolID == id){
-                try{
+            if (student.SchoolID == id)
+            {
+                try
+                {
                     IdentityResult result = await _studentManager.RemoveFromRoleAsync(student, "Student");
-               IdentityResult res = await _studentManager.DeleteAsync(student);/////remember to test
-            await _context.SaveChangesAsync();
-            return Ok();
+                    IdentityResult res = await _studentManager.DeleteAsync(student);/////remember to test
+                    await _context.SaveChangesAsync();
+                    return Ok();
                 }
-                catch(Exception ex){
+                catch (Exception ex)
+                {
                     throw ex;
                 }
-                
+
             }
-            else{
+            else
+            {
                 return BadRequest();
             }
-            
+
         }
 
         [HttpPost]
@@ -266,24 +275,26 @@ namespace WebApi.Controllers
 
             await _context.SaveChangesAsync();
             var returnSubjects = await _context.TeacherSubjects
-            .Where(x=> x.TeacherID == model.TeacherID)
-            .Include(x=> x.ClassSubject)
-            .ThenInclude(x=> x.ClassArm)
-            .Include(x=> x.ClassSubject)
-            .ThenInclude(x=> x.Subject)
+            .Where(x => x.TeacherID == model.TeacherID)
+            .Include(x => x.ClassSubject)
+            .ThenInclude(x => x.ClassArm)
+            .Include(x => x.ClassSubject)
+            .ThenInclude(x => x.Subject)
             .ToListAsync();
 
             var selected = new List<ReturnTeacherSubject>();
-            foreach(var returnSubject in returnSubjects){
-                var RTS = new ReturnTeacherSubject{
-                        TeacherSubjectID = returnSubject.TeacherSubjectID,
-                        Title = returnSubject.ClassSubject.Subject.Title,
-                        Range = returnSubject.ClassSubject.Subject.Range, // an update would be to get a hashset for the subject Ids so we can have
-                        //listings like: Junior English, Junior maths, for secondary school teachers 
-                        Class = returnSubject.ClassSubject.ClassArm.Class,
-                        Arm = returnSubject.ClassSubject.ClassArm.Arm
-                    };
-                    selected.Add(RTS);
+            foreach (var returnSubject in returnSubjects)
+            {
+                var RTS = new ReturnTeacherSubject
+                {
+                    TeacherSubjectID = returnSubject.TeacherSubjectID,
+                    Title = returnSubject.ClassSubject.Subject.Title,
+                    Range = returnSubject.ClassSubject.Subject.Range, // an update would be to get a hashset for the subject Ids so we can have
+                                                                      //listings like: Junior English, Junior maths, for secondary school teachers 
+                    Class = returnSubject.ClassSubject.ClassArm.Class,
+                    Arm = returnSubject.ClassSubject.ClassArm.Arm
+                };
+                selected.Add(RTS);
             }
 
             return Ok(selected);
@@ -294,12 +305,12 @@ namespace WebApi.Controllers
         //
         public async Task<IActionResult> DissociateSubject(int id)
         {
-             var tsub = await _context.TeacherSubjects
-             .Where(s => s.TeacherSubjectID == id)
-             .SingleOrDefaultAsync();
-             _context.TeacherSubjects.Remove(tsub);
-             await _context.SaveChangesAsync();
-             
+            var tsub = await _context.TeacherSubjects
+            .Where(s => s.TeacherSubjectID == id)
+            .SingleOrDefaultAsync();
+            _context.TeacherSubjects.Remove(tsub);
+            await _context.SaveChangesAsync();
+
             return Ok(new { Message = "Subject Succesfully dissociated from teacher" });
 
         }
@@ -460,7 +471,7 @@ namespace WebApi.Controllers
             }
         }
 
-        
+
         [HttpPost]
         [Route("EditStudent")]
         public async Task<IActionResult> EditStudent([FromBody] ReceivedStudentModel model)
@@ -468,16 +479,16 @@ namespace WebApi.Controllers
             //update this to check if prncipal or propreitress is from same school as student before being able to perform these operations
 
             var user = await _studentManager.FindByIdAsync(model.Id);
-            
-             user.Id = model.Id;
-                user.FirstName = model.FirstName;
-                user.LastName = model.LastName;
-                user.Address = model.Address;
-                user.ClassArmID = model.ClassArmID;
-                //LgaID = model.LgaID;
-                user.Gender = (UserGender)model.Gender;
-                 await _context.SaveChangesAsync();
-                 return Ok();
+
+            user.Id = model.Id;
+            user.FirstName = model.FirstName;
+            user.LastName = model.LastName;
+            user.Address = model.Address;
+            user.ClassArmID = model.ClassArmID;
+            //LgaID = model.LgaID;
+            user.Gender = (UserGender)model.Gender;
+            await _context.SaveChangesAsync();
+            return Ok();
             Student student = new Student
             {
                 Id = model.Id,
@@ -489,7 +500,7 @@ namespace WebApi.Controllers
                 Gender = (UserGender)model.Gender,
                 RegNo = model.RegNo,
                 UserName = model.RegNo
-                
+
             };
             try
             {
@@ -497,8 +508,8 @@ namespace WebApi.Controllers
                 var result = await _studentManager.UpdateAsync(student);
                 if (result.Succeeded)
                 {
-                   await _context.SaveChangesAsync();
-                   return Ok(result);
+                    await _context.SaveChangesAsync();
+                    return Ok(result);
                 }
                 else
                 {
@@ -729,6 +740,189 @@ namespace WebApi.Controllers
 
         }
 
+        [HttpPost]
+        [Route("saveTestScheme")]
+        public async Task<IActionResult> SaveTestScheme([FromBody] TestScheme Scheme)
+        {
+            var SchoolID = 0;
+
+            if (Scheme.SchoolID != 0)
+            {
+                SchoolID = Scheme.SchoolID;
+            }
+            else
+            {
+                var principalId = User.Claims.FirstOrDefault(c => c.Type == "UserID").Value;
+                var principal = await _principalManager.FindByIdAsync(principalId);
+                SchoolID = principal.SchoolID;
+
+            }
+            var ScoreScheme = await _context.ScoreSchemes
+            .Where(x => x.SchoolID == SchoolID)
+            .SingleOrDefaultAsync();
+
+            if (ScoreScheme == null)
+            {
+                var NewScheme = new ScoreScheme
+                {
+                    Test1 = Scheme.Test1,
+                    Test2 = Scheme.Test2,
+                    Test3 = Scheme.Test3,
+                    Exam = Scheme.Exam,
+                    SchoolID = SchoolID
+                };
+
+                await _context.ScoreSchemes.AddAsync(NewScheme);
+                await _context.SaveChangesAsync();
+
+                return Ok();
+
+            }
+            else
+            {
+                ScoreScheme.Test1 = Scheme.Test1;
+                ScoreScheme.Test2 = Scheme.Test2;
+                ScoreScheme.Test3 = Scheme.Test3;
+                ScoreScheme.Exam = Scheme.Exam;
+                ScoreScheme.SchoolID = SchoolID;
+
+                await _context.SaveChangesAsync();
+
+                return Ok();
+            }
+        }
+
+        [HttpPost]
+        [Route("saveGradeScheme")]
+        public async Task<IActionResult> SaveGradeScheme([FromBody] GradeScheme Scheme)
+        {
+            var SchoolID = 0;
+
+            if (Scheme.SchoolID != 0)
+            {
+                SchoolID = Scheme.SchoolID;
+            }
+            else
+            {
+                var principalId = User.Claims.FirstOrDefault(c => c.Type == "UserID").Value;
+                var principal = await _principalManager.FindByIdAsync(principalId);
+                SchoolID = principal.SchoolID;
+
+            }
+            var ScoreScheme = await _context.ScoreSchemes
+            .Where(x => x.SchoolID == SchoolID)
+            .SingleOrDefaultAsync();
+
+            if (ScoreScheme == null)
+            {
+                var NewScheme = new ScoreScheme
+                {
+                    MinA = Scheme.MinA,
+                    MaxA = Scheme.MaxA,
+                    MinB = Scheme.MinB,
+                    MaxB = Scheme.MaxB,
+                    MinC = Scheme.MinC,
+                    MaxC = Scheme.MaxC,
+                    MinD = Scheme.MinD,
+                    MaxD = Scheme.MaxD,
+                    MinE = Scheme.MinE,
+                    MaxE = Scheme.MaxE,
+                    MinP = Scheme.MinP,
+                    MaxP = Scheme.MaxP,
+                    MinF = Scheme.MinF,
+                    MaxF = Scheme.MaxF,
+                    SchoolID = SchoolID
+                };
+
+                await _context.ScoreSchemes.AddAsync(NewScheme);
+                await _context.SaveChangesAsync();
+
+                return Ok();
+
+            }
+            else
+            {
+                ScoreScheme.MinA = Scheme.MinA;
+                ScoreScheme.MaxA = Scheme.MaxA;
+                ScoreScheme.MinB = Scheme.MinB;
+                ScoreScheme.MaxB = Scheme.MaxB;
+                ScoreScheme.MinC = Scheme.MinC;
+                ScoreScheme.MaxC = Scheme.MaxC;
+                ScoreScheme.MinD = Scheme.MinD;
+                ScoreScheme.MaxD = Scheme.MaxD;
+                ScoreScheme.MinE = Scheme.MinE;
+                ScoreScheme.MaxE = Scheme.MaxE;
+                ScoreScheme.MinP = Scheme.MinP;
+                ScoreScheme.MaxP = Scheme.MaxP;
+                ScoreScheme.MinF = Scheme.MinF;
+                ScoreScheme.MaxF = Scheme.MaxF;
+                ScoreScheme.SchoolID = SchoolID;
+
+                await _context.SaveChangesAsync();
+
+                return Ok();
+            }
+        }
+
+        [HttpGet]
+        [Route("getScoreScheme")]
+        public async Task<IActionResult> GetScoreScheme(int SchoolID)
+        {
+            var ID = 0;
+
+            if (SchoolID != 0)
+            {
+                ID = SchoolID;
+            }
+            else
+            {
+                var principalId = User.Claims.FirstOrDefault(c => c.Type == "UserID").Value;
+                var principal = await _principalManager.FindByIdAsync(principalId);
+                ID = principal.SchoolID;
+
+            }
+            var ScoreScheme = await _context.ScoreSchemes
+            .Where(x => x.SchoolID == ID)
+            .SingleOrDefaultAsync();
+
+            var GradeScheme = new GradeScheme
+            {
+                MinA = ScoreScheme.MinA,
+                MaxA = ScoreScheme.MaxA,
+                MinB = ScoreScheme.MinB,
+                MaxB = ScoreScheme.MaxB,
+                MinC = ScoreScheme.MinC,
+                MaxC = ScoreScheme.MaxC,
+                MinD = ScoreScheme.MinD,
+                MaxD = ScoreScheme.MaxD,
+                MinE = ScoreScheme.MinE,
+                MaxE = ScoreScheme.MaxE,
+                MinP = ScoreScheme.MinP,
+                MaxP = ScoreScheme.MaxP,
+                MinF = ScoreScheme.MinF,
+                MaxF = ScoreScheme.MaxF,
+            };
+
+            var TestScheme = new TestScheme
+            {
+                Test1 = ScoreScheme.Test1,
+                Test2 = ScoreScheme.Test2,
+                Test3 = ScoreScheme.Test3,
+                Exam = ScoreScheme.Exam
+            };
+
+            var NewScoreScheme = new TestGradeScheme
+            {
+                Tests = TestScheme,
+                Grades = GradeScheme
+            };
+
+
+
+            return Ok(NewScoreScheme);
+
+        }
+
 
     }
 
@@ -751,7 +945,7 @@ namespace WebApi.Controllers
         public string Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        
+
         public string Email { get; set; }
         public int SchoolID { get; set; }
         public UserGender Gender { get; set; }
@@ -769,4 +963,6 @@ namespace WebApi.Controllers
         public Class Class { get; set; }
         public Arms Arm { get; set; }
     }
+
+
 }

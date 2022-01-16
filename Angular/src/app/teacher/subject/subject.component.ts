@@ -79,7 +79,13 @@ export class SubjectComponent implements OnInit {
         console.log(res);
       },
       err => {
-        this.alert.danger("Operation failed");
+        if(err.error){
+          this.alert.danger(err.error.Message);
+        }
+        else{
+          this.alert.danger("Operation failed");
+        }
+        
         console.log(err);
       }
     )

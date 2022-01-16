@@ -49,28 +49,67 @@ namespace WebApi.Controllers
         [Route("update")]
         public async Task<IActionResult> Update(ReturnEnrollment model)
         {
+            var teacherId = User.Claims.FirstOrDefault(c => c.Type == "UserID").Value;
+            var teacher = await _teacherManager.FindByIdAsync(teacherId);
+            var schoolId = teacher.SchoolID;
+
+            var scoreScheme = await _context.ScoreSchemes
+            .Where(x=> x.SchoolID == schoolId)
+            .SingleOrDefaultAsync();
+
             var enrollment = await _context.Enrollments
             .Where(x => x.EnrollmentID == model.EnrollmentID)
             .FirstOrDefaultAsync();
-            enrollment.FirstCA = model.FirstCA;
-            enrollment.SecondCA = model.SecondCA;
-            enrollment.ThridCA = model.ThirdCA;
-            enrollment.Exam = model.Exam;
+
+            if(scoreScheme.Test1 >= model.FirstCA){
+                enrollment.FirstCA = model.FirstCA;
+            }
+            else{
+                return BadRequest(new {Message = "First test score must not be greater than" + scoreScheme.Test1});
+            }
+
+            if(scoreScheme.Test2 >= model.SecondCA){
+                enrollment.SecondCA = model.SecondCA;
+            }
+            else{
+                return BadRequest(new {Message = "Second test score must not be greater than" + scoreScheme.Test2});
+            }
+
+            if(scoreScheme.Test3 >= model.ThirdCA){
+                enrollment.ThridCA = model.ThirdCA;
+            }
+            else{
+                return BadRequest(new {Message = "Third test score must not be greater than" + scoreScheme.Test3});
+            }
+
+            if(scoreScheme.Exam >= model.Exam){
+                enrollment.Exam = model.Exam;
+            }
+            else{
+                return BadRequest(new {Message = "Exam score must not be greater than" + scoreScheme.Exam});
+            }
+            
             enrollment.CA = enrollment.FirstCA + enrollment.SecondCA + enrollment.ThridCA;
                enrollment.Total = enrollment.CA + enrollment.Exam;
-               if(enrollment.Total >= 70){
+               if(enrollment.Total >= scoreScheme.MinA && enrollment.Total <= scoreScheme.MaxA){
                    enrollment.Grade = Grade.A;
                }
-               else if(enrollment.Total >= 60){
+               else if(enrollment.Total >= scoreScheme.MinB && enrollment.Total <= scoreScheme.MaxB){
                    enrollment.Grade = Grade.B;
                }
-               else if(enrollment.Total >= 50){
+               else if(enrollment.Total >= scoreScheme.MinC && enrollment.Total <= scoreScheme.MaxC){
                    enrollment.Grade = Grade.C;
                }
-               else if(enrollment.Total >= 45){
+               else if(enrollment.Total >= scoreScheme.MinD && enrollment.Total <= scoreScheme.MaxD){
                    enrollment.Grade = Grade.D;
                }
-               else{
+              else if(enrollment.Total >= scoreScheme.MinE && enrollment.Total <= scoreScheme.MaxE){
+                   enrollment.Grade = Grade.E;
+               }
+               else if(enrollment.Total >= scoreScheme.MinP && enrollment.Total <= scoreScheme.MaxP){
+                   enrollment.Grade = Grade.P;
+               }
+                else if(enrollment.Total >= scoreScheme.MinF && enrollment.Total <= scoreScheme.MaxF){
                    enrollment.Grade = Grade.F;
                }
                 _context.Enrollments.Update(enrollment);

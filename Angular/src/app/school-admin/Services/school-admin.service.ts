@@ -1,6 +1,8 @@
+import { formatDate } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { Gender } from 'src/app/Models/Gender';
 import { Principal } from 'src/app/Models/Principal';
 import { School } from 'src/app/Models/School';
@@ -173,5 +175,51 @@ export class SchoolAdminService {
 
   getSessions() {
     return this.http.post<any[]>(this.baseUrl + '/api/term/getSessions', this.schoolNo).toPromise();
+  }
+
+  newTerm(term:any){
+    return this.http.post<any[]>(this.baseUrl + '/api/term/startTerm', term).toPromise();
+  }
+
+  getCurrentSession(){
+    var id: any = {
+      SchoolID: 0,
+
+    };
+    id.SchoolID = this.schoolNo.schoolID;
+    return this.http.post<any>(this.baseUrl + '/api/term/currentSession', id).pipe(
+      map(data => {
+        if(data != null && data.Terms.length != 0 ){
+          console.log("it ran");
+           data.Terms[0].TermStart = formatDate(data.Terms[0].TermStart, 'yyyy-MM-dd', 'en-US');
+           
+        }
+        console.log(data);
+        return data;
+      })
+
+    );
+  }
+
+  endTerm(Id: number){
+    var id: any = {
+      Id: Id
+    };
+    return this.http.post<any[]>(this.baseUrl + '/api/term/endTerm', id).toPromise();
+  }
+
+  saveTestScheme(TestScheme: any){
+    TestScheme.SchoolID = this.schoolNo.schoolID;
+    return this.http.post<any>(this.baseUrl + '/api/principal/saveTestScheme', TestScheme).toPromise()
+  }
+
+  saveGradeScheme(GradeScheme: any){
+    GradeScheme.SchoolID = this.schoolNo.schoolID;
+    return this.http.post<any>(this.baseUrl + '/api/principal/saveGradeScheme', GradeScheme).toPromise()
+  }
+
+  getScoreScheme(){
+    console.log(this.schoolNo.schoolID);
+    return this.http.get<any>(this.baseUrl + '/api/principal/getScoreScheme/?SchoolID=' + this.schoolNo.schoolID).toPromise()
   }
 }

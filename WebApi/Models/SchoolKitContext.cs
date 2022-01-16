@@ -53,6 +53,7 @@ namespace WebApi.Models
       public DbSet<SchoolPackage> SchoolPackages { get; set; }
       public DbSet<Parent> Parents { get; set; }
       public DbSet<Proprietor> Proprietors { get; set; }
+      public DbSet<ScoreScheme> ScoreSchemes { get; set; }
       
     }
 }

@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebApi.Models;
 
 namespace WebApi.Migrations
 {
     [DbContext(typeof(SchoolKitContext))]
-    partial class SchoolKitContextModelSnapshot : ModelSnapshot
+    [Migration("20220113063336_fixResult")]
+    partial class fixResult
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -865,76 +867,6 @@ namespace WebApi.Migrations
                     b.ToTable("SchoolRegCodes");
                 });
 
-            modelBuilder.Entity("WebApi.Models.ScoreScheme", b =>
-                {
-                    b.Property<int>("ScoreShemeID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("Exam")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("MaxA")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("MaxB")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("MaxC")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("MaxD")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("MaxE")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("MaxF")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("MaxP")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("MinA")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("MinB")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("MinC")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("MinD")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("MinE")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("MinF")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("MinP")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("SchoolID")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("Test1")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("Test2")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("Test3")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("ScoreShemeID");
-
-                    b.HasIndex("SchoolID");
-
-                    b.ToTable("ScoreSchemes");
-                });
-
             modelBuilder.Entity("WebApi.Models.Session", b =>
                 {
                     b.Property<int>("SessionID")
@@ -1711,17 +1643,6 @@ namespace WebApi.Migrations
                 {
                     b.HasOne("WebApi.Models.School", "School")
                         .WithMany("SchoolPackages")
-                        .HasForeignKey("SchoolID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("School");
-                });
-
-            modelBuilder.Entity("WebApi.Models.ScoreScheme", b =>
-                {
-                    b.HasOne("WebApi.Models.School", "School")
-                        .WithMany()
                         .HasForeignKey("SchoolID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();

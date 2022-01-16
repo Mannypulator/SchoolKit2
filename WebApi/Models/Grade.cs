@@ -7,6 +7,7 @@ namespace WebApi.Models
         C,
         D,
         E,
+        P,
         F
     }
 }

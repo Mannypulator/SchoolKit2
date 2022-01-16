@@ -3,6 +3,7 @@ import { MediaChange, MediaObserver } from '@angular/flex-layout';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { AlertService } from 'ngx-alerts';
 import { Subscription } from 'rxjs';
+import { TermLabel } from 'src/app/Models/TermLabel';
 import { AuthService } from 'src/app/resources/auth.service';
 import { TitleService } from 'src/app/shared/services/title.service';
 import { AddSessionsComponent } from '../add-sessions/add-sessions.component';
@@ -20,8 +21,26 @@ export class SettingsComponent implements OnInit {
 
   mediaSub!: Subscription;
   alias!: string;
-  dialogWidth = "40%"
-  
+  dialogWidth = "40%";
+
+  session!: any;
+  term = TermLabel;
+
+  TestScheme: any = {
+    Test1: 0,
+    Test2: 0,
+    Test3: 0,
+    Exam: 0,
+    SchoolID: 0
+    
+  }
+
+  GradeScheme: any = {
+    MinA: 0, MaxA: 0, MinB: 0, MaxB: 0, MinC: 0, MaxC: 0, MinD: 0, MaxD: 0, MinE: 0, MaxE: 0,
+    MinP: 0, MaxP: 0, MinF: 0, MaxF: 0, SchoolID: 0
+  }
+
+ 
   constructor(public alert: AlertService,private mediaObserver: MediaObserver, private titleService: TitleService, private auth: AuthService, private admin: SchoolAdminService, public dialog: MatDialog) { }
 
   ngOnInit(): void {
@@ -36,7 +55,10 @@ export class SettingsComponent implements OnInit {
       }
       this.alias = result.mqAlias;
       
-    }) 
+    });
+
+    this.getCurrentSession();
+    this.getScoreSchemes();
   }
 
   openDialog(){
@@ -57,6 +79,7 @@ export class SettingsComponent implements OnInit {
         this.admin.addSession(result).then((res)=>{
           console.log(res);
           this.alert.success("Session Created Successfully");
+          this.getCurrentSession();
           
         },
         err=>{
@@ -74,4 +97,81 @@ export class SettingsComponent implements OnInit {
     });
   }
 
+  getCurrentSession(){
+    if (this.auth.isProprietor()) {
+      const s = localStorage.getItem('selectedSchool');
+      if (s !== null) {
+        this.admin.schoolNo.schoolID = parseInt(s)
+      }
+    }
+    this.admin.getCurrentSession().subscribe(res=>{
+      this.session = res;
+      console.log(res);
+    },
+    err=> console.log(err));
+    
+  }
+
+  endTerm(Id: number){
+    this.admin.endTerm(Id).then(res=>{
+      this.alert.success("Operation Succesful?");
+      this.getCurrentSession();
+    },
+    err=>{
+      this.alert.danger("Operation failed");
+      console.log(err);
+    } )
+    
+  }
+
+  saveTestScheme(){
+    if (this.auth.isProprietor()) {
+      const s = localStorage.getItem('selectedSchool');
+      if (s !== null) {
+        this.admin.schoolNo.schoolID = parseInt(s)
+      }
+    }
+
+    this.admin.saveTestScheme(this.TestScheme).then(res=>{
+      this.alert.success("Operation Succesful");
+    },
+    err=>{
+      console.log(err);
+      this.alert.danger("Operation Failed");
+    });
+  }
+
+  saveGradeScheme(){
+    if (this.auth.isProprietor()) {
+      const s = localStorage.getItem('selectedSchool');
+      if (s !== null) {
+        this.admin.schoolNo.schoolID = parseInt(s)
+      }
+    }
+
+    this.admin.saveGradeScheme(this.GradeScheme).then(res=>{
+      this.alert.success("Operation Succesful");
+    },
+    err=>{
+      console.log(err);
+      this.alert.danger("Operation Failed");
+    });
+  }
+
+  getScoreSchemes(){
+    if (this.auth.isProprietor()) {
+      const s = localStorage.getItem('selectedSchool');
+      if (s !== null) {
+        this.admin.schoolNo.schoolID = parseInt(s)
+      }
+    }
+    this.admin.getScoreScheme().then(res=>{
+      this.GradeScheme = res.Grades;
+      this.TestScheme = res.Tests;
+      
+    },
+    err=>{
+      console.log(err);
+    });
+  }
 }

@@ -22,9 +22,18 @@ public class TID{
     public string Id { get; set; }
 }
 
+public class TermID{
+    public int Id { get; set; }
+    
+}
+
 public class SE {
     public int ClassSubjectID { get; set; }
     public string StudentID { get; set; }
+}
+
+public class SO {
+    public int SchoolID { get; set; }
 }
 
 

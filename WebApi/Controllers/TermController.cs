@@ -14,7 +14,7 @@ namespace WebApi.Controllers
 {
     [ApiController]
     [Route("api/term")]
-    [Authorize(Roles = "Admin,Principal,Proprietor")]
+    //[Authorize(Roles = "Admin,Principal,Proprietor")]
     public class TermController : ControllerBase
     {
         private readonly SchoolKitContext _context;
@@ -29,22 +29,44 @@ namespace WebApi.Controllers
         }
 
         [HttpPost]
-        [Route("newTerm")]
+        [Route("startTerm")]
         //authorize for principal
-        public async Task<IActionResult> StartTerm(Term term)
+        public async Task<IActionResult> StartTerm(ReturnTerm returnTerm)
         {
             //confirm that there are fees for a term before starting term
             //or add a method for confirmation
-            var userId = User.Claims.FirstOrDefault(c => c.Type == "UserID").Value;
-            var principal = await _principalManager.FindByIdAsync(userId);
+             var schoolId = 0;
+
+            if (returnTerm.SchoolID != 0)
+            {
+                schoolId = returnTerm.SchoolID;
+            }
+            else
+            {
+                var principalId = User.Claims.FirstOrDefault(c => c.Type == "UserID").Value;
+                var principal = await _principalManager.FindByIdAsync(principalId);
+                schoolId = principal.SchoolID;
+
+            }
+
+            var term = await _context.Terms
+            .Where(x => x.TermID == returnTerm.TermID)
+            .FirstOrDefaultAsync();
 
             if(term.Current || term.Completed){
                 return BadRequest( new {Message = "This Term has already began or has been completed"});
             }
 
-            var terms = _context.Sessions
-            .Where(x => x.SchoolID == principal.SchoolID)
+            var sessions = await _context.Sessions
+            .Where(x => x.SchoolID == schoolId)
             .Include(f => f.Terms)
+            .ToListAsync();
+
+            var currentSession = sessions
+            .Where(x=> x.Current)
+            .FirstOrDefault();
+
+            var terms = sessions
             .SelectMany(t => t.Terms);
 
             var termIDs = terms
@@ -55,7 +77,7 @@ namespace WebApi.Controllers
             var i = termIDs.IndexOf(term.TermID);
 
             var students = _studentManager.Users
-            .Where(x => x.SchoolID == principal.SchoolID && !x.HasGraduated);
+            .Where(x => x.SchoolID == schoolId && !x.HasGraduated);
 
             if(i != 0)
             {
@@ -65,14 +87,18 @@ namespace WebApi.Controllers
                 .Where(c => c.TermID == prevTermID)
                 .FirstOrDefault();
 
-                if(prevTerm.Current)
+                if(terms.Any(x => x.Current))// check if there are any other running terms
                 {
                     return BadRequest( new {Message = "Please end current term before starting a new one"});
                 }
 
+                if(currentSession!=null && !currentSession.Terms.Any(x=> x.TermID == returnTerm.TermID)){
+                     return BadRequest( new {Message = "Please end current Session before starting a term in another"});
+                }
+
                 EMethod eMethod = new EMethod(); 
                  var schoolPackages = _context.SchoolPackages
-                .Where(x => x.SchoolID == principal.SchoolID);
+                .Where(x => x.SchoolID == schoolId);
 
                 if(schoolPackages.Any(x => x.Package == Package.Finance))
                 {
@@ -115,7 +141,7 @@ namespace WebApi.Controllers
                 EMethod eMethod = new EMethod(); 
 
                 var schoolPackages = _context.SchoolPackages
-                .Where(x => x.SchoolID == principal.SchoolID);
+                .Where(x => x.SchoolID == schoolId);
 
                 if(schoolPackages.Any(x => x.Package == Package.Finance))
                 {
@@ -151,19 +177,25 @@ namespace WebApi.Controllers
                 //fMethod.AssignFees(term, principal.SchoolID, _studentManager, _context);
             }
             if(term.Label == TermLabel.FirstTerm){
+
                 term.Current = true;
                 term.Completed = false;
-                var session = term.Session;
+                term.TermStart = DateTime.UtcNow.AddHours(1);
+                var session = await _context.Sessions
+                .Where(x=> x.SessionID == term.SessionID)
+                .FirstOrDefaultAsync();
                 session.Current = true;
                 session.Completed = false;
-                _context.Terms.Update(term);
-                _context.Sessions.Update(session);
+                session.SessionStart = DateTime.UtcNow.AddHours(1);
+                
                 await _context.SaveChangesAsync();
             }
             else{
+                 
                 term.Current = true;
                 term.Completed = false;
-                _context.Terms.Update(term);
+                term.TermStart = DateTime.UtcNow.AddHours(1);
+                
                 await _context.SaveChangesAsync();
             }
            
@@ -174,8 +206,13 @@ namespace WebApi.Controllers
         [HttpPost]
         [Route("endTerm")]
         //authorize for principals
-        public async Task<IActionResult> EndTerm(Term term)//remember to pass the session along
+        public async Task<IActionResult> EndTerm(TermID termID)//remember to pass the session along
         {
+            var term = await _context.Terms
+            .Where(x=> x.TermID == termID.Id)
+            .Include(x => x.Session)
+            .FirstOrDefaultAsync();
+
             if (term.Current){
                 
             /// check to make sure there's an active term
@@ -184,18 +221,18 @@ namespace WebApi.Controllers
                 {
                     term.Current = false;
                     term.Completed = true;
+                    term.TermEnd = DateTime.UtcNow.AddHours(1);
                     var session = term.Session;
                     session.Current = false;
                     session.Completed = true;
-                    _context.Terms.Update(term);
-                    _context.Sessions.Update(session);
+
                     await _context.SaveChangesAsync();
                     return Ok();
                 }
                 else{
                     term.Current = false;
                     term.Completed = true;
-                    _context.Terms.Update(term);
+                    term.TermEnd = DateTime.UtcNow.AddHours(1);
                     await _context.SaveChangesAsync();
                     return Ok();
                 }
@@ -442,5 +479,51 @@ namespace WebApi.Controllers
 
         }
 
+        [HttpPost]
+        [Route("currentSession")]
+        public async Task<IActionResult> CurrentSession([FromBody] SO i)
+        {
+            var schoolId = 0;
+
+            if (i.SchoolID != 0)
+            {
+                schoolId = i.SchoolID;
+            }
+            else
+            {
+                var principalId = User.Claims.FirstOrDefault(c => c.Type == "UserID").Value;
+                var principal = await _principalManager.FindByIdAsync(principalId);
+                schoolId = principal.SchoolID;
+
+            }
+
+            var session = await _context.Sessions
+            .Where(x => x.SchoolID == schoolId && x.Current)
+            .Include(x => x.Terms)
+            .FirstOrDefaultAsync();
+
+            if(session != null){
+                            var terms = session.Terms.ToList();
+
+            for(int j = terms.Count -1; j>= 0; j--){
+                if(!terms[j].Current){
+                    terms.RemoveAt(j); //remove terms that are not current
+                }
+            }
+            session.Terms = terms;
+            }
+            return Ok(session);
+
+        }
+
+        [HttpPost]
+        [Route("delete")]
+        //authorize for principals
+        public async void delete()//remember to pass the session along
+        {
+            var sessions = _context.Sessions.Include(x=> x.Terms).ToList();
+            _context.RemoveRange(sessions);
+            await _context.SaveChangesAsync();
+        }
     }
 }
