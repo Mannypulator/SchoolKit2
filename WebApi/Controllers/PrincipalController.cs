@@ -1,9 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -149,6 +152,7 @@ namespace WebApi.Controllers
 
 
         }
+        
         [HttpDelete]
         [Route("deleteStudent")]
         public async Task<IActionResult> DeleteStudent([FromBody] String studentId)
@@ -920,6 +924,57 @@ namespace WebApi.Controllers
 
 
             return Ok(NewScoreScheme);
+
+        }
+
+        [HttpPost]
+        [Route("uploadLogo")]
+        public async Task<IActionResult> UploadLogo([FromForm] IFormCollection data)
+        {
+             var ID = 0;
+
+           /* if (SchoolID != 0)
+            {
+                ID = SchoolID;
+            }
+            else
+            {
+                var principalId = User.Claims.FirstOrDefault(c => c.Type == "UserID").Value;
+                var principal = await _principalManager.FindByIdAsync(principalId);
+                ID = principal.SchoolID;
+
+            }*/
+
+            var name = data["ID"];
+
+          
+
+            try
+            {
+                var file = Request.Form.Files[0];
+                var folderName = Path.Combine("Resources", "Logos");
+                var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
+
+                if(file.Length > 0){
+                    var fileName = name;
+                    var extension = Path.GetExtension(ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"'));
+                    var fullPath = Path.Combine(pathToSave, name += extension);
+
+                    using(var stream = new FileStream(fullPath, FileMode.Create)){
+                        file.CopyTo(stream);
+                    }
+
+                    return Ok();
+                }
+                else{
+                    return BadRequest();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
 
         }
 

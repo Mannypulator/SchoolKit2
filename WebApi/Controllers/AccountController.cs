@@ -22,14 +22,14 @@ namespace WebApi.Controllers
     public class AccountController : ControllerBase
     {
         private readonly SchoolKitContext _context;
-        private readonly UserManager<Student> _userManager;
+        private readonly UserManager<Student> _studentManager;
         private readonly UserManager<ApplicationUser> _AuserManager;
         private readonly ApplicationSettings _appsettings;
 
-        public AccountController(SchoolKitContext context, UserManager<Student> userManager, UserManager<ApplicationUser> AuserManager, IOptions<ApplicationSettings> appsettings)
+        public AccountController(SchoolKitContext context, UserManager<Student> studentManager, UserManager<ApplicationUser> AuserManager, IOptions<ApplicationSettings> appsettings)
         {
             _context = context;
-            _userManager = userManager;
+            _studentManager = studentManager;
             _AuserManager = AuserManager;
             _appsettings = appsettings.Value;
         }
@@ -38,22 +38,22 @@ namespace WebApi.Controllers
         [Route("studentlogin")]
         public async Task<IActionResult> StudentLogin(LoginModel model)
         {
-            var user = await _userManager.Users.Where(x => x.RegNo == model.UserName)
+            var student = await _studentManager.Users.Where(x => x.RegNo == model.UserName)
             .FirstOrDefaultAsync();
-            if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
+            if (student != null && await _studentManager.CheckPasswordAsync(student, model.Password))
             {
-               /* if (!user.IsActivated)
+               /* if (!student.IsActivated)
                 {
                     return Unauthorized(new { message = _appsettings.notActivated });
                 }*/
-                var roles = await _userManager.GetRolesAsync(user);
+                var roles = await _studentManager.GetRolesAsync(student);
                 var role = roles.FirstOrDefault();
                 var tokendescriptor = new SecurityTokenDescriptor
                 {
                     Subject = new ClaimsIdentity(new Claim[]
                     {
-                       new Claim("UserID", user.Id.ToString()),
-                       new Claim("Role", role.ToString())
+                       new Claim("UserID", student.Id.ToString()),
+                       new Claim(ClaimTypes.Role, role.ToString())
                     }),
                     Expires = DateTime.Now.AddHours(1),
                     SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_appsettings.JWT_Secret)), SecurityAlgorithms.HmacSha256Signature)
@@ -74,8 +74,8 @@ namespace WebApi.Controllers
             var Auser = await _AuserManager.FindByEmailAsync(model.UserName);
             if (Auser != null && await _AuserManager.CheckPasswordAsync(Auser, model.Password))
             {
-                var studentcheck = await _userManager.FindByIdAsync(Auser.Id);
-                if (studentcheck != null)
+                //var usercheck = await _userManager.FindByIdAsync(Auser.Id);
+                if (Auser == null)
                 {
 
                     return BadRequest(new { message = _appsettings.failedlogin });

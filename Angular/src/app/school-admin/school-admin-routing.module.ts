@@ -6,10 +6,12 @@ import { AddSchoolsComponent } from './add-school/add-schools.component';
 import { AddStudentComponent } from './add-student/add-student.component';
 import { AddTeacherComponent } from './add-teacher/add-teacher.component';
 import { PrincipalDashboardComponent } from './principal-dashboard/principal-dashboard.component';
+import { ResultViewComponent } from './result-view/result-view.component';
 import { SchoolAdminComponent } from './school-admin/school-admin.component';
 import { SchoolSelectionComponent } from './school-selection/school-selection.component';
 import { SessionComponent } from './session/session.component';
 import { SettingsComponent } from './settings/settings.component';
+import { StudentResultsComponent } from './student-results/student-results.component';
 import { StudentsComponent } from './students/students.component';
 import { TeachersComponent } from './teachers/teachers.component';
 
@@ -38,6 +40,12 @@ const routes: Routes = [
       },
       {
         path: 'sessions', component: SessionComponent,
+      },
+      {
+        path: 'student-results', component: StudentResultsComponent,
+      },
+      {
+        path: 'result-view/:id', component: ResultViewComponent,
       },
       {
         path: '', redirectTo: 'principal-dashboard', pathMatch: 'full'

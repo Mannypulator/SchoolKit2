@@ -1,5 +1,5 @@
 import { formatDate } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpEventType } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -77,9 +77,13 @@ export class SchoolAdminService {
     return this.http.post<any[]>(this.baseUrl + '/api/principal/AddTeacher', teacher).toPromise();
   }
 
+  getRStudent() {
+    return this.http.post<any[]>(this.baseUrl + '/api/term/getStudents', this.schoolNo).toPromise();
+  }
   getStudent() {
     return this.http.post<any[]>(this.baseUrl + '/api/principal/getStudents', this.schoolNo).toPromise();
   }
+  
 
   getTeachers() {
     return this.http.post<any[]>(this.baseUrl + '/api/principal/getTeachers', this.schoolNo).toPromise();
@@ -111,6 +115,16 @@ export class SchoolAdminService {
     sNc.schoolID = this.schoolNo.schoolID;
 
     return this.http.post<any[]>(this.baseUrl + '/api/principal/filterStudents', sNc).toPromise();
+  }
+
+  filterRStudent(CAI: number) {
+    var sNc: any = {
+      schoolID: 0,
+      ClassArmID: CAI
+    };
+    sNc.schoolID = this.schoolNo.schoolID;
+
+    return this.http.post<any[]>(this.baseUrl + '/api/term/filterStudents', sNc).toPromise();
   }
 
   findStudent(SQ: string) {
@@ -208,6 +222,13 @@ export class SchoolAdminService {
     return this.http.post<any[]>(this.baseUrl + '/api/term/endTerm', id).toPromise();
   }
 
+  compileResult(Id: number){
+    var id: any = {
+      Id: Id
+    };
+    return this.http.post<any[]>(this.baseUrl + '/api/term/compileResult', id).toPromise();
+  }
+
   saveTestScheme(TestScheme: any){
     TestScheme.SchoolID = this.schoolNo.schoolID;
     return this.http.post<any>(this.baseUrl + '/api/principal/saveTestScheme', TestScheme).toPromise()
@@ -221,5 +242,18 @@ export class SchoolAdminService {
   getScoreScheme(){
     console.log(this.schoolNo.schoolID);
     return this.http.get<any>(this.baseUrl + '/api/principal/getScoreScheme/?SchoolID=' + this.schoolNo.schoolID).toPromise()
+  }
+
+  UploadFile(file:any){
+    if(file.length == 0){
+      return;
+    }
+    var id = (this.schoolNo.schoolID).toString();
+    let fileToUpload = <File>file[0];
+    const formData = new FormData();
+    formData.append('file', fileToUpload,fileToUpload.name);
+    formData.append('ID',id);
+
+    return this.http.post<any>(this.baseUrl + '/api/principal/uploadlogo', formData, {reportProgress: true, observe: 'events'})
   }
 }

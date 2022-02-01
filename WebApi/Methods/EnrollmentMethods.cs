@@ -30,12 +30,6 @@ namespace WebApi.Methods
                     .Select(j => j.SubjectID)
                     .ToList();
                     
-                    var Asub = _context.Subjects
-                    .Where(x => x.Range == ClassRange.All)
-                    .Select(j => j.SubjectID)
-                    .ToList();
-
-                    sub.AddRange(Asub);
                     foreach(var subId in sub)
                     {
                        var classSubject = _context.ClassSubjects
@@ -102,12 +96,7 @@ namespace WebApi.Methods
                         .Select(j => j.SubjectID)
                         .ToList();
                     
-                        var Asub = _context.Subjects
-                        .Where(x => x.Range == ClassRange.All)
-                        .Select(j => j.SubjectID)
-                        .ToList();
-
-                        sub.AddRange(Asub);
+                    
                         foreach(var subId in sub)
                         {
                            var classSubject = _context.ClassSubjects
@@ -129,7 +118,12 @@ namespace WebApi.Methods
                         var prevEnrollments = _context.Enrollments
                         .Where(x => x.StudentID == model.Id && x.TermID == prevTerm.TermID);
 
-                        foreach(var prevEnrollment in prevEnrollments)
+                        var sub = _context.SSCompulsories
+                        .Where(c => c.SchoolID == model.SchoolID)
+                        .Select(j => j.SubjectID)
+                        .ToList();
+
+                        foreach(var prevEnrollment in prevEnrollments)//loop through and repeat previous enrollments for the new term
                         {
                             var enrollment = new Enrollment{
                                 StudentID = model.Id,
@@ -137,6 +131,22 @@ namespace WebApi.Methods
                                 TermID = term.TermID
                             };
                             if(await CheckEnrollment(enrollment.StudentID,enrollment.TermID,enrollment.ClassSubjectID,_context)){
+                           await _context.Enrollments.AddAsync(enrollment);
+                       }
+                        }
+
+                        foreach(var subId in sub)//add compulsory subjects if not added yet
+                        {
+                           var classSubject = _context.ClassSubjects
+                           .Where(x => x.ClassArmID == model.ClassArmID && x.SubjectID == subId)
+                           .FirstOrDefault();
+                       
+                           var enrollment = new Enrollment{
+                           StudentID = model.Id,
+                           ClassSubjectID = classSubject.ClassSubjectID,
+                           TermID = term.TermID              
+                           };
+                           if(await CheckEnrollment(enrollment.StudentID,enrollment.TermID,enrollment.ClassSubjectID,_context)){
                            await _context.Enrollments.AddAsync(enrollment);
                        }
                         }

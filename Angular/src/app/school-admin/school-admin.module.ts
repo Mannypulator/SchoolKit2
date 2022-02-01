@@ -5,8 +5,6 @@ import { SchoolAdminRoutingModule } from './school-admin-routing.module';
 import { PrincipalDashboardComponent } from './principal-dashboard/principal-dashboard.component';
 import { AddTeacherComponent } from './add-teacher/add-teacher.component';
 import { AddStudentComponent } from './add-student/add-student.component';
-import { RemoveTeacherComponent } from './remove-teacher/remove-teacher.component';
-import { RemoveStudentComponent } from './remove-student/remove-student.component';
 import { SchoolAdminComponent } from './school-admin/school-admin.component';
 import { SharedModuleModule } from '../shared/shared-module/shared-module.module';
 import { AddSchoolsComponent } from './add-school/add-schools.component';
@@ -23,10 +21,13 @@ import { EditStudentComponent } from './edit-student/edit-student.component';
 import { SettingsComponent } from './settings/settings.component';
 import { SessionComponent } from './session/session.component';
 import { AddSessionsComponent } from './add-sessions/add-sessions.component';
+import { StudentResultsComponent } from './student-results/student-results.component';
+import { ClassSelectionComponent } from './class-selection/class-selection.component';
+import { ResultViewComponent } from './result-view/result-view.component';
 
 
 @NgModule({
-  declarations: [PrincipalDashboardComponent, AddTeacherComponent, AddStudentComponent, RemoveTeacherComponent, RemoveStudentComponent, SchoolAdminComponent, AddSchoolsComponent, PrincipalSidenavListComponent, TeachersComponent, StudentsComponent, SchoolSelectionComponent, SchoolsComponent, SchoolAdministrationComponent, AddPrincipalComponent, AssignSubjectComponent, EditStudentComponent, SettingsComponent, SessionComponent, AddSessionsComponent],
+  declarations: [PrincipalDashboardComponent, AddTeacherComponent, AddStudentComponent, SchoolAdminComponent, AddSchoolsComponent, PrincipalSidenavListComponent, TeachersComponent, StudentsComponent, SchoolSelectionComponent, SchoolsComponent, SchoolAdministrationComponent, AddPrincipalComponent, AssignSubjectComponent, EditStudentComponent, SettingsComponent, SessionComponent, AddSessionsComponent, StudentResultsComponent, ClassSelectionComponent, ResultViewComponent], 
   imports: [
     CommonModule,
     SchoolAdminRoutingModule,
@@ -36,3 +37,4 @@ import { AddSessionsComponent } from './add-sessions/add-sessions.component';
   ],
 })
 export class SchoolAdminModule { }
+ 

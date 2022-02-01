@@ -1,0 +1,39 @@
+<ngx-alerts></ngx-alerts>
+<class-selection (filter)="filter($event.classArmID)"></class-selection>
+<mat-divider></mat-divider>
+
+<div fxLayout="row" fxLayoutAlign="center none" class="mt" >
+    <mat-card fxFlex="85%" fxLayout="column" fxLayoutAlign="space-between none">
+        <div>
+                <div fxFlex fxLayout="row wrap" fxLayoutAlign="space-between center">
+                    <div fxFlex.sm="80" >
+                        <mat-form-field >
+                            <mat-label>Search</mat-label>
+                            <input matInput placeholder="search" name="search" [(ngModel)] = "studentSearch" >
+                        </mat-form-field>
+    
+                        <button mat-button (click)="findStudent()" style="margin-left:5px ;">
+                            <mat-icon>search</mat-icon>
+                        </button> 
+                    </div>
+
+                </div>
+        
+        </div>
+        <span><mat-divider></mat-divider></span>
+
+        <div class="mt">
+            <mat-card-content>
+                <mat-list>
+                    <mat-list-item *ngFor="let student of students">
+                        {{student.LastName }} {{student.FirstName}}
+                        <button mat-button style="margin-left: auto;margin-top: 11px;" routerLink="/school-admin/result-view/{{student.Id}}">view 
+                            <mat-icon class="mat-24">visibility</mat-icon>
+                        </button>
+                    </mat-list-item>
+                </mat-list>
+            </mat-card-content>
+
+        </div>
+    </mat-card>
+</div>

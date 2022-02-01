@@ -1,0 +1,5 @@
+<mat-card class="card" fxLayout="row wrap" fxLayoutAlign="space-around none">
+    <button mat-raised-button style = "margin:2px" *ngFor="let clas of classes" (click)="onFilter(clas.ClassArmID)" [class.current]="clas.ClassArmID === current">
+    <span style="text-align:center">{{clas.Name}} {{clas.Arm}}</span>
+    </button>
+</mat-card>

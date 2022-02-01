@@ -1,3 +1,4 @@
+import { HttpEventType } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { MediaChange, MediaObserver } from '@angular/flex-layout';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
@@ -22,6 +23,9 @@ export class SettingsComponent implements OnInit {
   mediaSub!: Subscription;
   alias!: string;
   dialogWidth = "40%";
+
+  message!: string;
+  progress!: number;
 
   session!: any;
   term = TermLabel;
@@ -106,7 +110,7 @@ export class SettingsComponent implements OnInit {
     }
     this.admin.getCurrentSession().subscribe(res=>{
       this.session = res;
-      console.log(res);
+      
     },
     err=> console.log(err));
     
@@ -116,8 +120,12 @@ export class SettingsComponent implements OnInit {
     this.admin.endTerm(Id).then(res=>{
       this.alert.success("Operation Succesful?");
       this.getCurrentSession();
+      console.log(res);
     },
     err=>{
+      if(err.error){
+        this.alert.danger(err.error.Message)
+      }
       this.alert.danger("Operation failed");
       console.log(err);
     } )
@@ -174,4 +182,38 @@ export class SettingsComponent implements OnInit {
       console.log(err);
     });
   }
+
+  uploadFile(file: any){
+    if (this.auth.isProprietor()) {
+      const s = localStorage.getItem('selectedSchool');
+      if (s !== null) {
+        this.admin.schoolNo.schoolID = parseInt(s)
+      }
+    }
+   this.admin.UploadFile(file)?.subscribe(event => {
+    if(event.type === HttpEventType.UploadProgress){
+      this.progress = Math.round(100 * event.loaded / event.total!);
+    }
+    else if(event.type === HttpEventType.Response){
+      this.message = 'Upload success.';
+    }
+  });
+  }
+
+  compileResult(Id: number){
+    this.alert.info("Please wait");
+    this.admin.compileResult(Id).then(res=>{
+      this.alert.success("Operation Succesful?");
+      this.getCurrentSession();
+      console.log(res);
+    },
+    err=>{
+      if(err.error){
+        this.alert.danger(err.error.Message)
+      }
+      this.alert.danger("Operation failed");
+      console.log(err);
+    } )
+  }
+
 }

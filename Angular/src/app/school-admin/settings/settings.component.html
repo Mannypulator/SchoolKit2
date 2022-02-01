@@ -48,6 +48,8 @@
     
             <mat-card-actions>
                 <button mat-raised-button (click) = "endTerm(session.Terms[0].TermID)" *ngIf="session.Terms.length > 0">End Term</button>
+           
+                <button mat-raised-button (click) = "compileResult(session.Terms[0].TermID)" *ngIf="session.Terms.length > 0">Compile Results</button>
             </mat-card-actions>
         </div>
         <span style="text-align: center;height: 120px;padding-top: 3%;" *ngIf="!session">There is no current Session</span>
@@ -318,10 +320,17 @@
 
                 </mat-form-field>
 
-                <div fxFlex="40">
-                    <h1>School logo</h1>
-                    <img mat-card-sm-image src="https://material.angular.io/assets/img/examples/shiba2.jpg">
+                <div fxFlex="100">
+                    <span>School Logo</span>
+                   <!-- <img mat-card-sm-image src="https://material.angular.io/assets/img/examples/shiba2.jpg"> -->
+                   <input mat-input type="file" #file placeholder="choose file" (change)="uploadFile(file.files)" style = "display: none;"> 
+                   <button mat-raised-button type="button" (click)="file.click()" style="margin-left: 1%;">Upload file</button>
+
+                   <span class="upload" *ngIf="progress > 0">
+                       {{progress}}%
+                   </span>
                 </div>
+                
 
             </div>
             <mat-card-actions>

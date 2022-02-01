@@ -21,7 +21,7 @@ import { EditStudentComponent } from '../edit-student/edit-student.component';
 })
 export class StudentsComponent implements OnInit {
 
-  classes: ClassArm[] = [];
+ 
   students: any[] = [];
   Gender = Gender;
 
@@ -34,7 +34,7 @@ export class StudentsComponent implements OnInit {
 
   ngOnInit(): void {
     this.titleService.setTitle("Students");
-    this. getClasses();
+    
     this.getStudents();
   }
 
@@ -53,20 +53,7 @@ export class StudentsComponent implements OnInit {
     })
   }
 
-  getClasses() {
-    if (this.auth.isProprietor()) {
-      const s = localStorage.getItem('selectedSchool');
-      if (s !== null) {
-        this.admin.schoolNo.schoolID = parseInt(s)
-      }
-    }
-    this.admin.getClasses().then((res)=>{
-      this.classes = res as unknown as ClassArm[]
-    },
-      (err)=>{
-        console.log(err)
-      })
-  }
+ 
 
   openDialog(){
     const dialogConfig = new MatDialogConfig();

@@ -11,6 +11,7 @@ namespace WebApi.Models
            Students = new HashSet<Student>();
            ClassSubjects = new HashSet<ClassSubject>();
            ResultRecords = new HashSet<ResultRecord>();
+           TeacherClasses = new HashSet<TeacherClass>();
         }
         
         [Key]
@@ -23,5 +24,6 @@ namespace WebApi.Models
         public ICollection<Student> Students { get; set; }
         public ICollection<ClassSubject> ClassSubjects { get; set; }
         public ICollection<ResultRecord> ResultRecords { get; set; }
+        public ICollection<TeacherClass> TeacherClasses { get; set; }
     }
 }

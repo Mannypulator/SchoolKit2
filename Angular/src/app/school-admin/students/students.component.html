@@ -1,9 +1,5 @@
 <ngx-alerts></ngx-alerts>
-<mat-card class="card" fxLayout="row wrap" fxLayoutAlign="space-around none">
-<button mat-raised-button style = "margin:2px" *ngFor="let clas of classes" (click)="filter(clas.ClassArmID)" >
-<span style="text-align:center">{{clas.Name}} {{clas.Arm}}</span>
-</button>
-</mat-card>
+<class-selection (filter)="filter($event.classArmID)"></class-selection>
 <mat-divider></mat-divider>
 
 <div fxLayout="row" fxLayoutAlign="center none" class="mt" >
