@@ -45,7 +45,7 @@ export class StudentResultsComponent implements OnInit {
         this.admin.schoolNo.schoolID = parseInt(s)
       }
     }
-    this.admin.getStudent().then((res)=>{
+    this.admin.getRStudent().then((res)=>{
       this.students = res;
     },
     (err)=>{
@@ -60,7 +60,7 @@ export class StudentResultsComponent implements OnInit {
         this.admin.schoolNo.schoolID = parseInt(s)
       }
     }
-    this.admin.filterStudent(CAI).then((res)=>{
+    this.admin.filterRStudent(CAI).then((res)=>{
       this.students = res;
     },
     (err)=>{

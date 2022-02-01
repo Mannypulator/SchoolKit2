@@ -252,6 +252,11 @@ namespace WebApi.Controllers
             .Include(x => x.Session)
             .FirstOrDefaultAsync();
 
+            if (ResultRecordExits(term))
+            {
+                return BadRequest(new { Message = "Result already compiled for this term" });
+            }
+
             if (term.Current)
             {
 
@@ -263,6 +268,15 @@ namespace WebApi.Controllers
             {
                 return BadRequest(new { Message = "Result for this term cannot be compiled" });
             }
+        }
+
+        public bool ResultRecordExits(Term term)
+        {
+            var record = _context.ResultRecords
+            .Where(x => x.TermID == term.TermID)
+            .FirstOrDefault();
+
+            return record == null ? false : true;
         }
 
         [HttpPost]
@@ -578,50 +592,56 @@ namespace WebApi.Controllers
         [Route("getStudents")]
         public async Task<IActionResult> GetStudents([FromBody] ClassId i)
         {
-            try
+            //  try
+            // {
+            var id = 0;
+
+            if (i.schoolID != 0)
             {
-                var id = 0;
+                id = i.schoolID;
+            }
+            else
+            {
+                var principalId = User.Claims.FirstOrDefault(c => c.Type == "UserID").Value;
+                var principal = await _principalManager.FindByIdAsync(principalId);
+                id = principal.SchoolID;
 
-                if (i.schoolID != 0)
-                {
-                    id = i.schoolID;
-                }
-                else
-                {
-                    var principalId = User.Claims.FirstOrDefault(c => c.Type == "UserID").Value;
-                    var principal = await _principalManager.FindByIdAsync(principalId);
-                    id = principal.SchoolID;
+            }
 
-                }
+            var currentTerm = await _context.Sessions
+            .Where(x => x.SchoolID == id && x.Current)
+            .Include(x => x.Terms)
+            .SelectMany(x => x.Terms)
+            .Where(x => x.Current)
+            .SingleOrDefaultAsync();
 
-                var currentTerm = await _context.Sessions
-                .Where(x => x.SchoolID == id && x.Current == true)
-                .Include( x => x.Terms)
-                .SelectMany(x => x.Terms)
-                .Where(x=> x.Current == true)
-                .SingleOrDefaultAsync();
-
+            if (currentTerm != null)
+            {
                 var students = _context.ResultRecords
-                .Where(x=> x.TermID == currentTerm.TermID)
-                .Include(x=> x.Results)
-                .ThenInclude(x=> x.Student)
-                .SelectMany(x=> x.Results)
-               
-              .Select(x => new ReturnStudent
-              {
-                  Id = x.Student.Id,
-                  FirstName = x.Student.FirstName,
-                  LastName = x.Student.LastName,
-              })
-              .ToHashSet();
+            .Where(x => x.TermID == currentTerm.TermID)
+            .Include(x => x.Results)
+            .ThenInclude(x => x.Student)
+            .SelectMany(x => x.Results)
+            .Where(x => x.PrincipalComment == "")
+          .Select(x => new ReturnStudent
+          {
+              Id = x.Student.Id,
+              FirstName = x.Student.FirstName,
+              LastName = x.Student.LastName,
+          })
+          .ToHashSet();
 
                 return Ok(students);
+            }
 
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            return Ok();
+
+
+            // }
+            // catch (Exception ex)
+            // {
+            //     throw ex;
+            // }
 
 
         }
@@ -646,27 +666,33 @@ namespace WebApi.Controllers
 
                 }
 
-               var currentTerm = await _context.Sessions
-                .Where(x => x.SchoolID == id && x.Current == true)
-                .Include( x => x.Terms)
-                .SelectMany(x => x.Terms)
-                .Where(x=> x.Current == true)
-                .SingleOrDefaultAsync();
+                var currentTerm = await _context.Sessions
+                 .Where(x => x.SchoolID == id && x.Current == true)
+                 .Include(x => x.Terms)
+                 .SelectMany(x => x.Terms)
+                 .Where(x => x.Current == true)
+                 .SingleOrDefaultAsync();
 
-                var students = _context.ResultRecords
-                .Where(x=> x.TermID == currentTerm.TermID && x.ClassArmID == i.ClassArmID)
-                .Include(x=> x.Results)
-                .ThenInclude(x=> x.Student)
-                .SelectMany(x=> x.Results)
+                if (currentTerm != null)
+                {
+                    var students = _context.ResultRecords
+                .Where(x => x.TermID == currentTerm.TermID && x.ClassArmID == i.ClassArmID)
+                .Include(x => x.Results)
+                .ThenInclude(x => x.Student)
+                .SelectMany(x => x.Results)
+                .Where(x => x.PrincipalComment == "")
               .Select(x => new ReturnStudent
-             {
+              {
                   Id = x.Student.Id,
                   FirstName = x.Student.FirstName,
                   LastName = x.Student.LastName,
               })
               .ToHashSet();
 
-               return Ok(students);
+                    return Ok(students);
+                }
+
+                return Ok();
 
             }
             catch (Exception ex)

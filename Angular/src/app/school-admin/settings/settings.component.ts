@@ -203,7 +203,7 @@ export class SettingsComponent implements OnInit {
   compileResult(Id: number){
     this.alert.info("Please wait");
     this.admin.compileResult(Id).then(res=>{
-      this.alert.success("Operation Succesful?");
+      this.alert.success("Operation Succesful");
       this.getCurrentSession();
       console.log(res);
     },
@@ -211,7 +211,9 @@ export class SettingsComponent implements OnInit {
       if(err.error){
         this.alert.danger(err.error.Message)
       }
-      this.alert.danger("Operation failed");
+      else{
+        this.alert.danger("Operation failed");
+      }
       console.log(err);
     } )
   }

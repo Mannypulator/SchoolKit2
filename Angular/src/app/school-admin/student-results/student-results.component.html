@@ -5,20 +5,10 @@
 <div fxLayout="row" fxLayoutAlign="center none" class="mt" >
     <mat-card fxFlex="85%" fxLayout="column" fxLayoutAlign="space-between none">
         <div>
-                <div fxFlex fxLayout="row wrap" fxLayoutAlign="space-between center">
-                    <div fxFlex.sm="80" >
-                        <mat-form-field >
-                            <mat-label>Search</mat-label>
-                            <input matInput placeholder="search" name="search" [(ngModel)] = "studentSearch" >
-                        </mat-form-field>
-    
-                        <button mat-button (click)="findStudent()" style="margin-left:5px ;">
-                            <mat-icon>search</mat-icon>
-                        </button> 
-                    </div>
-
-                </div>
-        
+                
+                    Approve Results For Current Term
+                    <mat-card-subtitle>Only results awaiting approval will be shown here</mat-card-subtitle>
+               
         </div>
         <span><mat-divider></mat-divider></span>
 

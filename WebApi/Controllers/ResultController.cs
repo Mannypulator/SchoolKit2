@@ -239,46 +239,7 @@ namespace WebApi.Controllers
 
         }
 
-        [HttpPost]
-        [Route("AvailableResults")]
-        //authorise for students
-        public async Task<IActionResult> AvailableResults(int id)
-        {
-            var schoolID = 0;
-
-            if (id != 0)
-            {
-                schoolID = id;
-            }
-            else
-            {
-                var principalId = User.Claims.FirstOrDefault(c => c.Type == "UserID").Value;
-                var principal = await _principalManager.FindByIdAsync(principalId);
-                schoolID = principal.SchoolID;
-
-            }
-
-            var term = await _context.Sessions
-            .Where(i => i.SchoolID == schoolID && i.Current)
-            .Include(t => t.Terms)
-            .SelectMany(r => r.Terms)
-            .Where(x => x.Current)
-            .SingleOrDefaultAsync();
-
-            var studentNames = await _context.ResultRecords
-            .Where(x => x.TermID == term.TermID)
-            .Include(x=> x.Results)
-            .ThenInclude(x=> x.Student)
-            .SelectMany(x=> x.Results)
-            .Select(x=> new Student{
-                FirstName = x.Student.FirstName,
-                LastName = x.Student.LastName
-            }).ToListAsync();
-
-            return Ok(studentNames);
-        }
-
-
+        
 
     }
 }
