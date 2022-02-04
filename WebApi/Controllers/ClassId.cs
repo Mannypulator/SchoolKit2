@@ -36,6 +36,11 @@ public class SO {
     public int SchoolID { get; set; }
 }
 
+public class CommentUpdateModel{
+    public string PComment { get; set; }
+    public int ResultID { get; set; }
+}
+
 
 
     

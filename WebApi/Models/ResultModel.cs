@@ -12,13 +12,16 @@ namespace WebApi.Models
          AnnualEnrollments = new List<AnnualEnrollmentModel>();
         }
         public string SessionName { get; set; }
+        public int ResultID { get; set; }
         public string TermName { get; set; }
         public string ClassName { get; set; }
+        public int ClassCount { get; set; }
         public string ResultType { get; set; }
         public double ClassAverage { get; set; }
         public int ClassPosition { get; set; }
         public int Total { get; set; }
-        public double Average { get; set; }        
+        public double Average { get; set; }   
+        public string StudentName { get; set; }     
         public List<EnrollmentModel> Enrollments { get; set; }
         public List<AnnualEnrollmentModel> AnnualEnrollments { get; set; }
 

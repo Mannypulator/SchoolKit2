@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { AlertService } from 'ngx-alerts';
+import { AuthService } from 'src/app/resources/auth.service';
+import { SchoolAdminService } from '../Services/school-admin.service';
 
 export interface PeriodicElement {
   name: string;
@@ -28,9 +31,14 @@ const ELEMENT_DATA: PeriodicElement[] = [
 })
 export class ResultViewComponent implements OnInit {
 
-  constructor(private _Activatedroute: ActivatedRoute) { }
-  displayedColumns: string[] = ['position', 'name','symbol','weight','weight']; 
-  dataSource = ELEMENT_DATA;
+  constructor(private _Activatedroute: ActivatedRoute, private admin: SchoolAdminService, private auth: AuthService, private alert: AlertService, private router: Router) { }
+  displayedColumns: string[] = ['subject', 'CA', 'Exam','Total','grade' ]; 
+  dataSource:any = [];
+
+  termlyResult:any = [];
+  annualResult:any = [];
+
+  PComment = "";
 
   ngOnInit(): void {
     this._Activatedroute.paramMap.subscribe(params => {
@@ -41,7 +49,41 @@ export class ResultViewComponent implements OnInit {
   }
 
   getResult(Id: string){
+    if(Id !== ""){
+      if (this.auth.isProprietor()) {
+        const s = localStorage.getItem('selectedSchool');
+        if (s !== null) {
+          this.admin.schoolNo.schoolID = parseInt(s)
+        }
+      }
+      this.admin.getStudentResult(Id).then(res=>{
+        this.termlyResult = res[0];
+        this.annualResult = res[1];
+        this.dataSource = res[0].Enrollments;
+        console.log(res);
+      },
+      err=>{
+        console.log(err)
+      })
+    }
+  }
 
+  submitComment(){
+    
+    if(this.PComment === ""){
+      this.alert.danger('Principal\'s comment is required');
+      return;
+    }
+    let obj = {
+      PComment: this.PComment,
+      ResultID: this.termlyResult.ResultID
+    }
+    this.admin.submitComment(obj).then(res=>
+      {
+        this.alert.success("Submitted Successfully");
+        setTimeout(() =>{this.router.navigateByUrl("school-admin/student-results")},1000)
+        
+      })
   }
 
 }

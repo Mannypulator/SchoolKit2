@@ -212,7 +212,7 @@ namespace WebApi.Controllers
             {
 
                 /// check to make sure there's an active term
-                ResultMethods.CompileResults(term.Session.SchoolID, _context, _studentManager, term);
+                ///ResultMethods.CompileResults(term.Session.SchoolID, _context, _studentManager, term);
                 if (term.Label == TermLabel.ThirdTerm)
                 {
                     term.Current = false;
@@ -622,14 +622,17 @@ namespace WebApi.Controllers
             .Include(x => x.Results)
             .ThenInclude(x => x.Student)
             .SelectMany(x => x.Results)
-            .Where(x => x.PrincipalComment == "")
-          .Select(x => new ReturnStudent
-          {
-              Id = x.Student.Id,
-              FirstName = x.Student.FirstName,
-              LastName = x.Student.LastName,
-          })
-          .ToHashSet();
+            .Where(x => x.PrincipalComment == null)
+            .Select(x=>x.Student)
+            .ToHashSet()
+            
+            .Select(x => new ReturnStudent
+            {
+              Id = x.Id,
+              FirstName = x.FirstName,
+              LastName = x.LastName,
+
+             });
 
                 return Ok(students);
             }
@@ -680,14 +683,17 @@ namespace WebApi.Controllers
                 .Include(x => x.Results)
                 .ThenInclude(x => x.Student)
                 .SelectMany(x => x.Results)
-                .Where(x => x.PrincipalComment == "")
-              .Select(x => new ReturnStudent
-              {
-                  Id = x.Student.Id,
-                  FirstName = x.Student.FirstName,
-                  LastName = x.Student.LastName,
-              })
-              .ToHashSet();
+                .Where(x => x.PrincipalComment == null)
+                .Select(x=>x.Student)
+                .ToHashSet()
+                .Select(x => new ReturnStudent
+                {
+                    Id = x.Id,
+                    FirstName = x.FirstName,
+                    LastName = x.LastName,
+
+                });
+               
 
                     return Ok(students);
                 }

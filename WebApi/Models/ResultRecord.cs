@@ -23,6 +23,7 @@ namespace WebApi.Models
 
         [ForeignKey("TermID")]
         public Term Term { get; set; }
+        public int ClassCount { get; set; }
 
         public ICollection<Result> Results { get; set; }
     }

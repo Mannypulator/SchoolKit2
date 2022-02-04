@@ -1,6 +1,8 @@
+<ngx-alerts></ngx-alerts>
 <div fxLayout="row wrap" fxLayoutAlign="center none">
     <mat-card class ="lw mt">
-        Comment on Okpala Daniel's Termly Result
+       {{termlyResult.SessionName}}
+       <mat-card-subtitle>{{termlyResult.ClassName}} {{termlyResult.TermName}} result for {{termlyResult.StudentName}}</mat-card-subtitle>
     </mat-card>
 
     <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 lw mt">
@@ -9,104 +11,89 @@
               The actual rendered columns are set as a property on the row definition" -->
       
         <!-- Position Column -->
-        <ng-container matColumnDef="position">
-            <th mat-header-cell *matHeaderCellDef [ngStyle]="{'display': 'none'}"> No. </th>
-            <td mat-cell *matCellDef="let element"> {{element.position}} </td>
+        <ng-container matColumnDef="subject">
+            <th mat-header-cell *matHeaderCellDef [ngStyle]="{'display': 'none'}"> subject </th>
+            <td mat-cell *matCellDef="let element"> {{element.SubjectName}} </td>
           </ng-container>
         
-          <ng-container matColumnDef="No">
-            <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2">No</th>
+          <ng-container matColumnDef="Subject">
+            <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2">Subject</th>
           </ng-container>
       
         <!-- Name Column -->
-        <ng-container matColumnDef="name">
-          <th mat-header-cell *matHeaderCellDef> Name </th>
-          <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+        <ng-container matColumnDef="CA">
+          <th mat-header-cell *matHeaderCellDef> CA </th>
+          <td mat-cell *matCellDef="let element"> {{element.CA}} </td>
         </ng-container>
       
         <!-- Weight Column -->
-        <ng-container matColumnDef="weight">
-          <th mat-header-cell *matHeaderCellDef> Weight </th>
-          <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+        <ng-container matColumnDef="Exam">
+          <th mat-header-cell *matHeaderCellDef> Exam </th>
+          <td mat-cell *matCellDef="let element"> {{element.Exam}} </td>
         </ng-container>
 
-        <ng-container matColumnDef="weight">
-            <th mat-header-cell *matHeaderCellDef> Weight </th>
-            <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+        <ng-container matColumnDef="Total">
+            <th mat-header-cell *matHeaderCellDef> Total </th>
+            <td mat-cell *matCellDef="let element"> {{element.Total}} </td>
           </ng-container>
       
         <!-- Symbol Column -->
-        <ng-container matColumnDef="symbol" rowspan="2">
-          <th mat-header-cell *matHeaderCellDef [ngStyle]="{'display': 'none'}"> Symbol </th>
-          <td mat-cell *matCellDef="let element"> {{element.symbol}} </td>
+        <ng-container matColumnDef="grade" rowspan="2">
+          <th mat-header-cell *matHeaderCellDef [ngStyle]="{'display': 'none'}"> grade </th>
+          <td mat-cell *matCellDef="let element"> {{element.Grade}} </td>
         </ng-container>
 
-        <ng-container matColumnDef="Sign">
-            <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2">Symb</th>
+        <ng-container matColumnDef="Grade">
+            <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2">Grade</th>
           </ng-container>
 
-        <ng-container matColumnDef="Cont.Ass">
-            <th mat-header-cell *matHeaderCellDef colspan="3"> CONTINUOUS ASSESSMENT </th>
+        <ng-container matColumnDef="Scores">
+            <th mat-header-cell *matHeaderCellDef colspan="3"> Scores </th>
           </ng-container>
-      
-        <tr mat-header-row *matHeaderRowDef="['No', 'Cont.Ass', 'Sign']"></tr>
+
+          <ng-container matColumnDef="CP">
+            <td mat-footer-cell *matFooterCellDef>
+              <span>Student Position: {{termlyResult.ClassPosition}}</span>
+             
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="Average">
+            <td mat-footer-cell *matFooterCellDef>
+              <span>Student's Average: {{termlyResult.Average}}</span>
+            </td>
+          </ng-container>
+          
+          <ng-container matColumnDef="GTotal">
+            <td mat-footer-cell *matFooterCellDef>
+              <span>Student's Total: {{termlyResult.Total}}</span>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="ClassAverage">
+            <td mat-footer-cell *matFooterCellDef>
+              <span>Class Average: {{termlyResult.ClassAverage}}</span>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="ClassCount">
+            <td mat-footer-cell *matFooterCellDef>
+              <span>No in Class: {{termlyResult.ClassCount}}</span>
+            </td>
+          </ng-container>
+     
+        <tr mat-header-row *matHeaderRowDef="['Subject', 'Scores', 'Grade']"></tr>
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        <tr mat-footer-row *matFooterRowDef="['CP', 'Average', 'GTotal', 'ClassAverage','ClassCount']" class="example-second-footer-row"></tr>
       </table>
       <mat-card class ="lw mt">
-        Comment on Okpala Daniel's Termly Result
+        <mat-form-field fxFlex="75">
+          <mat-label>Principal's Comment</mat-label>
+          <input matInput name="PComment" required [(ngModel)] = "PComment">
+      </mat-form-field>
+      <mat-card-actions class="ml"><button mat-raised-button (click)="submitComment()">Approve</button></mat-card-actions>
+     
     </mat-card>
 
-    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 lw mt">
-
-        <!--- Note that these columns can be defined in any order.
-              The actual rendered columns are set as a property on the row definition" -->
-      
-        <!-- Position Column -->
-        <ng-container matColumnDef="position">
-            <th mat-header-cell *matHeaderCellDef [ngStyle]="{'display': 'none'}"> No. </th>
-            <td mat-cell *matCellDef="let element"> {{element.position}} </td>
-          </ng-container>
-        
-          <ng-container matColumnDef="No">
-            <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2">No</th>
-          </ng-container>
-      
-        <!-- Name Column -->
-        <ng-container matColumnDef="name">
-          <th mat-header-cell *matHeaderCellDef> Name </th>
-          <td mat-cell *matCellDef="let element"> {{element.name}} </td>
-        </ng-container>
-      
-        <!-- Weight Column -->
-        <ng-container matColumnDef="weight">
-          <th mat-header-cell *matHeaderCellDef> Weight </th>
-          <td mat-cell *matCellDef="let element"> {{element.name}} </td>
-        </ng-container>
-
-        <ng-container matColumnDef="weight">
-            <th mat-header-cell *matHeaderCellDef> Weight </th>
-            <td mat-cell *matCellDef="let element"> {{element.name}} </td>
-          </ng-container>
-      
-        <!-- Symbol Column -->
-        <ng-container matColumnDef="symbol" rowspan="2">
-          <th mat-header-cell *matHeaderCellDef [ngStyle]="{'display': 'none'}"> Symbol </th>
-          <td mat-cell *matCellDef="let element"> {{element.symbol}} </td>
-        </ng-container>
-
-        <ng-container matColumnDef="Sign">
-            <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2">Symb</th>
-          </ng-container>
-
-        <ng-container matColumnDef="Cont.Ass">
-            <th mat-header-cell *matHeaderCellDef colspan="3"> CONTINUOUS ASSESSMENT </th>
-          </ng-container>
-      
-        <tr mat-header-row *matHeaderRowDef="['No', 'Cont.Ass', 'Sign']"></tr>
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-      </table>
-      
       
 </div>

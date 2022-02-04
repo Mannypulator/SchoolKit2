@@ -12,8 +12,10 @@ namespace WebApi.Models
         public int ClassPosition { get; set; }
         public int ResultRecordID { get; set; }
         public int Total { get; set; }
-        public string TeacherComment { get; set; }
-        public string PrincipalComment { get; set; }
+      
+        public string? TeacherComment { get; set; }
+     
+        public string? PrincipalComment { get; set; }
         
         public double Average { get; set; }
         [ForeignKey("StudentID")]

@@ -239,7 +239,23 @@ namespace WebApi.Controllers
 
         }
 
-        
+        [HttpPost]
+        [Route("updateComment")]
+        //authorise for students
+        public async Task<IActionResult> UpdateComment(CommentUpdateModel obj)
+        {
+           var result = await _context.Results
+           .Where(x => x.ResultID == obj.ResultID)
+           .SingleOrDefaultAsync();
+
+           result.PrincipalComment = obj.PComment;
+           await _context.SaveChangesAsync();
+           return Ok();
+
+        }
+
 
     }
+
+    
 }

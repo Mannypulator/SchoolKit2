@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebApi.Models;
 
 namespace WebApi.Migrations
 {
     [DbContext(typeof(SchoolKitContext))]
-    partial class SchoolKitContextModelSnapshot : ModelSnapshot
+    [Migration("20220202000301_removeComments")]
+    partial class removeComments
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -689,18 +691,10 @@ namespace WebApi.Migrations
                     b.Property<int>("ClassPosition")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("PrincipalComment")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
                     b.Property<int>("ResultRecordID")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("StudentID")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("TeacherComment")
                         .IsRequired()
                         .HasColumnType("TEXT");
 

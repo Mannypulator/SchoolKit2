@@ -36,7 +36,9 @@ namespace WebApi.Methods
                 {
                     ClassArmID = classArmID,
                     TermID = term.TermID,
-                    Type = ResultType.Term
+                    Type = ResultType.Term,
+                    ClassCount = students.Count()
+
                 };
 
                 await _context.ResultRecords.AddAsync(termResultRecord);
@@ -50,7 +52,8 @@ namespace WebApi.Methods
                     {
                         ClassArmID = classArmID,
                         TermID = term.TermID,
-                        Type = ResultType.Annual
+                        Type = ResultType.Annual,
+                        ClassCount = students.Count()
                     };
                     await _context.ResultRecords.AddAsync(annualResultRecord);
                     await _context.SaveChangesAsync();
@@ -83,7 +86,7 @@ namespace WebApi.Methods
 
                     if (term.Label == TermLabel.ThirdTerm)
                     {
-
+                        //get first and second term and respective enrollments for all three terms
                         var LastTerms = allterms
                        .Where(x => x.SessionID == term.SessionID)
                        .ToList();
@@ -101,19 +104,21 @@ namespace WebApi.Methods
 
                         var thisAnnualResult = new List<AnnualEnrollment>();
 
+                        //pick each of the subjects and check if the student enrolled in them for all 
+                        //three terms
                         foreach (var subjectID in EClassSubjectIDs)
                         {
                             var firstTermE = termsEnrollments
                             .Where(c => c.ClassSubjectID == subjectID && c.TermID == firstTerm.TermID)
-                            .FirstOrDefault();
+                            .SingleOrDefault();
 
                             var secondTermE = termsEnrollments
                             .Where(c => c.ClassSubjectID == subjectID && c.TermID == secondTerm.TermID)
-                            .FirstOrDefault();
+                            .SingleOrDefault();
 
                             var thirdTermE = termsEnrollments
                             .Where(c => c.ClassSubjectID == subjectID && c.TermID == term.TermID)
-                            .FirstOrDefault();
+                            .SingleOrDefault();
                             int num = 3;
 
                             List<Enrollment> E = new List<Enrollment> { firstTermE, secondTermE, thirdTermE };
@@ -158,7 +163,7 @@ namespace WebApi.Methods
                             {
                                 StudentID = student.Id,
                                 ClassSubjectID = subjectID,
-                                FirstTerm = firstTermE != null ? firstTermE.Total: 0,//if the terms are null equat the them to zero
+                                FirstTerm = firstTermE != null ? firstTermE.Total: 0,//if the terms are null equal the them to zero
                                 SecondTerm = secondTermE != null ? secondTermE.Total: 0,
                                 ThirdTerm = thirdTermE != null? thirdTermE.Total: 0,
                                 Total = aTotal,
@@ -188,7 +193,8 @@ namespace WebApi.Methods
 
                         if (student.ClassArm.Class == Class.Primary6 || student.ClassArm.Class == Class.SSS3)
                         {
-
+                            student.HasGraduated = true;
+                            await _studentManager.UpdateAsync(student);
                         }
                         else
                         {
@@ -245,7 +251,7 @@ namespace WebApi.Methods
                         .SingleOrDefault();
 
                     var annualResults = annualResultRec.Results
-                    .OrderBy(x => x.Average);
+                    .OrderByDescending(x => x.Average);
 
                     var annualClasstotal = annualResults.Sum(f => f.Total);
 
@@ -271,11 +277,11 @@ namespace WebApi.Methods
 
             var result = await _context.ResultRecords
                     .Where(d => d.TermID == term.TermID && d.Type == ResultType.Annual)
-                    .Include(x => x.Results.Where(s => s.StudentID == studentId))
+                    .Include(x => x.Results)
                     .ThenInclude(x => x.ResultRecord)
                     .ThenInclude(x => x.ClassArm)
                     .SelectMany(x => x.Results)
-
+                    .Where(s => s.StudentID == studentId)
                     .SingleOrDefaultAsync();
 
             var classArm = result.ResultRecord.ClassArm;
@@ -297,11 +303,14 @@ namespace WebApi.Methods
             var annualResult = new ResultModel
             {
                 SessionName = term.Session.SessionName,
+                ResultID = result.ResultID,
                 TermName = Enum.GetName(typeof(TermLabel), term.Label),
                 ResultType = Enum.GetName(typeof(ResultType), result.ResultRecord.Type),
                 ClassName = Enum.GetName(typeof(Class), classArm.Class) + Enum.GetName(typeof(Arms), classArm.Arm),
                 ClassAverage = result.ResultRecord.ClassAverage,
                 ClassPosition = result.ClassPosition,
+                StudentName = result.Student.LastName + " " + result.Student.FirstName,
+                ClassCount = result.ResultRecord.ClassCount,
                 Total = result.Total,
                 Average = result.Total,
                 AnnualEnrollments = annualEnrollments
@@ -316,10 +325,12 @@ namespace WebApi.Methods
         {
             var result = await _context.ResultRecords
                     .Where(d => d.TermID == term.TermID && d.Type == ResultType.Term)
-                    .Include(x => x.Results.Where(s => s.StudentID == studentId))
+                    .Include(x => x.Results)
                     .ThenInclude(x => x.ResultRecord)
                     .ThenInclude(x => x.ClassArm)
                     .SelectMany(x => x.Results)
+                    .Include(x => x.Student)
+                    .Where(s => s.StudentID == studentId)
                     .SingleOrDefaultAsync();
 
             var classArm = result.ResultRecord.ClassArm;
@@ -334,11 +345,13 @@ namespace WebApi.Methods
                     CA = d.CA,
                     Exam = d.Exam,
                     Grade = d.Grade,
+                    Total = d.Total
                 }).ToListAsync();
 
             var stResult = new ResultModel
             {
                 SessionName = term.Session.SessionName,
+                ResultID = result.ResultID,
                 TermName = Enum.GetName(typeof(TermLabel), term.Label),
                 ResultType = Enum.GetName(typeof(ResultType), result.ResultRecord.Type),
                 ClassName = Enum.GetName(typeof(Class), classArm.Class) + Enum.GetName(typeof(Arms), classArm.Arm),
@@ -346,7 +359,8 @@ namespace WebApi.Methods
                 ClassPosition = result.ClassPosition,
                 Total = result.Total,
                 Average = result.Total,
-
+                StudentName = result.Student.LastName + " " + result.Student.FirstName,
+                ClassCount = result.ResultRecord.ClassCount,
                 Enrollments = enrollments
 
             };

@@ -256,4 +256,17 @@ export class SchoolAdminService {
 
     return this.http.post<any>(this.baseUrl + '/api/principal/uploadlogo', formData, {reportProgress: true, observe: 'events'})
   }
+
+  getStudentResult(Id : string){
+    var id: any = {
+      Id: Id,
+      schoolID : 0
+    };
+    id.schoolID = this.schoolNo.schoolID;
+    return this.http.post<any>(this.baseUrl + '/api/result/getStudentResult', id).toPromise()
+  }
+
+  submitComment(obj:  any){
+    return this.http.post<any>(this.baseUrl + '/api/result/updateComment', obj).toPromise()
+  }
 }

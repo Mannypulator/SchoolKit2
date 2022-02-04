@@ -47,6 +47,7 @@ export class StudentResultsComponent implements OnInit {
     }
     this.admin.getRStudent().then((res)=>{
       this.students = res;
+      console.log(res);
     },
     (err)=>{
       console.log(err);
