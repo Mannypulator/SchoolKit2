@@ -17,11 +17,13 @@ namespace WebApi.Models
         public string ClassName { get; set; }
         public int ClassCount { get; set; }
         public string ResultType { get; set; }
-        public double ClassAverage { get; set; }
+        public string ClassAverage { get; set; }
         public int ClassPosition { get; set; }
         public int Total { get; set; }
-        public double Average { get; set; }   
-        public string StudentName { get; set; }     
+        public string Average { get; set; }   
+        public string StudentName { get; set; }  
+        public string PrincipalComment { get; set; }  
+        public string TeacherComment { get; set; } 
         public List<EnrollmentModel> Enrollments { get; set; }
         public List<AnnualEnrollmentModel> AnnualEnrollments { get; set; }
 

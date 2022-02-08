@@ -24,16 +24,18 @@ import { AddSessionsComponent } from './add-sessions/add-sessions.component';
 import { StudentResultsComponent } from './student-results/student-results.component';
 import { ClassSelectionComponent } from './class-selection/class-selection.component';
 import { ResultViewComponent } from './result-view/result-view.component';
+import { AssignClassComponent } from './assign-class/assign-class.component';
 
 
 @NgModule({
-  declarations: [PrincipalDashboardComponent, AddTeacherComponent, AddStudentComponent, SchoolAdminComponent, AddSchoolsComponent, PrincipalSidenavListComponent, TeachersComponent, StudentsComponent, SchoolSelectionComponent, SchoolsComponent, SchoolAdministrationComponent, AddPrincipalComponent, AssignSubjectComponent, EditStudentComponent, SettingsComponent, SessionComponent, AddSessionsComponent, StudentResultsComponent, ClassSelectionComponent, ResultViewComponent], 
+  declarations: [PrincipalDashboardComponent, AddTeacherComponent, AddStudentComponent, SchoolAdminComponent, AddSchoolsComponent, PrincipalSidenavListComponent, TeachersComponent, StudentsComponent, SchoolSelectionComponent, SchoolsComponent, SchoolAdministrationComponent, AddPrincipalComponent, AssignSubjectComponent, EditStudentComponent, SettingsComponent, SessionComponent, AddSessionsComponent, StudentResultsComponent, ClassSelectionComponent, ResultViewComponent, AssignClassComponent], 
   imports: [
     CommonModule,
     SchoolAdminRoutingModule,
     SharedModuleModule
   ],
   providers: [
+    SchoolAdminService,
   ],
 })
 export class SchoolAdminModule { }

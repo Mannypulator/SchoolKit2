@@ -11,10 +11,11 @@ import { ProfileComponent } from './profile/profile.component';
 import { ResultSelectionComponent } from './result-selection/result-selection.component';
 import { EnrollmentsComponent } from './enrollments/enrollments.component';
 import { EnrollmentListComponent } from './enrollment-list/enrollment-list.component';
+import { ResultViewSComponent } from './result-view-s/result-view-s.component';
 
 
 @NgModule({
-  declarations: [StudentComponent, PinValidationComponent, ResultComponent, StudentSidenavComponent, ProfileComponent, ResultSelectionComponent, EnrollmentsComponent, EnrollmentListComponent],
+  declarations: [StudentComponent, PinValidationComponent, ResultComponent, StudentSidenavComponent, ProfileComponent, ResultSelectionComponent, EnrollmentsComponent, EnrollmentListComponent, ResultViewSComponent],
   imports: [
     CommonModule,
     StudentRoutingModule,

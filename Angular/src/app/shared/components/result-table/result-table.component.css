@@ -1,0 +1,16 @@
+.mt{
+    margin-top: 1%;
+}
+
+.gh{
+    height: 400px;
+}
+th.mat-header-cell, td.mat-cell {
+      text-align: center;
+      
+      padding: 0 !important;
+  }
+
+.ml{
+    margin-left: 6px;
+}

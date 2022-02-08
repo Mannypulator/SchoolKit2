@@ -12,8 +12,10 @@ import { AuthInterceptor } from './resources/auth.interceptor';
 import { ProgressbarService } from './shared/services/progressbar.service';
 import { TitleService } from './shared/services/title.service';
 import { AdminService } from './resources/admin.service';
-import { SchoolAdminService } from './school-admin/Services/school-admin.service';
+
 import { AuthService } from './resources/auth.service';
+
+
 
 
 
@@ -26,6 +28,8 @@ import { AuthService } from './resources/auth.service';
   declarations: [
     AppComponent,
     PageNotFoundComponent,
+   
+    
   ],
   imports: [
     BrowserModule,
@@ -40,7 +44,7 @@ import { AuthService } from './resources/auth.service';
     AdminService,
     ProgressbarService,
     TitleService, 
-    SchoolAdminService,
+    
     AuthService
   ],
   bootstrap: [AppComponent]

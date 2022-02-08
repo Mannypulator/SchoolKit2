@@ -28,6 +28,7 @@ export class AssignSubjectComponent implements OnInit {
 
   Classes = Classes;
   Arm = Arms;
+
   ngOnInit(): void {
     this.GetSubjects();
   }
@@ -49,12 +50,7 @@ export class AssignSubjectComponent implements OnInit {
   }
 
   SubjectClassses(){
-    if (this.auth.isProprietor()) {
-      const s = localStorage.getItem('selectedSchool');
-      if (s !== null) {
-        this.admin.schoolNo.schoolID = parseInt(s)
-      }
-    }
+    this.admin.assignSchoolID();
     this.admin.getSubjectClasses(this.SubjectID).then((res)=>{
       this.classSubjects = res;
       console.log(res);

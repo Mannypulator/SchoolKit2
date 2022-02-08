@@ -15,7 +15,14 @@ namespace WebApi.Models
         [ForeignKey("TeacherID")]
         public Teacher Teacher { get; set; }
 
-        
-       
-     }
+    }
+
+    public class RequestTeacherClass
+    {
+        public int ClassArmID { get; set; }
+        public string TeacherID { get; set; }
+
+
+
+    }
 }

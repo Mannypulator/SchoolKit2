@@ -8,6 +8,7 @@ import { Principal } from 'src/app/Models/Principal';
 import { School } from 'src/app/Models/School';
 import { SchoolType } from 'src/app/Models/SchoolType';
 import { Student } from 'src/app/Models/student';
+import { AuthService } from 'src/app/resources/auth.service';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -53,7 +54,16 @@ export class SchoolAdminService {
 
 
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private auth: AuthService) { }
+
+  assignSchoolID(){
+    if (this.auth.isProprietor()) {
+      const s = localStorage.getItem('selectedSchool');
+      if (s !== null) {
+        this.schoolNo.schoolID = parseInt(s)
+      }
+    }
+  }
 
   addPrincipal() {
     return this.http.post(this.baseUrl + '/api/principal/addPrincipal', this.principal).toPromise();
@@ -263,10 +273,21 @@ export class SchoolAdminService {
       schoolID : 0
     };
     id.schoolID = this.schoolNo.schoolID;
-    return this.http.post<any>(this.baseUrl + '/api/result/getStudentResult', id).toPromise()
+    return this.http.post<any>(this.baseUrl + '/api/result/getStudentResult', id).pipe(map(data=>{
+      data.forEach((element: { PrincipalComment: string | null; }) => {
+        if(element.PrincipalComment === null){
+         element.PrincipalComment = "";
+        }
+      });
+      return data;
+    }))
   }
 
   submitComment(obj:  any){
     return this.http.post<any>(this.baseUrl + '/api/result/updateComment', obj).toPromise()
+  }
+
+  assignTeacherClass(teacherClass:any){
+    return this.http.post<any>(this.baseUrl + '/api/principal/assignTeacherClass', teacherClass).toPromise();
   }
 }

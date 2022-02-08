@@ -18,12 +18,14 @@ namespace WebApi.Controllers
         private readonly SchoolKitContext _context;
         private readonly UserManager<Student> _studentManager;
         private readonly UserManager<Principal> _principalManager;
+        private readonly UserManager<Teacher> _teacherManager;
 
-        public ResultController(SchoolKitContext context, UserManager<Student> studentManager, UserManager<Principal> principalManager)
+        public ResultController(SchoolKitContext context, UserManager<Student> studentManager, UserManager<Principal> principalManager, UserManager<Teacher> teacherManager)
         {
             _context = context;
             _studentManager = studentManager;
             _principalManager = principalManager;
+            _teacherManager = teacherManager;
         }
 
 
@@ -196,7 +198,7 @@ namespace WebApi.Controllers
 
         [HttpPost]
         [Route("getStudentResult")]
-        //authorise for students
+        //authorise for principal
         public async Task<IActionResult> GetStudentResult(TID i)
         {
             var schoolID = 0;
@@ -207,9 +209,9 @@ namespace WebApi.Controllers
             }
             else
             {
-                var principalId = User.Claims.FirstOrDefault(c => c.Type == "UserID").Value;
-                var principal = await _principalManager.FindByIdAsync(principalId);
-                schoolID = principal.SchoolID;
+                var Id = User.Claims.FirstOrDefault(c => c.Type == "UserID").Value;
+                var principal = await _principalManager.FindByIdAsync(Id);
+                schoolID = principal == null ? await getTeacherSchoolID(Id) : principal.SchoolID;
 
             }
 
@@ -252,6 +254,11 @@ namespace WebApi.Controllers
            await _context.SaveChangesAsync();
            return Ok();
 
+        }
+
+        public async Task<int> getTeacherSchoolID(string Id){
+            var teacher = await _teacherManager.FindByIdAsync(Id);
+            return teacher.SchoolID;
         }
 
 

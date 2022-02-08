@@ -64,6 +64,17 @@
                                         <td>{{teacher.PhoneNumber}}</td>
                                     </tr>
 
+                                    <tr>
+                                        <td>Class:</td>
+                                        <td><span>{{Classes[teacher.Class]}} {{Arm[teacher.Arm]}}</span>
+                                            <button mat-icon-button color="accent" style="padding-left: 1%;"
+                                            (click)="openDialog3(teacher)">
+                                            <mat-icon>change_circle</mat-icon>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    
+                             
 
                                 </table>
                             </div>
@@ -90,6 +101,8 @@
                                         <span>Assign subject </span>
                                         <mat-icon>add</mat-icon>
                                     </button>
+
+                                  
     
                                     <button mat-raised-button color="warn" fxHide fxShow.gt-sm (click)="RemoveTeacher(teacher.Id)">
                                         <span>Remove Teacher </span>

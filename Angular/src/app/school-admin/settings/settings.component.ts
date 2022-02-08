@@ -118,7 +118,7 @@ export class SettingsComponent implements OnInit {
 
   endTerm(Id: number){
     this.admin.endTerm(Id).then(res=>{
-      this.alert.success("Operation Succesful?");
+      this.alert.success("Operation Succesful");
       this.getCurrentSession();
       console.log(res);
     },

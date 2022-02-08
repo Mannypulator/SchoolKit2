@@ -9,12 +9,12 @@
 .gh{
     height: 400px;
 }
-th.mat-header-cell, td.mat-cell {
-      text-align: center;
-      
-      padding: 0 !important;
-  }
 
-.ml{
+
+.ml-6{
     margin-left: 6px;
+}
+.mc{
+    margin-left: auto;
+    margin-right: auto;
 }

@@ -21,12 +21,7 @@ export class ClassSelectionComponent implements OnInit {
     this.filter.emit({classArmID});
   }
   getClasses() {
-    if (this.auth.isProprietor()) {
-      const s = localStorage.getItem('selectedSchool');
-      if (s !== null) {
-        this.admin.schoolNo.schoolID = parseInt(s)
-      }
-    }
+    this.admin.assignSchoolID()
     this.admin.getClasses().then((res)=>{
       this.classes = res as unknown as ClassArm[]
     },

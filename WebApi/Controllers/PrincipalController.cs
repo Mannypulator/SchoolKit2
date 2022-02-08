@@ -56,11 +56,15 @@ namespace WebApi.Controllers
 
             var teachers = _teacherManager.Users
             .Where(x => x.SchoolID == id)
+            
+            
             .Include(x => x.TeacherSubjects)
             .ThenInclude(x => x.ClassSubject)
             .ThenInclude(x => x.Subject)
             .Include(x => x.TeacherSubjects)
             .ThenInclude(x => x.ClassSubject)
+            .ThenInclude(x => x.ClassArm)
+            .Include(x => x.TeacherClasses)
             .ThenInclude(x => x.ClassArm);
 
 
@@ -77,11 +81,8 @@ namespace WebApi.Controllers
                     SchoolID = teacher.SchoolID,
                     //LgaID = teacher.LgaID,
                     Gender = teacher.Gender,
-
                     PhoneNumber = teacher.PhoneNumber,
                     TeacherSubjects = new List<ReturnTeacherSubject>()
-
-
                 };
                 foreach (var subject in teacher.TeacherSubjects)
                 {
@@ -97,6 +98,9 @@ namespace WebApi.Controllers
                     TS.TeacherSubjects.Add(RTS);
 
                 }
+                var t = teacher.TeacherClasses.SingleOrDefault();
+                TS.Class = t != null ? (int)t.ClassArm.Class : -1;
+                TS.Arm = t != null ? (int)t.ClassArm.Arm : -1;
 
                 selection.Add(TS);
             }
@@ -152,7 +156,7 @@ namespace WebApi.Controllers
 
 
         }
-        
+
         [HttpDelete]
         [Route("deleteStudent")]
         public async Task<IActionResult> DeleteStudent([FromBody] String studentId)
@@ -269,15 +273,28 @@ namespace WebApi.Controllers
 
             foreach (var CSID in model.ClassSubjectIDs)
             {
-                var teacherSubject = new TeacherSubject
+                var teacherSubjects = await _context.TeacherSubjects
+                .Where(x => x.ClassSubjectID == CSID && x.TeacherID == model.TeacherID)
+                .AnyAsync();
+
+                if (!teacherSubjects)
                 {
-                    ClassSubjectID = CSID,
-                    TeacherID = model.TeacherID
-                };
-                await _context.TeacherSubjects.AddAsync(teacherSubject);
+                    var teacherSubject = new TeacherSubject
+                    {
+                        ClassSubjectID = CSID,
+                        TeacherID = model.TeacherID
+                    };
+                    await _context.TeacherSubjects.AddAsync(teacherSubject);
+                }
+                else
+                {
+                    return BadRequest(new { Message = "Subject already asigned" });
+                }
+
             }
 
             await _context.SaveChangesAsync();
+
             var returnSubjects = await _context.TeacherSubjects
             .Where(x => x.TeacherID == model.TeacherID)
             .Include(x => x.ClassSubject)
@@ -931,23 +948,23 @@ namespace WebApi.Controllers
         [Route("uploadLogo")]
         public async Task<IActionResult> UploadLogo([FromForm] IFormCollection data)
         {
-             var ID = 0;
+            var ID = 0;
 
-           /* if (SchoolID != 0)
-            {
-                ID = SchoolID;
-            }
-            else
-            {
-                var principalId = User.Claims.FirstOrDefault(c => c.Type == "UserID").Value;
-                var principal = await _principalManager.FindByIdAsync(principalId);
-                ID = principal.SchoolID;
+            /* if (SchoolID != 0)
+             {
+                 ID = SchoolID;
+             }
+             else
+             {
+                 var principalId = User.Claims.FirstOrDefault(c => c.Type == "UserID").Value;
+                 var principal = await _principalManager.FindByIdAsync(principalId);
+                 ID = principal.SchoolID;
 
-            }*/
+             }*/
 
             var name = data["ID"];
 
-          
+
 
             try
             {
@@ -955,24 +972,68 @@ namespace WebApi.Controllers
                 var folderName = Path.Combine("Resources", "Logos");
                 var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
 
-                if(file.Length > 0){
+                if (file.Length > 0)
+                {
                     var fileName = name;
                     var extension = Path.GetExtension(ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"'));
                     var fullPath = Path.Combine(pathToSave, name += extension);
 
-                    using(var stream = new FileStream(fullPath, FileMode.Create)){
+                    using (var stream = new FileStream(fullPath, FileMode.Create))
+                    {
                         file.CopyTo(stream);
                     }
 
                     return Ok();
                 }
-                else{
+                else
+                {
                     return BadRequest();
                 }
             }
             catch (Exception ex)
             {
                 throw ex;
+            }
+
+
+        }
+
+        [HttpPost]
+        [Route("assignTeacherClass")]
+        public async Task<IActionResult> assignTeacherClass(RequestTeacherClass teacherClass)
+        {
+            var existingEntry = await _context.TeacherClasses
+            .Where(x => x.TeacherID == teacherClass.TeacherID)
+            .Include(x => x.ClassArm)
+            .SingleOrDefaultAsync();
+
+            if (existingEntry == null)
+            {
+                var tc = new TeacherClass();
+                tc.ClassArmID = teacherClass.ClassArmID;
+                tc.TeacherID = teacherClass.TeacherID;
+
+                await _context.TeacherClasses.AddAsync(tc);
+                await _context.SaveChangesAsync();
+
+                var Entry = await _context.TeacherClasses
+                .Where(x => x.TeacherID == teacherClass.TeacherID)
+                .Include(x => x.ClassArm)
+                .SingleOrDefaultAsync();
+
+                return Ok(Entry.ClassArm);
+            }
+            else
+            {
+                existingEntry.ClassArmID = teacherClass.ClassArmID;
+                existingEntry.TeacherID = teacherClass.TeacherID;
+                await _context.SaveChangesAsync();
+
+                var Entry = await _context.TeacherClasses
+                .Where(x => x.TeacherID == teacherClass.TeacherID)
+                .Include(x => x.ClassArm)
+                .SingleOrDefaultAsync();
+                return Ok(Entry.ClassArm);
             }
 
 
@@ -1005,6 +1066,8 @@ namespace WebApi.Controllers
         public int SchoolID { get; set; }
         public UserGender Gender { get; set; }
         public string PhoneNumber { get; set; }
+        public int? Class { get; set; }
+        public int? Arm { get; set; }
 
         public ICollection<ReturnTeacherSubject> TeacherSubjects { get; set; }
     }

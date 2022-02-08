@@ -1,0 +1,17 @@
+<ngx-alerts></ngx-alerts>
+<div fxFlex="100%" fxLayout="row wrap" fxLayoutAlign="space-between none">
+    <h2>Assign as a Form Teacher</h2>
+    <div fxFlex="100%" fxLayout="row wrap" fxLayoutAlign="space-around center">
+        <mat-form-field fxFlex="75">
+            <mat-label>Select Class</mat-label>
+            <mat-select name="Class" [(ngModel)]="teacherClass.ClassArmID">
+                <mat-option *ngFor="let classArm of classes" [value]="classArm.ClassArmID">{{classArm.Name}} {{classArm.Arm}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+    </div>
+    <div fxFlex="100%" fxLayout="row wrap" fxLayoutAlign="space-around center">
+        <button fxFlex="55" mat-raised-button color="accent" (click)="SubmitClass()">Submit</button>
+         <button style="margin-top:2%" fxFlex="55" mat-raised-button color="accent" [mat-dialog-close]="null">Cancel</button>
+    </div>
+    
+</div>

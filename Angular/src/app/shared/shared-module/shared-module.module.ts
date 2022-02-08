@@ -29,13 +29,16 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { HeaderComponent } from '../components/header/header.component';
 import { AlertModule } from 'ngx-alerts';
 import { MatDialogModule } from '@angular/material/dialog';
+import { ResultTableComponent } from '../components/result-table/result-table.component';
+import { ResultListComponent } from '../components/result-list/result-list.component';
+
 
 
 
 
 
 @NgModule({
-  declarations: [HeaderComponent],
+  declarations: [HeaderComponent,ResultTableComponent,  ResultListComponent],
   imports: [
     AlertModule.forRoot({maxMessages: 5, timeout: 5000, positionX: 'right'}),
     CommonModule,
@@ -86,6 +89,8 @@ import { MatDialogModule } from '@angular/material/dialog';
     MatListModule,
     MatTableModule,
     HeaderComponent,
+    ResultTableComponent,
+    ResultListComponent,
     MatDividerModule,
     MatDialogModule,
     MatPaginatorModule

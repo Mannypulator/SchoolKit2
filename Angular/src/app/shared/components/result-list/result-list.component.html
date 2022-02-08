@@ -1,0 +1,25 @@
+<div fxLayout="row" fxLayoutAlign="center none" class="mt" >
+    <mat-card fxFlex="85%" fxLayout="column" fxLayoutAlign="space-between none">
+        <div>
+                
+                    Approve Results For Current Term
+                    <mat-card-subtitle>Only results awaiting approval will be shown here</mat-card-subtitle>
+               
+        </div>
+        <span><mat-divider></mat-divider></span>
+
+        <div class="mt">
+            <mat-card-content>
+                <mat-list>
+                    <mat-list-item *ngFor="let student of students">
+                        {{student.LastName }} {{student.FirstName}}
+                        <button mat-button style="margin-left: auto;margin-top: 11px;" routerLink="/school-admin/result-view/{{student.Id}}">view 
+                            <mat-icon class="mat-24">visibility</mat-icon>
+                        </button>
+                    </mat-list-item>
+                </mat-list>
+            </mat-card-content>
+
+        </div>
+    </mat-card>
+</div>

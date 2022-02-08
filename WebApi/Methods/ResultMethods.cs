@@ -71,7 +71,7 @@ namespace WebApi.Methods
 
                     int total = enrollments.Sum(j => j.Total); //sum of all enrollments total scores for current student
                     int count = enrollments.Count();
-                    double average = count != 0 ?(double)(total / count): 0;
+                    double average = count != 0 ? (double)total / (double)count : 0;
                     
 
                     var result = new Result
@@ -178,7 +178,7 @@ namespace WebApi.Methods
 
                         var annualcount = thisAnnualResult.Count;
                         var annualTotal = thisAnnualResult.Sum(j => j.Total);
-                        var annualAverage = annualcount != 0 ? (double)(annualTotal / annualcount): 0;
+                        var annualAverage = annualcount != 0 ? (double)annualTotal / (double)annualcount : 0.0;
 
                         var annualresult = new Result
                         {
@@ -229,15 +229,25 @@ namespace WebApi.Methods
                 var classtotal = classResults.Sum(f => f.Total);
 
                 int resCount = 1;
+
+                //hold prev result so as to check if next person has same score
+                var prevResult = new Result();
                 foreach (var result in classResults)
                 {
-                    result.ClassPosition = resCount;
+                    if(prevResult != null && result.Average == prevResult.Average){
+                        result.ClassPosition = prevResult.ClassPosition;
+                         _context.Update(result);
+                    }
+                    else{
+                        result.ClassPosition = resCount;
 
                     _context.Update(result);
+                    }
 
                     resCount++;
+                    prevResult = result;
                 }
-                resultRec.ClassAverage = classtotal / classResults.Count();
+                resultRec.ClassAverage = (double)classtotal / classResults.Count();
                 _context.Update(resultRec);
                 await _context.SaveChangesAsync();
 
@@ -255,15 +265,25 @@ namespace WebApi.Methods
 
                     var annualClasstotal = annualResults.Sum(f => f.Total);
 
+                    var aPrevResult = new Result();
                     int aCount = 1;
                     foreach (var result in annualResults)
                     {
+                        if(aPrevResult != null && result.Average == aPrevResult.Average){
+                        result.ClassPosition = aPrevResult.ClassPosition;
+                         _context.Update(result);
+                    }
+                    else{
                         result.ClassPosition = aCount;
-                        _context.Update(result);
-                        aCount++;
+
+                    _context.Update(result);
                     }
 
-                    annualResultRec.ClassAverage = annualClasstotal / annualResults.Count();
+                    aCount++;
+                    aPrevResult = result;
+                    }
+
+                    annualResultRec.ClassAverage = (double)annualClasstotal / annualResults.Count();
                     _context.Update(annualResultRec);
                     await _context.SaveChangesAsync();
                 }
@@ -307,13 +327,15 @@ namespace WebApi.Methods
                 TermName = Enum.GetName(typeof(TermLabel), term.Label),
                 ResultType = Enum.GetName(typeof(ResultType), result.ResultRecord.Type),
                 ClassName = Enum.GetName(typeof(Class), classArm.Class) + Enum.GetName(typeof(Arms), classArm.Arm),
-                ClassAverage = result.ResultRecord.ClassAverage,
+                ClassAverage = result.ResultRecord.ClassAverage.ToString(),
                 ClassPosition = result.ClassPosition,
                 StudentName = result.Student.LastName + " " + result.Student.FirstName,
                 ClassCount = result.ResultRecord.ClassCount,
                 Total = result.Total,
-                Average = result.Total,
-                AnnualEnrollments = annualEnrollments
+                Average = result.Average.ToString(),
+                AnnualEnrollments = annualEnrollments,
+                PrincipalComment = result.PrincipalComment,
+                TeacherComment = result.TeacherComment
 
             };
 
@@ -355,13 +377,16 @@ namespace WebApi.Methods
                 TermName = Enum.GetName(typeof(TermLabel), term.Label),
                 ResultType = Enum.GetName(typeof(ResultType), result.ResultRecord.Type),
                 ClassName = Enum.GetName(typeof(Class), classArm.Class) + Enum.GetName(typeof(Arms), classArm.Arm),
-                ClassAverage = result.ResultRecord.ClassAverage,
+                ClassAverage = result.ResultRecord.ClassAverage.ToString(),
                 ClassPosition = result.ClassPosition,
                 Total = result.Total,
-                Average = result.Total,
+                Average = result.Average.ToString(),
                 StudentName = result.Student.LastName + " " + result.Student.FirstName,
                 ClassCount = result.ResultRecord.ClassCount,
-                Enrollments = enrollments
+                Enrollments = enrollments,
+                TeacherComment = result.TeacherComment,
+                PrincipalComment = result.PrincipalComment
+                
 
             };
 

@@ -8,6 +8,7 @@ import { ReturnTeacher, Teacher } from 'src/app/Models/Teacher';
 import { AuthService } from 'src/app/resources/auth.service';
 import { TitleService } from 'src/app/shared/services/title.service';
 import { AddTeacherComponent } from '../add-teacher/add-teacher.component';
+import { AssignClassComponent } from '../assign-class/assign-class.component';
 import { AssignSubjectComponent } from '../assign-subject/assign-subject.component';
 import { SchoolAdminService } from '../Services/school-admin.service';
 
@@ -35,12 +36,7 @@ export class TeachersComponent implements OnInit {
   }
 
   getTeachers(){
-    if (this.auth.isProprietor()) {
-      const s = localStorage.getItem('selectedSchool');
-      if (s !== null) {
-        this.admin.schoolNo.schoolID = parseInt(s)
-      }
-    }
+   this.admin.assignSchoolID();
     this.admin.getTeachers().then((res)=>{
       this.teachers = res;
       console.log(res)
@@ -93,9 +89,9 @@ export class TeachersComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if(result !== null){
-       var teacherSubject = this.teachers.find(x=>x.Id == result.TeacherID);
-       teacherSubject.TeacherSubjects = result.TeacherSubjects;
-       console.log(teacherSubject);
+       var teach = this.teachers.find(x=>x.Id == result.TeacherID);
+       teach.TeacherSubjects = result.TeacherSubjects;
+      
       }
       
       
@@ -140,5 +136,28 @@ export class TeachersComponent implements OnInit {
         console.log(err);
       })
     }
+  }
+
+  openDialog3(teacher: any){
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.width = "60%";
+    dialogConfig.data = {Id: teacher.Id}
+
+    const dialogRef =  this.dialog.open(AssignClassComponent, dialogConfig);
+
+    dialogRef.afterClosed().subscribe(result => {
+      if(result !== null){
+       var teach = this.teachers.find(x=>x.Id == teacher.Id);
+       teach.Class = result.Class;
+       teach.Arm = result.Arm;
+       console.log(teach);
+       console.log('hey')
+      
+      }
+      
+      
+    });
   }
 }
