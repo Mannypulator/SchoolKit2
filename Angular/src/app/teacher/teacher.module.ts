@@ -11,12 +11,12 @@ import { FilterPipe } from '../resources/filter.pipe';
 import { EnrollStudentComponent } from './enroll-student/enroll-student.component';
 import { StudentResultsComponent } from './student-results/student-results.component';
 
-import { ResultViewTComponent } from './result-view-t/result-view-t.component';
+
 
 
 
 @NgModule({
-  declarations: [ProfileComponent, TeacherComponent, SubjectComponent, TeacherSidenavComponent, FilterPipe, EnrollStudentComponent, StudentResultsComponent, ResultViewTComponent],
+  declarations: [ProfileComponent, TeacherComponent, SubjectComponent, TeacherSidenavComponent, FilterPipe, EnrollStudentComponent, StudentResultsComponent],
   imports: [
     CommonModule,
     TeacherRoutingModule,

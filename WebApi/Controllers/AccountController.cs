@@ -82,18 +82,23 @@ namespace WebApi.Controllers
 
                 }
                 var roles = await _AuserManager.GetRolesAsync(Auser);
-                var role = roles.FirstOrDefault();
+                
+              
                 var tokendescriptor = new SecurityTokenDescriptor
                 {
                     Subject = new ClaimsIdentity(new Claim[]
                     {
                        new Claim("UserID", Auser.Id.ToString()),
-                       new Claim(ClaimTypes.Role, role.ToString()),
+                      
                        //new Claim(ClaimTypes.Role, "superadmin")
                     }),
                     Expires = DateTime.Now.AddHours(24),
                     SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_appsettings.JWT_Secret)), SecurityAlgorithms.HmacSha256Signature)
                 };
+               foreach(var role in roles){
+                   var claim = new Claim(ClaimTypes.Role, role.ToString());
+                   tokendescriptor.Subject.AddClaim(claim); 
+               }
                 var tokenHandler = new JwtSecurityTokenHandler();
                 var securityToken = tokenHandler.CreateToken(tokendescriptor);
                 var token = tokenHandler.WriteToken(securityToken);

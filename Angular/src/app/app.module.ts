@@ -24,10 +24,12 @@ import { AuthService } from './resources/auth.service';
 
 
 
+
 @NgModule({
   declarations: [
     AppComponent,
     PageNotFoundComponent,
+   
    
     
   ],

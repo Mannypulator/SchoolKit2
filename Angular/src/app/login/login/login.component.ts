@@ -43,7 +43,7 @@ export class LoginComponent implements OnInit {
       error: (err: any) => {
         this.progressService.setFailure();
         console.log(err);
-        this.alertService.danger(err.error.message);
+        this.alertService.danger(err.error.Message);
         this.progressService.completeLoading();
       },
     };
@@ -64,25 +64,25 @@ export class LoginComponent implements OnInit {
         this.progressService.setSuccess();
         this.alertService.success('Welcome back ');
         this.progressService.completeLoading();
-        console.log('before admin if')
+        
         if(this.authService.isAdmin()){
-          console.log('after admin if')
+         
           if(this.authService.redirectUrl != ""){
             this.router.navigateByUrl(this.authService.redirectUrl);
-            console.log(this.authService.redirectUrl)
+            
             //this.authService.redirectUrl = "";
           }
           else{
             this.router.navigateByUrl('admin');
-            console.log('login else');
+           
           }
           
         }
        
         else if(this.authService.isPrincipal() || this.authService.isProprietor()){
-          console.log('after principal if');
+          
           if(this.authService.isProprietor() && localStorage.getItem('selectedSchool') === null){
-            console.log('proprietor if')
+           
             this.router.navigateByUrl('school-admin/school-selection');
           }
           else{
@@ -96,18 +96,22 @@ export class LoginComponent implements OnInit {
           }
          
         }
+        
         else if(this.authService.isTeacher()){
+          
           if(this.authService.redirectUrl != ""){
             this.router.navigateByUrl(this.authService.redirectUrl);
-            console.log(this.authService.redirectUrl)
+            
             //this.authService.redirectUrl = "";
           }
           else{
+            console.log('teacher else ran')
             this.router.navigateByUrl('teacher');
            
           }
           
         }
+       
 
         //else if(this.authService.isTecher)
         //  this.router.navigateByUrl()

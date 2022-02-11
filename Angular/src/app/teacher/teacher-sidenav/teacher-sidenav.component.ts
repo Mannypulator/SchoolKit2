@@ -1,4 +1,5 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { AuthService } from 'src/app/resources/auth.service';
 
 @Component({
   selector: 'teacher-sidenav',
@@ -9,7 +10,7 @@ export class TeacherSidenavComponent implements OnInit {
   @Output() public sidenavClose = new EventEmitter();
 
   
-  constructor() { }
+  constructor(public auth: AuthService) { }
   
   ngOnInit(): void {}
 

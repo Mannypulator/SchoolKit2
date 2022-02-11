@@ -97,8 +97,7 @@ export class AdminService {
     {
       returnProprietor = response as Proprietor;
       this.school.ProprietorID = returnProprietor.Id;
-      console.log(this.school.ProprietorID);
-      console.log("map ran");
+     
     }));
   }
 

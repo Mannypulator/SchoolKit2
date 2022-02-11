@@ -20,12 +20,14 @@ namespace WebApi.Controllers
         private readonly SchoolKitContext _context;
         private readonly UserManager<Student> _studentManager;
         private readonly UserManager<Principal> _principalManager;
+        private readonly UserManager<Teacher> _teacherManager;
 
-        public TermController(SchoolKitContext context, UserManager<Student> studentManager, UserManager<Principal> principalManager)
+        public TermController(SchoolKitContext context, UserManager<Student> studentManager, UserManager<Principal> principalManager, UserManager<Teacher> teacherManager)
         {
             _context = context;
             _studentManager = studentManager;
             _principalManager = principalManager;
+            _teacherManager = teacherManager;
         }
 
         [HttpPost]
@@ -623,16 +625,16 @@ namespace WebApi.Controllers
             .ThenInclude(x => x.Student)
             .SelectMany(x => x.Results)
             .Where(x => x.PrincipalComment == null)
-            .Select(x=>x.Student)
+            .Select(x => x.Student)
             .ToHashSet()
-            
+
             .Select(x => new ReturnStudent
             {
-              Id = x.Id,
-              FirstName = x.FirstName,
-              LastName = x.LastName,
+                Id = x.Id,
+                FirstName = x.FirstName,
+                LastName = x.LastName,
 
-             });
+            });
 
                 return Ok(students);
             }
@@ -684,7 +686,7 @@ namespace WebApi.Controllers
                 .ThenInclude(x => x.Student)
                 .SelectMany(x => x.Results)
                 .Where(x => x.PrincipalComment == null)
-                .Select(x=>x.Student)
+                .Select(x => x.Student)
                 .ToHashSet()
                 .Select(x => new ReturnStudent
                 {
@@ -693,7 +695,7 @@ namespace WebApi.Controllers
                     LastName = x.LastName,
 
                 });
-               
+
 
                     return Ok(students);
                 }
@@ -706,5 +708,59 @@ namespace WebApi.Controllers
                 throw ex;
             }
         }
+
+        [HttpGet]
+        [Route("formTeachResList")]
+        public async Task<IActionResult> FormTeachResList()
+        {
+
+            var teacherId = User.Claims.FirstOrDefault(c => c.Type == "UserID").Value;
+            var teacher = await _teacherManager.FindByIdAsync(teacherId);
+
+            var currentTerm = await _context.Sessions
+            .Where(x => x.SchoolID == teacher.SchoolID && x.Current)
+            .Include(x => x.Terms)
+            .SelectMany(x => x.Terms)
+            .Where(x => x.Current)
+            .SingleOrDefaultAsync();
+
+            var teacherClass = await _context.TeacherClasses
+            .Where(x => x.TeacherID == teacher.Id)
+            .SingleOrDefaultAsync();
+
+            if (currentTerm != null && teacherClass != null)
+            {
+                var students = _context.ResultRecords
+               .Where(x => x.TermID == currentTerm.TermID && x.ClassArmID == teacherClass.ClassArmID)
+               .Include(x => x.Results)
+               .ThenInclude(x => x.Student)
+               .SelectMany(x => x.Results)
+               .Where(x => x.TeacherComment == null)
+               .Select(x => x.Student)
+               .ToHashSet()
+
+               .Select(x => new ReturnStudent
+               {
+                   Id = x.Id,
+                   FirstName = x.FirstName,
+                   LastName = x.LastName,
+
+               });
+
+                return Ok(students);
+            }
+
+            return Ok();
+
+
+            // }
+            // catch (Exception ex)
+            // {
+            //     throw ex;
+            // }
+
+
+        }
+
     }
 }

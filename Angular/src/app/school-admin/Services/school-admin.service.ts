@@ -267,25 +267,9 @@ export class SchoolAdminService {
     return this.http.post<any>(this.baseUrl + '/api/principal/uploadlogo', formData, {reportProgress: true, observe: 'events'})
   }
 
-  getStudentResult(Id : string){
-    var id: any = {
-      Id: Id,
-      schoolID : 0
-    };
-    id.schoolID = this.schoolNo.schoolID;
-    return this.http.post<any>(this.baseUrl + '/api/result/getStudentResult', id).pipe(map(data=>{
-      data.forEach((element: { PrincipalComment: string | null; }) => {
-        if(element.PrincipalComment === null){
-         element.PrincipalComment = "";
-        }
-      });
-      return data;
-    }))
-  }
+ 
 
-  submitComment(obj:  any){
-    return this.http.post<any>(this.baseUrl + '/api/result/updateComment', obj).toPromise()
-  }
+  
 
   assignTeacherClass(teacherClass:any){
     return this.http.post<any>(this.baseUrl + '/api/principal/assignTeacherClass', teacherClass).toPromise();

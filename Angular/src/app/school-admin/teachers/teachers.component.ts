@@ -63,7 +63,7 @@ export class TeachersComponent implements OnInit {
           }
         }
         this.admin.addTeacher(result).then((res)=>{
-          console.log(res);
+          
           this.alert.success("Teacher Account Created Successfully");
           this.getTeachers();
         },
@@ -71,7 +71,7 @@ export class TeachersComponent implements OnInit {
           console.log(err);
           this.alert.danger("Operation Failed");
         });
-        console.log(result as Teacher);
+       
       }
       
       
@@ -152,8 +152,6 @@ export class TeachersComponent implements OnInit {
        var teach = this.teachers.find(x=>x.Id == teacher.Id);
        teach.Class = result.Class;
        teach.Arm = result.Arm;
-       console.log(teach);
-       console.log('hey')
       
       }
       

@@ -196,24 +196,14 @@ namespace WebApi.Controllers
             return Ok(results);
         }
 
-        [HttpPost]
+        [HttpGet]
         [Route("getStudentResult")]
         //authorise for principal
-        public async Task<IActionResult> GetStudentResult(TID i)
+        public async Task<IActionResult> GetStudentResult(string Id)
         {
-            var schoolID = 0;
-
-            if (i.schoolID != 0)
-            {
-                schoolID = i.schoolID;
-            }
-            else
-            {
-                var Id = User.Claims.FirstOrDefault(c => c.Type == "UserID").Value;
-                var principal = await _principalManager.FindByIdAsync(Id);
-                schoolID = principal == null ? await getTeacherSchoolID(Id) : principal.SchoolID;
-
-            }
+            
+            var student = await _studentManager.FindByIdAsync(Id);
+            int schoolID = student.SchoolID;
 
             var term = await _context.Sessions
             .Where(i => i.SchoolID == schoolID && i.Current)
@@ -226,14 +216,14 @@ namespace WebApi.Controllers
             if (term.Label != TermLabel.ThirdTerm)
             {
                 List<ResultModel> resModel = new List<ResultModel>();
-                resModel.Add(await ResultMethods.Results(term, i.Id, _context));
+                resModel.Add(await ResultMethods.Results(term, Id, _context));
                 return Ok(resModel);
             }
             else
             {
                 List<ResultModel> resModel = new List<ResultModel>();
-                resModel.Add(await ResultMethods.Results(term, i.Id, _context));
-                resModel.Add(await ResultMethods.AResults(term, i.Id, _context));
+                resModel.Add(await ResultMethods.Results(term, Id, _context));
+                resModel.Add(await ResultMethods.AResults(term, Id, _context));
 
                 return Ok(resModel);
             }
@@ -242,7 +232,7 @@ namespace WebApi.Controllers
         }
 
         [HttpPost]
-        [Route("updateComment")]
+        [Route("updatePComment")]
         //authorise for students
         public async Task<IActionResult> UpdateComment(CommentUpdateModel obj)
         {
@@ -251,6 +241,21 @@ namespace WebApi.Controllers
            .SingleOrDefaultAsync();
 
            result.PrincipalComment = obj.PComment;
+           await _context.SaveChangesAsync();
+           return Ok();
+
+        }
+
+        [HttpPost]
+        [Route("updateTComment")]
+        //authorise for students
+        public async Task<IActionResult> UpdateTComment(CommentUpdateModel obj)
+        {
+           var result = await _context.Results
+           .Where(x => x.ResultID == obj.ResultID)
+           .SingleOrDefaultAsync();
+
+           result.TeacherComment = obj.PComment;
            await _context.SaveChangesAsync();
            return Ok();
 

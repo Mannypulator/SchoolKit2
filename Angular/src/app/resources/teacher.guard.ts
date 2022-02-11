@@ -14,7 +14,7 @@ export class TeacherRoleGuard implements CanLoad {
   }
   canLoad(route: Route, segments: UrlSegment[]): true|UrlTree { 
     //const url = segments.map(s => s.path).join('/');
-    console.log("canload")
+    
       
     return this.checkLogin();
   }

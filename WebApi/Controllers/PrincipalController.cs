@@ -1014,6 +1014,9 @@ namespace WebApi.Controllers
                 tc.TeacherID = teacherClass.TeacherID;
 
                 await _context.TeacherClasses.AddAsync(tc);
+
+                var teacher = await _teacherManager.FindByIdAsync(teacherClass.TeacherID);
+                var result = await _teacherManager.AddToRoleAsync(teacher, "FormTeacher");
                 await _context.SaveChangesAsync();
 
                 var Entry = await _context.TeacherClasses

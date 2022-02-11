@@ -1,12 +1,13 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { ProprietorGuard } from '../resources/Proprietor.guard';
+import { ResultViewComponent } from '../shared/components/result-view/result-view.component';
 import { AddPrincipalComponent } from './add-principal/add-principal.component';
 import { AddSchoolsComponent } from './add-school/add-schools.component';
 import { AddStudentComponent } from './add-student/add-student.component';
 import { AddTeacherComponent } from './add-teacher/add-teacher.component';
 import { PrincipalDashboardComponent } from './principal-dashboard/principal-dashboard.component';
-import { ResultViewComponent } from './result-view/result-view.component';
+
 import { SchoolAdminComponent } from './school-admin/school-admin.component';
 import { SchoolSelectionComponent } from './school-selection/school-selection.component';
 import { SessionComponent } from './session/session.component';

@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { AuthService } from 'src/app/resources/auth.service';
 
 @Component({
   selector: 'result-list',
@@ -7,7 +8,7 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class ResultListComponent implements OnInit {
 
-  constructor() { }
+  constructor(public auth: AuthService) { }
 
   @Input() students: any =[];
   ngOnInit(): void {

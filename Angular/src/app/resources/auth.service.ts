@@ -39,7 +39,7 @@ export class AuthService {
           this.currentUser.userRoles = decodedToken.role;
         }
        
-        console.log(this.currentUser);
+        
         localStorage.setItem('token', response.token);
       })
     );
@@ -69,6 +69,7 @@ export class AuthService {
   isLoggedIn(): boolean {
     const token: string | undefined = (localStorage.getItem('token') !== null ? localStorage.getItem('token') : undefined)!;
     return !this.helper.isTokenExpired(token);
+    
   }
 
   isAdmin(): boolean{
@@ -87,14 +88,12 @@ export class AuthService {
 
   getUser(){
     const token: string | undefined = (localStorage.getItem('token') !== null ? localStorage.getItem('token') : undefined)!;
+    
     const decodedToken = this.helper.decodeToken(token);
     this.currentUser.userID = decodedToken.UserID;
-    if (typeof decodedToken.role === "string"){
-      this.currentUser.userRoles.push(decodedToken.role);
-    }
-    else{
+    
       this.currentUser.userRoles = decodedToken.role;
-    }
+     
       
    
   }
@@ -149,6 +148,19 @@ export class AuthService {
       }
       ///
       return this.currentUser.userRoles.includes("Student");
+    }
+    return false;
+  }
+
+  isFormTeacher(): boolean{
+    if(this.isLoggedIn()){
+      ///
+      if(this.currentUser.userRoles.length === 0){
+        this.getUser();
+      }
+      
+      ///
+      return this.currentUser.userRoles.includes("FormTeacher");
     }
     return false;
   }

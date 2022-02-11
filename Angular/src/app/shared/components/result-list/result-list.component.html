@@ -13,7 +13,11 @@
                 <mat-list>
                     <mat-list-item *ngFor="let student of students">
                         {{student.LastName }} {{student.FirstName}}
-                        <button mat-button style="margin-left: auto;margin-top: 11px;" routerLink="/school-admin/result-view/{{student.Id}}">view 
+                       <!--two result view buttons.... for teacher view and principal view-->
+                        <button mat-button style="margin-left: auto;margin-top: 11px;" *ngIf="auth.isProprietor() || auth.isPrincipal()" routerLink="/school-admin/result-view/{{student.Id}}">view 
+                            <mat-icon class="mat-24">visibility</mat-icon>
+                        </button>
+                        <button mat-button style="margin-left: auto;margin-top: 11px;" *ngIf="auth.isFormTeacher()" routerLink="/teacher/result-view/{{student.Id}}">view 
                             <mat-icon class="mat-24">visibility</mat-icon>
                         </button>
                     </mat-list-item>

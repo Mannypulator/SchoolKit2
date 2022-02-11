@@ -15,10 +15,10 @@
 
         </a>
 
-        <a mat-list-item class="span-white button" routerLink="/teacher/student-result" routerLinkActive="activebutton" (click)="onSidenavClose()" >
+        <a mat-list-item class="span-white button" *ngIf="auth.isFormTeacher()" routerLink="/teacher/student-result" routerLinkActive="activebutton" (click)="onSidenavClose()" >
 
             <mat-icon matListIcon class="span-white">table_chart</mat-icon>
-            <span class="span-white">Student Results</span>
+            <span class="span-white">Student Results</span> 
             <mat-divider></mat-divider>
 
         </a>

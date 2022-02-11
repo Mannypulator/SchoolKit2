@@ -31,6 +31,7 @@ import { AlertModule } from 'ngx-alerts';
 import { MatDialogModule } from '@angular/material/dialog';
 import { ResultTableComponent } from '../components/result-table/result-table.component';
 import { ResultListComponent } from '../components/result-list/result-list.component';
+import { ResultViewComponent } from '../components/result-view/result-view.component';
 
 
 
@@ -38,7 +39,7 @@ import { ResultListComponent } from '../components/result-list/result-list.compo
 
 
 @NgModule({
-  declarations: [HeaderComponent,ResultTableComponent,  ResultListComponent],
+  declarations: [HeaderComponent,ResultTableComponent,  ResultListComponent, ResultViewComponent],
   imports: [
     AlertModule.forRoot({maxMessages: 5, timeout: 5000, positionX: 'right'}),
     CommonModule,
@@ -91,6 +92,7 @@ import { ResultListComponent } from '../components/result-list/result-list.compo
     HeaderComponent,
     ResultTableComponent,
     ResultListComponent,
+    ResultViewComponent,
     MatDividerModule,
     MatDialogModule,
     MatPaginatorModule
