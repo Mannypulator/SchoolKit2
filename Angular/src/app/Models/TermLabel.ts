@@ -1,7 +1,7 @@
 export enum TermLabel
     {
-        FirstTerm,
-        SecondTerm,
-        ThirdTerm
+        First_Term,
+        Second_Term,
+        Third_Term
 
     }

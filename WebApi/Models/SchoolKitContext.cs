@@ -55,6 +55,8 @@ namespace WebApi.Models
       public DbSet<Proprietor> Proprietors { get; set; }
       public DbSet<ScoreScheme> ScoreSchemes { get; set; }
       public DbSet<TeacherClass> TeacherClasses { get; set; }
+      public DbSet<AffectiveDomain> AffectiveDomains { get; set; }
+      public DbSet<PsychomotorDomain> PsychomotorDomains { get; set; }
       
     }
 }

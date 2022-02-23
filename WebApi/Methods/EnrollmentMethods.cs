@@ -42,7 +42,8 @@ namespace WebApi.Methods
                     {
                         StudentID = model.Id,
                         ClassSubjectID = classSubject.ClassSubjectID,
-                        TermID = term.TermID
+                        TermID = term.TermID,
+                        Grade = Grade.F
                     };
                     if (await CheckEnrollment(enrollment.StudentID, enrollment.TermID, enrollment.ClassSubjectID, _context))
                     {
@@ -50,6 +51,7 @@ namespace WebApi.Methods
                     }
 
                 }
+                AddPADomain(model, term, _context);
 
                 await _context.SaveChangesAsync();
                 return await classSubjects.ToListAsync();
@@ -70,13 +72,15 @@ namespace WebApi.Methods
                     {
                         StudentID = model.Id,
                         ClassSubjectID = select.ClassSubjectID,
-                        TermID = term.TermID
+                        TermID = term.TermID,
+                        Grade = Grade.F
                     };
                     if (await CheckEnrollment(enrollment.StudentID, enrollment.TermID, enrollment.ClassSubjectID, _context))
                     {
                         await _context.Enrollments.AddAsync(enrollment);
                     }
                 }
+                AddPADomain(model, term, _context);
                 await _context.SaveChangesAsync();
                 return selected;
             }
@@ -113,7 +117,8 @@ namespace WebApi.Methods
                         {
                             StudentID = model.Id,
                             ClassSubjectID = classSubject.ClassSubjectID,
-                            TermID = term.TermID
+                            TermID = term.TermID,
+                            Grade = Grade.F
                         };
                         if (await CheckEnrollment(enrollment.StudentID, enrollment.TermID, enrollment.ClassSubjectID, _context))
                         {
@@ -133,7 +138,8 @@ namespace WebApi.Methods
                         {
                             StudentID = model.Id,
                             ClassSubjectID = prevEnrollment.ClassSubjectID,
-                            TermID = term.TermID
+                            TermID = term.TermID,
+                            Grade = Grade.F
                         };
                         if (await CheckEnrollment(enrollment.StudentID, enrollment.TermID, enrollment.ClassSubjectID, _context))
                         {
@@ -160,7 +166,8 @@ namespace WebApi.Methods
                             {
                                 StudentID = model.Id,
                                 ClassSubjectID = classSubject.ClassSubjectID,
-                                TermID = term.TermID
+                                TermID = term.TermID,
+                                Grade = Grade.F
                             };
                             if (await CheckEnrollment(enrollment.StudentID, enrollment.TermID, enrollment.ClassSubjectID, _context))
                             {
@@ -169,6 +176,7 @@ namespace WebApi.Methods
                         }
                         
                     }
+                    AddPADomain(model, term, _context);
                     await _context.SaveChangesAsync();
 
                 }
@@ -190,7 +198,8 @@ namespace WebApi.Methods
                     {
                         StudentID = model.Id,
                         ClassSubjectID = select.ClassSubjectID,
-                        TermID = term.TermID
+                        TermID = term.TermID,
+                        Grade = Grade.F
                     };
                     if (await CheckEnrollment(enrollment.StudentID, enrollment.TermID, enrollment.ClassSubjectID, _context))
                     {
@@ -198,6 +207,7 @@ namespace WebApi.Methods
                     }
 
                 }
+                AddPADomain(model, term, _context);
                 await _context.SaveChangesAsync();
             }
         }
@@ -217,6 +227,50 @@ namespace WebApi.Methods
             }
         }
 
+        public async void AddPADomain(Student model, Term term, SchoolKitContext _context){
+            if(term.Label == TermLabel.ThirdTerm){
+                var affectiveDomain = new AffectiveDomain{
+                    StudentID = model.Id,
+                    TermID = term.TermID,
+                    Type = ResultType.Term
+                };
+                 var psychomotorDomain = new PsychomotorDomain{
+                    StudentID = model.Id,
+                    TermID = term.TermID,
+                    Type = ResultType.Term
+                };
+                 var annualAffectiveDomain = new AffectiveDomain{
+                    StudentID = model.Id,
+                    TermID = term.TermID,
+                    Type = ResultType.Annual
+                };
+                 var annualPsychomotorDomain = new PsychomotorDomain{
+                    StudentID = model.Id,
+                    TermID = term.TermID,
+                    Type = ResultType.Annual
+                };
+                await _context.AffectiveDomains.AddAsync(affectiveDomain);
+                await _context.PsychomotorDomains.AddAsync(psychomotorDomain);
+                await _context.AffectiveDomains.AddAsync(annualAffectiveDomain);
+                await _context.PsychomotorDomains.AddAsync(annualPsychomotorDomain);
+            }
+            else{
+                 var affectiveDomain = new AffectiveDomain{
+                    StudentID = model.Id,
+                    TermID = term.TermID,
+                    Type = ResultType.Term
+                };
+                 var psychomotorDomain = new PsychomotorDomain{
+                    StudentID = model.Id,
+                    TermID = term.TermID,
+                    Type = ResultType.Term
+                };
+                await _context.AffectiveDomains.AddAsync(affectiveDomain);
+                await _context.PsychomotorDomains.AddAsync(psychomotorDomain);
+            }
+           
+
+        }
 
     }
 }

@@ -49,9 +49,10 @@ ses!:any;
       }
     }
     
-    console.log(returnTerm);
+    
     this.admin.newTerm(returnTerm).then(res=>{
       this.alert.success("Successful");
+      console.log(res);
     },
     err=>{
       if(err.error){

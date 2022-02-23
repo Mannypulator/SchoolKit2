@@ -6,35 +6,14 @@
     <mat-divider></mat-divider>
     <mat-divider></mat-divider>
     <mat-card-content>
-        <mat-list role="list">
-            <mat-list-item>
-                <span mat-line>Jss A first Term Result</span>
-                <button mat-button routerLink="/student/result">
+        <mat-list role="list" *ngIf="resultList">
+            <mat-list-item *ngFor="let result of resultList">
+                <span mat-line>{{Class[result.Class]}} {{Arm[result.Arm]}} {{Label[result.Label] | space}} {{Type[result.Type]}} Result</span>
+                <button mat-button routerLink="/student/result/{{result.Result}}">
                     view
                     <mat-icon class="mat-24">visibility</mat-icon>
                   </button>
             </mat-list-item>
-            
-            <mat-list-item ><span mat-line>Jss A Second Term Result</span>
-              <button mat-button>
-                    view
-                    <mat-icon class="mat-24">visibility</mat-icon>
-                  </button>
-            </mat-list-item>
-            
-            <mat-list-item><span mat-line>Jss A Third Term Result</span>
-              <button mat-button>
-                    view
-                    <mat-icon class="mat-24">visibility</mat-icon>
-                  </button>
-            </mat-list-item>
-            
-            <mat-list-item><span mat-line>Jss A Third Term Result</span>
-                <button mat-button routerlink="/student/result">
-                      view
-                      <mat-icon class="mat-24">visibility</mat-icon>
-                    </button>
-              </mat-list-item>
             
           </mat-list>
     </mat-card-content>

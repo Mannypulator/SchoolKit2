@@ -27,4 +27,19 @@ namespace WebApi.Models
 
         public ICollection<Result> Results { get; set; }
     }
+
+    public class ResultList
+    {
+        public ResultType Type { get; set; }
+        public TermLabel Label { get; set; }
+
+        public Arms Arm { get; set; }
+        public Class Class{ get; set; }
+        public int Result { get; set; }
+       
+
+        
+
+        
+    }
 }

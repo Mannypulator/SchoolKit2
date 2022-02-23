@@ -53,11 +53,16 @@ namespace WebApi.Controllers
 
             var term = await _context.Terms
             .Where(x => x.TermID == returnTerm.TermID)
+            .Include(x => x.Session)
             .FirstOrDefaultAsync();
 
             if (term.Current || term.Completed)
             {
                 return BadRequest(new { Message = "This Term has already began or has been completed" });
+            }
+            else if (term.Session.Completed)
+            {
+                return BadRequest(new { Message = "This Session has already been completed" });
             }
 
             var sessions = await _context.Sessions
@@ -70,17 +75,32 @@ namespace WebApi.Controllers
             .FirstOrDefault();
 
             var terms = sessions
-            .SelectMany(t => t.Terms);
+            .SelectMany(t => t.Terms)
+            .OrderBy(x => x.TermID)
+            .ToList();
+
+            var j = terms.IndexOf(term);
+
+            if (term.Label != TermLabel.ThirdTerm)
+            {
+                var nextTerm = terms[j + 1];
+
+                if (nextTerm.Completed)
+                {
+                    return BadRequest(new { Message = "Cannot start this term because the next term is completed" });
+                }
+            }
+
 
             var termIDs = terms
             .Select(x => x.TermID)
-            .OrderBy(x => x)
             .ToList();
 
             var i = termIDs.IndexOf(term.TermID);
 
             var students = _studentManager.Users
-            .Where(x => x.SchoolID == schoolId && !x.HasGraduated);
+            .Where(x => x.SchoolID == schoolId && !x.HasGraduated)
+            .Include(x => x.ClassArm);
 
             if (i != 0)
             {
@@ -108,7 +128,14 @@ namespace WebApi.Controllers
                 {
                     foreach (var student in students)
                     {
-                        eMethod.EnrollStudent(student, term, _context, prevTerm);
+                        if (term.Label == TermLabel.ThirdTerm && student.ClassArm.Class != Class.SSS3)
+                        {
+                            eMethod.EnrollStudent(student, term, _context, prevTerm);
+                        }
+                        else{
+                             eMethod.EnrollStudent(student, term, _context, prevTerm);
+                        }
+
                         /*var payments = _context.Fees
                         .Where(t => t.TermID == term.TermID)
                         .Include(c => c.FeePayments)
@@ -131,12 +158,19 @@ namespace WebApi.Controllers
                 {
                     foreach (var student in students)
                     {
-                        eMethod.EnrollStudent(student, term, _context, prevTerm);
+                        if (term.Label == TermLabel.ThirdTerm && student.ClassArm.Class != Class.SSS3)
+                        {
+                           
+                            eMethod.EnrollStudent(student, term, _context, prevTerm);
+                        }
+                        else{
+                             eMethod.EnrollStudent(student, term, _context, prevTerm);
+                        }
                     }
                 }
 
 
-                FinanceMethods fMethod = new FinanceMethods();
+                //FinanceMethods fMethod = new FinanceMethods();
                 //fMethod.AssignFees(term, principal.SchoolID, prevTerm, _studentManager, _context);
 
             }
@@ -152,7 +186,13 @@ namespace WebApi.Controllers
                 {
                     foreach (var student in students)
                     {
-                        eMethod.EnrollStudent(student, term, _context);
+                        if (term.Label == TermLabel.ThirdTerm && student.ClassArm.Class != Class.SSS3)
+                        {
+                            eMethod.EnrollStudent(student, term, _context);
+                        }
+                        else{
+                             eMethod.EnrollStudent(student, term, _context);
+                        }
                         /*var payments = _context.Fees
                         .Where(t => t.TermID == term.TermID)
                         .Include(c => c.FeePayments)
@@ -175,11 +215,18 @@ namespace WebApi.Controllers
                 {
                     foreach (var student in students)
                     {
-                        eMethod.EnrollStudent(student, term, _context);
+                        if (term.Label == TermLabel.ThirdTerm && student.ClassArm.Class != Class.SSS3)
+                        {
+                          
+                            eMethod.EnrollStudent(student, term, _context);
+                        }
+                        else{
+                             eMethod.EnrollStudent(student, term, _context);
+                        }
                     }
                 }
 
-                FinanceMethods fMethod = new FinanceMethods();
+                //FinanceMethods fMethod = new FinanceMethods();
                 //fMethod.AssignFees(term, principal.SchoolID, _studentManager, _context);
             }
 
@@ -213,10 +260,12 @@ namespace WebApi.Controllers
             if (term.Current)
             {
 
+
                 /// check to make sure there's an active term
                 ///ResultMethods.CompileResults(term.Session.SchoolID, _context, _studentManager, term);
                 if (term.Label == TermLabel.ThirdTerm)
                 {
+
                     term.Current = false;
                     term.Completed = true;
                     term.TermEnd = DateTime.UtcNow.AddHours(1);
@@ -236,6 +285,7 @@ namespace WebApi.Controllers
                     return Ok();
                 }
 
+                ResultMethods.PromoteStudents(term.Session.SchoolID, _context, _studentManager, term);
 
             }
             else

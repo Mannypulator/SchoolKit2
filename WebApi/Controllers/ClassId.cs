@@ -37,7 +37,7 @@ public class SO {
 }
 
 public class CommentUpdateModel{
-    public string PComment { get; set; }
+    public string Comment { get; set; }
     public int ResultID { get; set; }
 }
 

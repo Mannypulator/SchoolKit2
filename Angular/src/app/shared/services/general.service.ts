@@ -32,4 +32,13 @@ export class GeneralService {
   submitTComment(obj:  any){
     return this.http.post<any>(this.baseUrl + '/api/result/updateTComment', obj).toPromise()
   }
+
+  gradeA(obj : any){
+    console.log(obj);
+    return this.http.post<any>(this.baseUrl + '/api/result/gradeADomain', obj).toPromise()
+  }
+  gradeP(obj : any){
+    return this.http.post<any>(this.baseUrl + '/api/result/gradePDomain', obj).toPromise()
+  }
+
 }

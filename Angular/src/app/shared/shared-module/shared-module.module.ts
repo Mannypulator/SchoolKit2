@@ -32,6 +32,9 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { ResultTableComponent } from '../components/result-table/result-table.component';
 import { ResultListComponent } from '../components/result-list/result-list.component';
 import { ResultViewComponent } from '../components/result-view/result-view.component';
+import { SpacePipe } from '../resources/space.pipe';
+import { APDomainsComponent } from '../components/apdomains/apdomains.component';
+import { EnumToArrayPipe } from '../resources/enum-to-array.pipe';
 
 
 
@@ -39,7 +42,7 @@ import { ResultViewComponent } from '../components/result-view/result-view.compo
 
 
 @NgModule({
-  declarations: [HeaderComponent,ResultTableComponent,  ResultListComponent, ResultViewComponent],
+  declarations: [HeaderComponent,ResultTableComponent, EnumToArrayPipe, ResultListComponent, ResultViewComponent,SpacePipe,APDomainsComponent],
   imports: [
     AlertModule.forRoot({maxMessages: 5, timeout: 5000, positionX: 'right'}),
     CommonModule,
@@ -93,6 +96,9 @@ import { ResultViewComponent } from '../components/result-view/result-view.compo
     ResultTableComponent,
     ResultListComponent,
     ResultViewComponent,
+    SpacePipe,
+    EnumToArrayPipe,
+    APDomainsComponent,
     MatDividerModule,
     MatDialogModule,
     MatPaginatorModule

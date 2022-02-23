@@ -1,0 +1,195 @@
+<div fxLayout="row wrap" fxLayoutAlign="center none" >
+    <mat-card class ="lw mt" fxFlex="93">
+       AFFECTIVE DOMAIN
+       <mat-card-subtitle>Score Student's Character</mat-card-subtitle>
+
+    </mat-card>
+    <table mat-table [dataSource]="aDomain" class="mat-elevation-z8 mt fw" fxFlex="90" fxFlex.lt-md = "100">
+
+        <ng-container matColumnDef="Activeness">
+            <th mat-header-cell *matHeaderCellDef> Activeness </th>
+            <td mat-cell *matCellDef="let element"> 
+                <mat-select name="g1" [(value)]="element.Activeness">
+                    <mat-option *ngFor="let grade of Grades | enumToArray" [value]= "grade">
+                      {{Grades[grade]}}
+                    </mat-option>
+                  </mat-select>
+                  
+                 </td>
+          </ng-container>
+
+
+        <ng-container matColumnDef="Attendance">
+          <th mat-header-cell *matHeaderCellDef> Attendance</th>
+          <td mat-cell *matCellDef="let element">
+            <mat-select name="g2" [(value)]="element.Attendance">
+                <mat-option *ngFor="let grade of Grades | enumToArray" [value]= "grade">
+                  {{Grades[grade]}}
+                </mat-option>
+              </mat-select>
+          </td>
+        </ng-container>
+      
+
+        <ng-container matColumnDef="Honesty">
+          <th mat-header-cell *matHeaderCellDef > Honesty </th>
+          <td mat-cell *matCellDef="let element"> 
+            <mat-select name="g3" [(value)]="element.Honesty">
+                <mat-option *ngFor="let grade of Grades | enumToArray" [value]= "grade">
+                  {{Grades[grade]}}
+                </mat-option>
+              </mat-select>
+             </td>
+        </ng-container>
+
+        <ng-container matColumnDef="Neatness">
+            <th mat-header-cell *matHeaderCellDef> Neatness </th>
+            <td mat-cell *matCellDef="let element"> 
+                <mat-select name="g4" [(value)]="element.Neatness">
+                    <mat-option *ngFor="let grade of Grades | enumToArray" [value]= "grade">
+                      {{Grades[grade]}}
+                    </mat-option>
+                  </mat-select>
+            </td>
+          </ng-container>
+     
+        <ng-container matColumnDef="Obedience">
+          <th mat-header-cell *matHeaderCellDef > Obedience </th>
+          <td mat-cell *matCellDef="let element"> 
+            <mat-select name="g5" [(value)]="element.Obedience">
+                <mat-option *ngFor="let grade of Grades | enumToArray" [value]= "grade">
+                  {{Grades[grade]}}
+                </mat-option>
+              </mat-select>
+             </td>
+        </ng-container>
+
+
+        <ng-container matColumnDef="Punctuality">
+            <th mat-header-cell *matHeaderCellDef > Punctuality </th>
+            <td mat-cell *matCellDef="let element"> 
+                <mat-select name="g6" [(value)]="element.Punctuality">
+                    <mat-option *ngFor="let grade of Grades | enumToArray" [value]= "grade">
+                      {{Grades[grade]}}
+                    </mat-option>
+                  </mat-select>
+                 </td>
+          </ng-container>
+
+          <ng-container matColumnDef="SelfControl">
+            <th mat-header-cell *matHeaderCellDef > SelfControl </th>
+            <td mat-cell *matCellDef="let element"> 
+                <mat-select name="g6" [(value)]="element.SelfControl">
+                    <mat-option *ngFor="let grade of Grades | enumToArray" [value]= "grade">
+                      {{Grades[grade]}}
+                    </mat-option>
+                  </mat-select>
+                 
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="submit" >
+            <td mat-footer-cell *matFooterCellDef colspan="7">
+              <button mat-raised-button style="width:70%;" (click)="gradeADomain()">Submit</button>
+            </td>
+          </ng-container>
+
+       
+        <tr mat-header-row *matHeaderRowDef="aDisplayedColumns" class="noSpace"></tr>
+        <tr mat-row *matRowDef="let row; columns: aDisplayedColumns;"></tr> 
+        <tr mat-footer-row *matFooterRowDef="['submit']"></tr>
+
+      </table>
+    
+      <mat-card class ="lw mt" fxFlex="93">
+        PSYCHOMOTOR DOMAIN
+        <mat-card-subtitle>Score Student's skills</mat-card-subtitle>
+ 
+     </mat-card>
+    
+      <table mat-table [dataSource]="pDomain" class="mat-elevation-z8 fw mt" fxFlex="90" fxFlex.lt-md = "100">
+
+       
+        <ng-container matColumnDef="Creativity">
+            <th mat-header-cell *matHeaderCellDef> Crafts & Creativity </th>
+            <td mat-cell *matCellDef="let element"> 
+                <mat-select name="pg1" [(value)]="element.Creativity">
+                    <mat-option *ngFor="let grade of Grades | enumToArray" [value]= "grade">
+                      {{Grades[grade]}}
+                    </mat-option>
+                  </mat-select>
+            </td>
+          </ng-container>
+        
+        <ng-container matColumnDef="DrawingPainting">
+          <th mat-header-cell *matHeaderCellDef> Drawing & Painting</th>
+          <td mat-cell *matCellDef="let element"> 
+            <mat-select name="pg2" [(value)]="element.DrawingPainting">
+                <mat-option *ngFor="let grade of Grades | enumToArray" [value]= "grade">
+                  {{Grades[grade]}}
+                </mat-option>
+              </mat-select> 
+        </td>
+        </ng-container>
+      
+    
+        <ng-container matColumnDef="Fluency">
+          <th mat-header-cell *matHeaderCellDef> Fluency </th>
+          <td mat-cell *matCellDef="let element"> 
+            <mat-select name="pg3" [(value)]="element.Fluency">
+                <mat-option *ngFor="let grade of Grades | enumToArray" [value]= "grade">
+                  {{Grades[grade]}}
+                </mat-option>
+              </mat-select>
+        </td>
+        </ng-container>
+
+        <ng-container matColumnDef="HandlingTools">
+            <th mat-header-cell *matHeaderCellDef> Handling Tools </th>
+            <td mat-cell *matCellDef="let element"> 
+                <mat-select name="pg4" [(value)]="element.HandlingTools">
+                    <mat-option *ngFor="let grade of Grades | enumToArray" [value]= "grade">
+                      {{Grades[grade]}}
+                    </mat-option>
+                  </mat-select>  
+            </td>
+          </ng-container>
+      
+
+        <ng-container matColumnDef="Handwriting">
+          <th mat-header-cell *matHeaderCellDef > Handwriting </th>
+          <td mat-cell *matCellDef="let element"> 
+            <mat-select name="pg5" [(value)]="element.Handwriting">
+                <mat-option *ngFor="let grade of Grades | enumToArray" [value]= "grade">
+                  {{Grades[grade]}}
+                </mat-option>
+              </mat-select> 
+        </td>
+        </ng-container>
+
+        <ng-container matColumnDef="Sports">
+            <th mat-header-cell *matHeaderCellDef > Sports </th>
+            <td mat-cell *matCellDef="let element"> 
+                <mat-select name="pg6" [(value)]="element.Sports">
+                    <mat-option *ngFor="let grade of Grades | enumToArray" [value]= "grade">
+                      {{Grades[grade]}}
+                    </mat-option>
+                  </mat-select>  
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="submit" >
+            <td mat-footer-cell *matFooterCellDef colspan="7">
+              <button mat-raised-button style="width:70%;" (click)="gradePDomain()">Submit</button>
+            </td>
+          </ng-container>
+
+        
+        <tr mat-header-row *matHeaderRowDef="pDisplayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: pDisplayedColumns;"></tr> 
+        <tr mat-footer-row *matFooterRowDef="['submit']"></tr>
+      </table>
+      
+</div>
+<!---------------------------->
+
+

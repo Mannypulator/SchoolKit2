@@ -58,4 +58,14 @@ namespace WebApi.Models
         public ICollection<SchoolPackage> SchoolPackages { get; set; }
         
     }
+
+    [NotMapped]
+     public class ResultReturnedSchool
+    {
+        
+        public string Name { get; set; }
+        
+        public string? Address { get; set; }
+       
+    }
 }

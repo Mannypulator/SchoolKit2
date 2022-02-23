@@ -1,0 +1,101 @@
+.lw{
+    width:90%;
+} 
+.fw{
+    width:100%;
+} 
+.mt {
+    margin-top: 1%;
+}
+.mc{
+    margin-left: auto;
+    margin-right: auto;
+}
+.ml-6{
+    margin-left: 6px;
+}
+
+.center{
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.noSpace{
+    padding: 0% !important;
+    margin: 0% !important;
+}
+
+.mat-column-Activeness {
+    border-right: 1px solid currentColor;
+    text-align: center;
+  
+  }
+  
+  .mat-column-Attendance {
+    border-right: 1px solid currentColor;
+    text-align: center;
+  }
+  
+  .mat-column-Honesty {
+    border-right: 1px solid currentColor;
+    text-align: center;
+  }
+  
+.mat-column-Obedience {
+    border-right: 1px solid currentColor;
+    text-align: center;
+}
+
+.mat-column-Neatness {
+    border-right: 1px solid currentColor;
+    text-align: center;
+    }
+    
+.mat-column-Punctuality {
+    border-right: 1px solid currentColor;
+    text-align: center;
+}
+
+.mat-column-SelfControl {
+    
+    text-align: center;
+}
+.mat-column-submit {
+    text-align: center;
+    width: 100px
+}
+
+.mat-column-Creativity {
+    border-right: 1px solid currentColor;
+    text-align: center;
+    width: 130px !important;
+  
+  }
+  
+  .mat-column-DrawingPainting {
+    border-right: 1px solid currentColor;
+    text-align: center;
+    width: 130px !important;
+  }
+  
+.mat-column-Fluency {
+    border-right: 1px solid currentColor;
+    text-align: center;
+  }
+  
+.mat-column-Handwriting {
+    border-right: 1px solid currentColor;
+    text-align: center;
+}
+.mat-column-HandlingTools {
+    border-right: 1px solid currentColor;
+    text-align: center;
+    width: 130px !important;
+}
+
+.mat-column-Sports {
+    
+    text-align: center;
+    }
+            
+            

@@ -11,7 +11,8 @@ namespace WebApi.Models
             Fees = new HashSet<Fee>();
             Enrollments = new HashSet<Enrollment>();
             AnnualEnrollments = new HashSet<AnnualEnrollment>();
-
+             AffectiveDomains = new HashSet<AffectiveDomain>();
+            PsychomotorDomains = new HashSet<PsychomotorDomain>();
         }
         [Key]
         public int TermID { get; set; }
@@ -30,6 +31,8 @@ namespace WebApi.Models
         public ICollection<Test> Tests { get; set; }
         public ICollection<Fee> Fees { get; set; }
         public ICollection<AnnualEnrollment> AnnualEnrollments { get; set; }
+        public ICollection<AffectiveDomain> AffectiveDomains { get; set; }
+        public ICollection<PsychomotorDomain> PsychomotorDomains { get; set; }
         
     }
 

@@ -1,16 +1,18 @@
 <ngx-alerts></ngx-alerts>
 <result-table [termlyResult]="termlyResult" ></result-table>
-<mat-card class ="lw mt mc" *ngIf="termlyResult  && (auth.isProprietor() || auth.isProprietor())">
-  <mat-form-field fxFlex="75">
+<apdomains *ngIf="auth.isFormTeacher() && termlyResult" [pDomain] = "termlyResult.PD" [aDomain] = "termlyResult.AD" ></apdomains>
+
+  <mat-card class ="lw mt mc" *ngIf="termlyResult  && (auth.isProprietor() || auth.isProprietor())">
+  <mat-form-field fxFlex="100">
     <mat-label>Principal's Comment</mat-label>
-    <input matInput name="PComment" required [(ngModel)] = "termlyResult.PrincipalComment">
+    <input matInput name="PComment" required [(ngModel)] = "termlyResult.PrincipalComment" fxFlex="70">
 </mat-form-field>
 <mat-card-actions class="ml-6"><button mat-raised-button (click)="submitPComment()">Approve</button></mat-card-actions>
 
 </mat-card>
 
 <mat-card class ="lw mt mc" *ngIf="termlyResult && auth.isFormTeacher()">
-    <mat-form-field fxFlex="75">
+    <mat-form-field fxFlex="100">
       <mat-label>Teacher's Comment</mat-label>
       <input matInput name="TComment" required [(ngModel)] = "termlyResult.TeacherComment">
   </mat-form-field>
@@ -20,17 +22,22 @@
 
 <result-table [annualResult]="annualResult" ></result-table>
 
-<mat-card class ="lw mt mc" *ngIf="annualResult && (auth.isProprietor() || auth.isProprietor())>
-  <mat-form-field fxFlex="75">
+<apdomains *ngIf="auth.isFormTeacher() && annualResult" [aDomain] = "annualResult.AD" [pDomain]= "annualResult.PD"></apdomains>
+
+
+<mat-card class ="lw mt mc" *ngIf="annualResult && (auth.isProprietor() || auth.isProprietor())">
+  <mat-form-field fxFlex="100">
     <mat-label>Principal's Comment</mat-label>
     <input matInput name="APComment" required [(ngModel)] = "annualResult.PrincipalComment">
 </mat-form-field>
 <mat-card-actions class="ml-6"><button mat-raised-button (click)="submitAnnualComment()">Approve</button></mat-card-actions>
+</mat-card>
 
 <mat-card class ="lw mt mc" *ngIf="annualResult && auth.isFormTeacher()">
-    <mat-form-field fxFlex="75">
+    <mat-form-field fxFlex="100">
       <mat-label>Teacher's Comment</mat-label>
       <input matInput name="ATComment" required [(ngModel)] = "annualResult.TeacherComment">
   </mat-form-field>
   <mat-card-actions class="ml-6"><button mat-raised-button (click)="submitAnnualTComment()">Approve</button></mat-card-actions>
+  </mat-card>
   

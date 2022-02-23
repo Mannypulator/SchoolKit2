@@ -16,6 +16,12 @@ namespace WebApi.Methods
             .Where(x => x.SchoolID == schoolId && x.HasGraduated == false)
             .Include(x => x.ClassArm);
 
+            //filter out ss3 students in third Term
+            if(term.Label == TermLabel.ThirdTerm){
+                allstudents = allstudents.Where(x => x.ClassArm.Class != Class.SSS3 ).Include(x => x.ClassArm);
+            }
+            
+
             var classArmIDs = allstudents
                 .Select(r => r.ClassArmID).ToHashSet();
 
@@ -60,7 +66,7 @@ namespace WebApi.Methods
                     annualResRec = annualResultRecord;
                 }
 
-
+                
                 foreach (var student in students)
                 {
                     var allEnrollments = _context.Enrollments
@@ -79,7 +85,7 @@ namespace WebApi.Methods
                         StudentID = student.Id,
                         ResultRecordID = termResultRecord.ResultRecordID,
                         Total = total,
-                        Average = average
+                        Average = Math.Round(average,2)
                     };
                     await _context.Results.AddAsync(result); //add result for current 
                     await _context.SaveChangesAsync();
@@ -185,32 +191,13 @@ namespace WebApi.Methods
                             StudentID = student.Id,
                             ResultRecordID = annualResRec.ResultRecordID,
                             Total = annualTotal,
-                            Average = annualAverage
+                            Average = Math.Round(annualAverage,2)
                         };
 
                         await _context.Results.AddAsync(annualresult);
                         await _context.SaveChangesAsync();
 
-                        if (student.ClassArm.Class == Class.Primary6 || student.ClassArm.Class == Class.SSS3)
-                        {
-                            student.HasGraduated = true;
-                            await _studentManager.UpdateAsync(student);
-                        }
-                        else
-                        {
-                            var totalMarks = count * 100;
-                            var minimumPassMark = totalMarks * 0.4;
-                            if (annualTotal >= minimumPassMark)
-                            {
-                                var nextClass = (Class)((int)student.ClassArm.Class + 1);
-                                var classArm = _context.ClassArms
-                                .Where(f => f.Class == nextClass && f.Arm == student.ClassArm.Arm)
-                                .FirstOrDefault();
-
-                                student.ClassArmID = classArm.ClassArmID;
-                                await _studentManager.UpdateAsync(student);
-                            }
-                        }
+                        
                     }
 
                 }
@@ -247,7 +234,7 @@ namespace WebApi.Methods
                     resCount++;
                     prevResult = result;
                 }
-                resultRec.ClassAverage = (double)classtotal / classResults.Count();
+                resultRec.ClassAverage = Math.Round((double)classtotal / classResults.Count(),2);
                 _context.Update(resultRec);
                 await _context.SaveChangesAsync();
 
@@ -283,7 +270,7 @@ namespace WebApi.Methods
                     aPrevResult = result;
                     }
 
-                    annualResultRec.ClassAverage = (double)annualClasstotal / annualResults.Count();
+                    annualResultRec.ClassAverage = Math.Round((double)annualClasstotal / annualResults.Count(),2);
                     _context.Update(annualResultRec);
                     await _context.SaveChangesAsync();
                 }
@@ -291,6 +278,62 @@ namespace WebApi.Methods
 
             }
         }
+
+          public static async void PromoteStudents(int schoolId, SchoolKitContext _context, UserManager<Student> _studentManager, Term term)
+        {
+            if(term.Label == TermLabel.ThirdTerm){
+                var students = await _studentManager.Users
+                .Where(x => x.SchoolID == schoolId && !x.HasGraduated)
+                .Include(x => x.ClassArm)
+                .Where(x => x.ClassArm.Class == Class.SSS3)
+                .ToListAsync();
+
+                foreach(var student in students){
+                   
+                    student.HasGraduated = true;
+                    await _studentManager.UpdateAsync(student);
+                }
+            
+            
+                students = await _studentManager.Users
+                .Where(x => x.SchoolID == schoolId && !x.HasGraduated)
+                .Include(x =>x.ClassArm)
+                .ToListAsync();
+
+                foreach(var student in students){
+                    var nextClass = (Class)((int)student.ClassArm.Class + 1);
+                    var classArm = _context.ClassArms
+                    .Where(f => f.Class == nextClass && f.Arm == student.ClassArm.Arm)
+                    .SingleOrDefault();
+
+                    student.ClassArmID = classArm.ClassArmID;
+                    await _studentManager.UpdateAsync(student);
+                }
+            }
+
+
+            /*if (student.ClassArm.Class == Class.Primary6 || student.ClassArm.Class == Class.SSS3)
+                        {
+                            student.HasGraduated = true;
+                            await _studentManager.UpdateAsync(student);
+                        }
+                        else
+                        {
+                            var totalMarks = count * 100;
+                            var minimumPassMark = totalMarks * 0.4;
+                            if (annualTotal >= minimumPassMark)
+                            {
+                                var nextClass = (Class)((int)student.ClassArm.Class + 1);
+                                var classArm = _context.ClassArms
+                                .Where(f => f.Class == nextClass && f.Arm == student.ClassArm.Arm)
+                                .FirstOrDefault();
+
+                                student.ClassArmID = classArm.ClassArmID;
+                                await _studentManager.UpdateAsync(student);
+                            }
+                        }*/
+        }
+
 
         public static async Task<ResultModel> AResults(Term term, string studentId, SchoolKitContext _context)
         {
@@ -320,11 +363,18 @@ namespace WebApi.Methods
                             Grade = d.Grade,
                         }).ToListAsync();
 
+             var aD = await _context.AffectiveDomains
+            .Where( d=> d.StudentID == studentId && d.TermID == term.TermID && d.Type == ResultType.Annual).ToListAsync();
+
+             var pD = await _context.PsychomotorDomains
+            .Where( d=> d.StudentID == studentId && d.TermID == term.TermID && d.Type == ResultType.Annual).ToListAsync();
+
+
             var annualResult = new ResultModel
             {
                 SessionName = term.Session.SessionName,
                 ResultID = result.ResultID,
-                TermName = Enum.GetName(typeof(TermLabel), term.Label),
+                TermName = term.Label,
                 ResultType = Enum.GetName(typeof(ResultType), result.ResultRecord.Type),
                 ClassName = Enum.GetName(typeof(Class), classArm.Class) + Enum.GetName(typeof(Arms), classArm.Arm),
                 ClassAverage = result.ResultRecord.ClassAverage.ToString(),
@@ -335,7 +385,11 @@ namespace WebApi.Methods
                 Average = result.Average.ToString(),
                 AnnualEnrollments = annualEnrollments,
                 PrincipalComment = result.PrincipalComment,
-                TeacherComment = result.TeacherComment
+                TeacherComment = result.TeacherComment,
+                Gender = result.Student.Gender,
+                RegNo = result.Student.RegNo,
+                AD = aD,
+                PD = pD
 
             };
 
@@ -351,9 +405,9 @@ namespace WebApi.Methods
                     .ThenInclude(x => x.ResultRecord)
                     .ThenInclude(x => x.ClassArm)
                     .SelectMany(x => x.Results)
-                    .Include(x => x.Student)
                     .Where(s => s.StudentID == studentId)
                     .SingleOrDefaultAsync();
+                    
 
             var classArm = result.ResultRecord.ClassArm;
 
@@ -370,11 +424,17 @@ namespace WebApi.Methods
                     Total = d.Total
                 }).ToListAsync();
 
+            var aD = await _context.AffectiveDomains
+            .Where( d=> d.StudentID == studentId && d.TermID == term.TermID && d.Type == ResultType.Term).ToListAsync();
+
+             var pD = await _context.PsychomotorDomains
+            .Where( d=> d.StudentID == studentId && d.TermID == term.TermID && d.Type == ResultType.Term).ToListAsync();
+
             var stResult = new ResultModel
             {
                 SessionName = term.Session.SessionName,
                 ResultID = result.ResultID,
-                TermName = Enum.GetName(typeof(TermLabel), term.Label),
+                TermName = term.Label,
                 ResultType = Enum.GetName(typeof(ResultType), result.ResultRecord.Type),
                 ClassName = Enum.GetName(typeof(Class), classArm.Class) + Enum.GetName(typeof(Arms), classArm.Arm),
                 ClassAverage = result.ResultRecord.ClassAverage.ToString(),
@@ -385,7 +445,11 @@ namespace WebApi.Methods
                 ClassCount = result.ResultRecord.ClassCount,
                 Enrollments = enrollments,
                 TeacherComment = result.TeacherComment,
-                PrincipalComment = result.PrincipalComment
+                PrincipalComment = result.PrincipalComment,
+                Gender = result.Student.Gender,
+                RegNo = result.Student.RegNo,
+                AD = aD,
+                PD = pD
                 
 
             };
@@ -409,7 +473,7 @@ namespace WebApi.Methods
             var annualResult = new ResultModel
             {
                 SessionName = term.Session.SessionName,
-                TermName = Enum.GetName(typeof(TermLabel), term.Label),
+                TermName = term.Label,
                 ResultType = Enum.GetName(typeof(ResultType), result.ResultRecord.Type),
                 ClassName = Enum.GetName(typeof(Class), classArm.Class) + Enum.GetName(typeof(Arms), classArm.Arm),
                 Message = "You can't view ths result until you complete your fees for the term"
@@ -434,7 +498,7 @@ namespace WebApi.Methods
             var stResult = new ResultModel
             {
                 SessionName = term.Session.SessionName,
-                TermName = Enum.GetName(typeof(TermLabel), term.Label),
+                TermName = term.Label,
                 ResultType = Enum.GetName(typeof(ResultType), result.ResultRecord.Type),
                 ClassName = Enum.GetName(typeof(Class), classArm.Class) + Enum.GetName(typeof(Arms), classArm.Arm),
                 Message = "You can't view ths result until you complete your fees for the term"

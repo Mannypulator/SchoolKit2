@@ -37,7 +37,7 @@
     
                 <tr>
                     <td>Current Term</td>
-                    <td *ngIf="session.Terms.length > 0">{{term[session.Terms[0].Label]}}</td>
+                    <td *ngIf="session.Terms.length > 0">{{term[session.Terms[0].Label] | space}}</td>
     
                 </tr>
                 <tr>

@@ -14,6 +14,9 @@ namespace WebApi.Models
             StudentFees = new HashSet<StudentFee>();
             AnnualEnrollments = new HashSet<AnnualEnrollment>();
             Purchases = new HashSet<ProductSale>();
+            AffectiveDomains = new HashSet<AffectiveDomain>();
+            PsychomotorDomains = new HashSet<PsychomotorDomain>();
+
         }
         public string RegNo { get; set; }
         public DateTime DateOfBirth { get; set; }
@@ -42,6 +45,8 @@ namespace WebApi.Models
         public ICollection<AnnualEnrollment> AnnualEnrollments { get; set; }
         public ICollection<FeePayment> Payments { get; set; }
         public ICollection<ProductSale> Purchases { get; set; }
+        public ICollection<AffectiveDomain> AffectiveDomains { get; set; }
+        public ICollection<PsychomotorDomain> PsychomotorDomains { get; set; }
     }
 
     public class ReceivedStudentModel : ApplicationUser

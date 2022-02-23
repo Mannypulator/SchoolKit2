@@ -13,12 +13,15 @@ import { GeneralService } from '../../services/general.service';
 })
 export class ResultViewComponent implements OnInit {
 
-  constructor(private _Activatedroute: ActivatedRoute, private general: GeneralService, private auth: AuthService, private alert: AlertService, private router: Router) { }
-  displayedColumns: string[] = ['subject', 'CA', 'Exam', 'Total', 'grade'];
-  dataSource: any = [];
+  constructor(private _Activatedroute: ActivatedRoute, private general: GeneralService, public auth: AuthService, private alert: AlertService, private router: Router) { }
+  aDisplayedColumns = ["Activeness", "Attendance", "Honesty", "Neatness", "Obedience", "Punctuality", "SelfControl"];
+
+  
 
   termlyResult: any;
   annualResult: any;
+
+  aDomain :any=[];
 
   PComment = "";
   APComment = "";
@@ -31,6 +34,7 @@ export class ResultViewComponent implements OnInit {
       this.getResult(id !== null ? id : "");
 
     });
+    
   }
 
   getResult(Id: string) {
@@ -39,6 +43,7 @@ export class ResultViewComponent implements OnInit {
       this.termlyResult = res[0];
       this.annualResult = res[1];
       console.log(res);
+     
     },
       err => {
         console.log(err)
@@ -46,19 +51,21 @@ export class ResultViewComponent implements OnInit {
 
   }
 
-  submitComment() {
+  submitPComment() {
 
      if (this.termlyResult.PrincipalComment === "") {
        this.alert.danger('Principal\'s comment is required');
        return;
      }
      let obj = {
-       PComment: this.termlyResult.PrincipalComment,
+       Comment: this.termlyResult.PrincipalComment,
        ResultID: this.termlyResult.ResultID
      }
      this.general.submitComment(obj).then(res => {
        this.alert.success("Submitted Successfully");
-       setTimeout(() => { this.router.navigateByUrl("school-admin/student-results") }, 1000)
+       if(!this.annualResult){
+        setTimeout(() => { this.router.navigateByUrl("school-admin/student-results") }, 1000)
+      }
  
      })
   }
@@ -70,7 +77,7 @@ export class ResultViewComponent implements OnInit {
       return;
     }
     let obj = {
-      PComment: this.termlyResult.PrincipalComment,
+      Comment: this.termlyResult.PrincipalComment,
       ResultID: this.annualResult.ResultID
     }
     this.general.submitComment(obj).then(res => {
@@ -82,36 +89,41 @@ export class ResultViewComponent implements OnInit {
 
   submitTComment() {
 
-    if (this.termlyResult.PrincipalComment === "") {
-      this.alert.danger('Principal\'s comment is required');
+    if (this.termlyResult.TeacherComment === "") {
+      this.alert.danger('Teacher\'s comment is required');
       return;
     }
     let obj = {
-      PComment: this.termlyResult.PrincipalComment,
+      Comment: this.termlyResult.TeacherComment,
       ResultID: this.termlyResult.ResultID
     }
     this.general.submitTComment(obj).then(res => {
       this.alert.success("Submitted Successfully");
-      setTimeout(() => { this.router.navigateByUrl("school-admin/student-results") }, 1000)
+      if(!this.annualResult){
+        setTimeout(() => { this.router.navigateByUrl("teacher/student-result") }, 1000)
+      }
+      
+      
 
     })
  }
 
  submitAnnualTComment() {
 
-   if (this.annualResult.PrincipalComment === "") {
-     this.alert.danger('Principal\'s comment is required');
+   if (this.annualResult.TeacherComment === "") {
+     this.alert.danger('Teacher\'s comment is required');
      return;
    }
    let obj = {
-     PComment: this.termlyResult.PrincipalComment,
+     Comment: this.termlyResult.TeacherComment,
      ResultID: this.annualResult.ResultID
    }
    this.general.submitTComment(obj).then(res => {
      this.alert.success("Submitted Successfully");
-     setTimeout(() => { this.router.navigateByUrl("school-admin/student-results") }, 1000)
+     setTimeout(() => { this.router.navigateByUrl("teacher/student-result") }, 1000)
 
    })
  }
 
+ 
 }

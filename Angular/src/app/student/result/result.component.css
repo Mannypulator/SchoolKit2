@@ -4,31 +4,42 @@
 }
 .tab tr {
     font-size: 15px;
-    text-align: center;   
+    text-align: center;  
+    justify-content: center; 
   }
+  .tab td{
+    
+    font-size: 15px;
+    text-align: center; 
+    
+}
+
 
 .tab-border{
    
-    border: 2px solid black;
+    border: 1px solid black;
     border-collapse: collapse;
 }
 .tab-border tr{
-   
+    font-size: 15px;
     text-align: center; 
 }
 .tab-border td{
     padding: 2px;
     border: 2px solid black;
+    font-size: 15px;
   
 }
 .tab-border th{
     padding: 2px;
     border: 2px solid black;
+    font-size: 15px;
   
 }
 
 .comment-tab{
-   font-size: 15px
+   font-size: 15px;
+ 
 }
 .comment-tab tr{
    

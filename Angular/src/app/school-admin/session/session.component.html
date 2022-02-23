@@ -22,7 +22,7 @@
                         </mat-expansion-panel-header>
                         <mat-list role="list">
                             <mat-list-item *ngFor="let term of session.Terms; let i = index" style="padding-bottom: 2%;">
-                                {{Term[term.Label]}}
+                                {{Term[term.Label] | space}}
                                 <button mat-raised-button style="margin-left: auto;" *ngIf="!term.Completed" (click)="startTerm(term)">Start</button>
                                 <mat-icon style="margin-top: 10px;margin-left: auto;" *ngIf="term.Completed">check_circle</mat-icon>
 

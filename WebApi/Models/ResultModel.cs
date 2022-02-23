@@ -13,7 +13,7 @@ namespace WebApi.Models
         }
         public string SessionName { get; set; }
         public int ResultID { get; set; }
-        public string TermName { get; set; }
+        public TermLabel TermName { get; set; }
         public string ClassName { get; set; }
         public int ClassCount { get; set; }
         public string ResultType { get; set; }
@@ -24,8 +24,13 @@ namespace WebApi.Models
         public string StudentName { get; set; }  
         public string PrincipalComment { get; set; }  
         public string TeacherComment { get; set; } 
+        public string RegNo { get; set; }
+        public List<AffectiveDomain> AD { get; set; }
+        public List<PsychomotorDomain> PD { get; set; }
+        public UserGender Gender { get; set; }
         public List<EnrollmentModel> Enrollments { get; set; }
         public List<AnnualEnrollmentModel> AnnualEnrollments { get; set; }
+        
 
         public string Message { get; set; }
     }

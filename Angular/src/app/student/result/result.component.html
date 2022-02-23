@@ -1,146 +1,201 @@
 <div fxFlex fxLayout="row wrap" fxLayoutAlign="center none">
-    <img src="https://localhost:5001/Resources/Logos/2.png" alt="" style="width:100px;height: 100px;margin-left: 20px;">
-    <div fxFlex="60" style="text-align:center; padding:0px">
+    <img src="https://localhost:5001/Resources/Logos/2.jpg" alt=""
+        style="width:100px;height: 100px;margin-left: 17px;margin-top: 10px;">
+    <div fxFlex="60" style="text-align:center; padding:0px" *ngIf="school">
         <h1
-            style="padding:0px; margin: 0px; margin-top: 20px; color:#3cb371;font-size: 40px;font-family: Arial, Helvetica, sans-serif;">
-            <b>SAINTS HIGH SCHOOL</b>
+            style="padding:0px; margin: 0px; margin-top: 15px; color:#3cb371;font-size: 40px;font-family: Arial, Helvetica, sans-serif;">
+            <b>{{school.Name}}</b>
         </h1>
-        <h4>
-            No 3 SAINTS HIGH SCHOOL CLOSE, OFF HATCHERY ROAD ABAKALIKI
-            <br />
-            NUTURING FUTURE CHAMPIONS
+        <h4 style="padding:0px; margin-top: 1%; font-family: Arial, Helvetica, sans-serif;">
+            {{school.Address}}
+
         </h4>
+        <h1 style="padding:0px;  color:#3cb371;font-size: 25px;font-family: Arial, Helvetica, sans-serif;">
+            <b>{{Label[result.TermName] | space}} Report Sheet</b>
+        </h1>
+        <mat-divider></mat-divider>
+
     </div>
-    <div fxFlex="100" fxLayout="row" fxLayoutAlign="space-around none">
-        <table fxFlex="70" class="tab">
+    <div fxFlex="100" fxLayout="row" fxLayoutAlign="space-around none" *ngIf="result" style="padding:0px; margin-top: 2px;">
+        <table fxFlex="80" class="tab">
 
             <tr>
                 <td>
-            <tr>
-                <td><b>NAME:</b></td>
-                <td>Okpala Chukwuman</td>
+
+                    <b>NAME:</b>
+                    <span> {{result.StudentName}}</span>
+
+                </td>
+                <td>
+
+                    <b>GENDER:</b>
+                    <span> {{Gender[result.Gender]}}</span>
+
+                </td>
+                <td>
+                    <b>REG NO:</b>
+                    <span> {{result.RegNo}}</span>
+
+
+                </td>
             </tr>
-            </td>
-            <td>
-                <tr>
-                    <td><b>GENDER:</b></td>
-                    <td>Male</td>
-                </tr>
-            </td>
-            <td>
-                <tr>
-                    <td><b>REG NO:</b></td>
-                    <td>SHS001</td>
-                </tr>
-            </td>
-            </tr>
+
             <tr>
                 <td>
-            <tr>
-                <td><b>POSITION:</b></td>
-                <td>3rd</td>
+
+                    <b>POSITION:</b>
+                    <span> {{result.ClassPosition}}</span>
+
+                </td>
+                <td>
+
+                    <b>CLASS:</b>
+                    <span> {{result.ClassName}}</span>
+
+                </td>
+                <td>
+
+                    <b>Next Term Begins:</b>
+                    <span> 20-3-2020</span>
+
+                </td>
             </tr>
-            </td>
-            <td>
-                <tr>
-                    <td><b>CLASS</b></td>
-                    <td>Jss3 A</td>
-                </tr>
-            </td>
-            <td>
-                <tr>
-                    <td><b>TERM:</b></td>
-                    <td>2nd Term</td>
-                </tr>
-            </td>
-            <td>
-
-                </tr>
-
         </table>
 
     </div>
-    <div fxFlex="95" fxLayout="row" fxLayoutAlign="space-around none" style="padding-top:10px;">
-        <table fxFlex="100" class="tab-border">
+    <div fxFlex="97" fxLayout="row wrap" fxLayoutAlign="space-around none" style="padding-top:10px;">
+
+        <h1 fxFlex="100"
+            style="padding:0px; margin: 0px; color:#3cb371;font-size: 20px;font-family: Arial, Helvetica, sans-serif; text-align: center;">
+            <b>COGNITIVE DOMAIN (ACADEMICS)</b>
+            <span>
+                <mat-divider></mat-divider>
+            </span>
+        </h1>
+
+        <table fxFlex="100" class="tab-border" *ngIf="result" style="margin-top:10px;">
             <tr>
-                <th style="background-color:#3cb371" rowspan="2">SUBJECT</th>
-                <th style="background-color:#3cb371" colspan="4">CONTINUOUS ASSESSMENT</th>
-                <th style="background-color:#3cb371" rowspan="2">TERM EXAM</th>
-                <th style="background-color:#3cb371" rowspan="2">TOTAL SCORE</th>
-                <th style="background-color:#3cb371" rowspan="2">GRADE</th>
+                <th rowspan="2" style="width:200px">SUBJECT</th>
+                <th colspan="4">CONTINUOUS ASSESSMENT</th>
+                <th rowspan="2" style="width:50px">TERM EXAM</th>
+                <th rowspan="2" style="width:50px">TOTAL SCORE</th>
+                <th rowspan="2" style="width:50px">GRADE</th>
+                <th rowspan="2" style="width:200px">REMARKS</th>
             </tr>
             <tr>
-                <td style="background-color:#3cb371"><b>1ST TEST</b></td>
-                <td style="background-color:#3cb371"><b>2ND TEST</b></td>
-                <td style="background-color:#3cb371"><b>3RD TEST</b></td>
-                <td style="background-color:#3cb371"><b>TOTAL</b></td>
+                <td style="width:50px"><b>1ST TEST</b></td>
+                <td style="width:50px"><b>2ND TEST</b></td>
+                <td style="width:50px"><b>3RD TEST</b></td>
+                <td style="width:50px"><b>TOTAL</b></td>
             </tr>
-            <tr *ngFor="let entry of dataSource">
-                <td>{{entry.name}}</td>
-                <td>1ST TEST</td>
-                <td>2ND TEST</td>
-                <td>3RD TEST</td>
-                <td>TOTAL</td>
-                <td>{{entry.weight}}</td>
-                <td>{{entry.position}}</td>
-                <td>{{entry.symbol}}</td>
+            <tr *ngFor="let enrollment of result.Enrollments">
+                <td>{{enrollment.SubjectName}}</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>{{enrollment.CA}}</td>
+                <td>{{enrollment.Exam}}</td>
+                <td>{{enrollment.Total}}</td>
+                <td>{{Grade[enrollment.Grade]}}</td>
+                <td>{{Remark[enrollment.Grade] | space}}</td>
 
             </tr>
             <tr>
-                <td colspan="2">student's average</td>
-                <td colspan="2">class average</td>
-                <td colspan="2">finale</td>
-                <td colspan="2"><b>TOTAL</b></td>
+                <td colspan="2">student's average: {{result.Average}}</td>
+                <td colspan="3">class average: {{result.ClassAverage}}</td>
+                <td colspan="3">No. in Class: {{result.ClassCount}}</td>
+                <td>Total: {{result.Total}}</td>
             </tr>
         </table>
     </div>
 
-    <div fxFlex="95" fxLayout="row" fxLayoutAlign="space-between start" style="padding-top:10px;">
-        <table fxFlex="40" class="tab-border">
+    <div fxFlex="95" fxLayout="row wrap" fxLayoutAlign="space-around none" style="padding-top:10px;">
+        <h1 fxFlex="100"
+            style="padding:0px; margin: 0px; color:#3cb371;font-size: 20px;font-family: Arial, Helvetica, sans-serif; text-align: center;">
+            <b>AFFECTIVE DOMAIN REPORT (CHARACTER)</b>
+            <span>
+                <mat-divider></mat-divider>
+            </span>
+        </h1>
+
+
+        <table fxFlex="100" class="tab-border" style="margin-top:10px;" *ngIf="result">
             <tr>
-                <th style="background-color:#3cb371" rowspan="2">AFFECTIVE RELATIONSHIP</th>
-                <th style="background-color:#3cb371" rowspan="2">GRADE</th>
-                <th style="background-color:#3cb371" colspan="2">PYSCHOMOTOR ABILITY AND PHYSICAL SKILL</th>
+                <th>Punctuality</th>
+                <th>Attendance</th>
+                <th>Neatness</th>
+                <th>Honesty</th>
+                <th>Self Control</th>
+                <th>Obedience</th>
+                <th>Activeness</th>
+
             </tr>
+
             <tr>
-                <th style="background-color:#3cb371">ACTIVITIES</th>
-                <th style="background-color:#3cb371">GRADE</th>
-            </tr>
-            <tr *ngFor="let entry of dataSource">
-                <td>{{entry.weight}}</td>
-                <td>{{entry.symbol}}</td>
-                <td>{{entry.weight}}</td>
-                <td>{{entry.symbol}}</td>
+                <td>{{Remark[result.AD[0].Punctuality] | space}}</td>
+                <td>{{Remark[result.AD[0].Attendance] | space}}</td>
+                <td>{{Remark[result.AD[0].Neatness] | space}}</td>
+                <td>{{Remark[result.AD[0].Honesty] | space}}</td>
+                <td>{{Remark[result.AD[0].SelfControl] | space}}</td>
+                <td>{{Remark[result.AD[0].Obedience] | space}}</td>
+                <td>{{Remark[result.AD[0].Activeness] | space}}</td>
 
             </tr>
         </table>
-        <table fxFlex="55" class="comment-tab">
 
-            <tr >
+        <h1 fxFlex="100"
+            style="padding:0px; margin: 0px; color:#3cb371;font-size: 20px;font-family: Arial, Helvetica, sans-serif; text-align: center;">
+            <b>PSYCHOMOTOR DOMAIN REPORT (SKILLS)</b>
+            <span>
+                <mat-divider></mat-divider>
+            </span>
+        </h1>
+
+        <table fxFlex="100" class="tab-border" style="margin-top:10px;" *ngIf="result">
+            <tr>
+                <th>Craft/Creativity</th>
+                <th>Hand Writing</th>
+                <th>Drawing & Painting</th>
+                <th>Handling Tools</th>
+                <th>Sports</th>
+                <th>Fluency</th>
+
+            </tr>
+
+            <tr>
+                <td>{{Remark[result.PD[0].Creativity] | space}}</td>
+                <td>{{Remark[result.PD[0].Handwriting] | space}}</td>
+                <td>{{Remark[result.PD[0].DrawingPainting] | space}}</td>
+                <td>{{Remark[result.PD[0].HandlingTools] | space}}</td>
+                <td>{{Remark[result.PD[0].Sports] | space}}</td>
+                <td>{{Remark[result.PD[0].Fluency] | space}}</td>
+
+            </tr>
+        </table>
+
+    </div>
+
+    <div fxFlex="95" fxLayout="row" fxLayoutAlign="start none" style="padding-top:10px;">
+        <table class="comment-tab" style="padding-top:10px;" *ngIf="result">
+
+            <tr>
 
                 <td><b>Class Teacher's Comment</b></td>
-                <td >keep on the good work</td>
+                <td>{{result.TeacherComment}}</td>
 
             </tr>
 
-            <tr >
+            <tr>
 
                 <td><b>Principal's Comment</b></td>
-                <td >keep on the good work</td>
+                <td>{{result.PrincipalComment}}</td> 
 
             </tr>
 
-            <tr >
-
-
-                <td><b>Next term begins</b></td>
-                <td >Monday, 28th august, 2021 </td>
-
-            </tr>
         </table>
 
 
-
     </div>
+
 
 </div>

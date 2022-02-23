@@ -23,7 +23,7 @@ const routes: Routes = [
   {path: '', component: ProfileComponent},
   ],
 },
-{path: 'result', component: ResultComponent},
+{path: 'result/:id', component: ResultComponent},
 ];
 
 @NgModule({
